@@ -34,7 +34,7 @@
         "chai": "^4.1.2",
         "chai-http": "^4.0.0",
         "faker": "^4.1.0",
-        "gulp": "^4.0.0",
+        "gulp": "^3.9.1",
         "gulp-add-src": "^1.0.0",
         "gulp-autoprefixer": "^5.0.0",
         "gulp-babel": "^7.0.1",
@@ -48,7 +48,7 @@
         "gulp-sourcemaps": "^2.6.4",
         "gulp-uglify": "^3.0.0",
         "gulp-util": "^3.0.8",
-        "gulp-wrap": "^0.14.0",
+        "gulp-wrap": "^0.13.0",
         "merge-stream": "^1.0.1",
         "mocha": "^5.2.0",
         "run-sequence": "^2.2.1"
