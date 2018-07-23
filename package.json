@@ -4,8 +4,9 @@
     "description": "A program for managing purchase orders and ordering processes within a business environment.",
     "main": "public/assets/js/server/server.js",
     "scripts": {
-        "start": "nodemon public/assets/js/server/server.js",
-        "test": "mocha --exit"
+        "start": "node public/assets/js/server/server.js",
+        "test": "mocha --exit",
+        "start-dev": "nodemon public/assets/js/server/server.js"
     },
     "repository": {
         "type": "git",
