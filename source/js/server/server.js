@@ -1,6 +1,4 @@
-const express = require('express');
-const app = express();
-app.use(express.static('public'));
+const app = require('./app');
 
 let server;
 
@@ -33,4 +31,4 @@ if (require.main === module) {
     runServer().catch(err => console.error(err));
 };
 
-module.exports = { app, runServer, closeServer };
+module.exports = { runServer, closeServer };

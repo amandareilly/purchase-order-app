@@ -35,48 +35,48 @@ gulp.task('build-css', function() {
         .pipe(livereload());
 });
 
-gulp.task('compile-templates', function() {
-    //process and register partials
-    //assume that all partials start with an underscore
-    const partials = gulp.src('source/templates/**/_*.hbs')
-        .pipe(handlebars())
-        .pipe(wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, Handlebars.template(<%= contents %>));', {}, {
-            imports: {
-                processPartialName: function(fileName) {
-                    // Strip the extension and underscore
-                    // Escape the output with JSON.stringify
-                    const fileArr = fileName.split('\\');
-                    let name = '';
-                    for (let i = 0; i < fileArr.length; i++) {
-                        if (i !== fileArr.length - 1) {
-                            name += fileArr[i] + '_';
-                        } else {
-                            name += fileArr[i].slice(1, -3);
-                        }
-                    }
-                    return JSON.stringify(name);
+// gulp.task('compile-templates', function() {
+//     //process and register partials
+//     //assume that all partials start with an underscore
+//     const partials = gulp.src('source/templates/**/_*.hbs')
+//         .pipe(handlebars())
+//         .pipe(wrap('Handlebars.registerPartial(<%= processPartialName(file.relative) %>, Handlebars.template(<%= contents %>));', {}, {
+//             imports: {
+//                 processPartialName: function(fileName) {
+//                     // Strip the extension and underscore
+//                     // Escape the output with JSON.stringify
+//                     const fileArr = fileName.split('\\');
+//                     let name = '';
+//                     for (let i = 0; i < fileArr.length; i++) {
+//                         if (i !== fileArr.length - 1) {
+//                             name += fileArr[i] + '_';
+//                         } else {
+//                             name += fileArr[i].slice(1, -3);
+//                         }
+//                     }
+//                     return JSON.stringify(name);
 
-                }
-            }
-        }));
-    const templates = gulp.src('source/templates/**/[^_]*.hbs')
-        .pipe(handlebars())
-        .pipe(wrap('Handlebars.template(<%= contents %>)'))
-        .pipe(declare({
-            namespace: 'templates',
-            noRedeclare: true // Avoid duplicate declarations
-        }));
+//                 }
+//             }
+//         }));
+//     const templates = gulp.src('source/templates/**/[^_]*.hbs')
+//         .pipe(handlebars())
+//         .pipe(wrap('Handlebars.template(<%= contents %>)'))
+//         .pipe(declare({
+//             namespace: 'templates',
+//             noRedeclare: true // Avoid duplicate declarations
+//         }));
 
-    //output both the partials and the templates as js/templates.js
-    return merge(partials, templates)
-        .pipe(concat('templates.js'))
-        .pipe(gulp.dest('source/js/client/templates'));
+//     //output both the partials and the templates as js/templates.js
+//     return merge(partials, templates)
+//         .pipe(concat('templates.js'))
+//         .pipe(gulp.dest('source/js/client/templates'));
 
-});
+// });
 
 gulp.task('build-js', function() {
     return gulp.src('source/js/client/classes/*.js')
-        .pipe(addsrc.append('source/js/client/templates/*.js'))
+        // .pipe(addsrc.append('source/js/client/templates/*.js'))
         .pipe(addsrc.append('source/js/client/*.js'))
         .pipe(sourcemaps.init())
         .pipe(concat('bundle.js'))
@@ -107,7 +107,7 @@ gulp.task('copy-html', function() {
 
 gulp.task('watch', function() {
     livereload.listen();
-    gulp.watch('source/templates/**/*.hbs', ['compile-templates']);
+    // gulp.watch('source/templates/**/*.hbs', ['compile-templates']);
     gulp.watch('source/*.html', ['copy-html']);
     gulp.watch('source/scss/**/*.scss', ['build-css']);
     gulp.watch('source/js/**/*.js', ['build-js']);
@@ -115,7 +115,7 @@ gulp.task('watch', function() {
 
 gulp.task('build', function() {
     runSequence(
-        ['build-css', 'compile-templates', 'copy-html', 'copy-server-js'],
+        ['build-css', /*'compile-templates', */ 'copy-html', 'copy-server-js'],
         'build-js'
     );
 });
