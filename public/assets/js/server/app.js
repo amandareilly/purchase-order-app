@@ -1,6 +1,0 @@
-const express = require('express');
-const app = express();
-app.use(express.static('public'));
-
-module.exports = app;
-//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiIiwic291cmNlcyI6WyJhcHAuanMiXSwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgZXhwcmVzcyA9IHJlcXVpcmUoJ2V4cHJlc3MnKTtcclxuY29uc3QgYXBwID0gZXhwcmVzcygpO1xyXG5hcHAudXNlKGV4cHJlc3Muc3RhdGljKCdwdWJsaWMnKSk7XHJcblxyXG5tb2R1bGUuZXhwb3J0cyA9IGFwcDsiXSwiZmlsZSI6ImFwcC5qcyJ9
