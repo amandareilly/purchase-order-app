@@ -2,9 +2,9 @@
     "name": "purchase-order-app",
     "version": "1.0.0",
     "description": "A program for managing purchase orders and ordering processes within a business environment.",
-    "main": "public/js/server.js",
+    "main": "public/assets/js/server/server.js",
     "scripts": {
-        "start": "nodemon js/server.js",
+        "start": "nodemon public/assets/js/server/server.js",
         "test": "mocha --exit"
     },
     "repository": {

@@ -1,0 +1,9 @@
+language: node_js
+node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: HjKdnehZLtJ7ZmJPq3rdq9hN+c8LlKpB7r7l5Q00zoDP7csMYDRICsYYQL5qZwNuM6/0PXpKNlJMotMicHpF4pYjneioA5VCdlFiSD8BiwTLurbBKia9KvML4nI/nwnS2ulxycjhhVsKS/zZg9vWpBLa34MV1gmkNzuWr0v3IR7NQYpUyDN2+uY+hLGj35o9/DYKWrgfI3MPHfkaWRs0zjqx9WIyiKMKQasp46WNDqPW9DeIsYijiE6W2JDKc1gkEoFDDmyRs9KXQHKXlGUVIXl+pch9m0UGmkyC5MjRNdpMT4u4fzLdbXvJIF4GcwX4YPKSX9Mi2sc1OpVP8mgZ5dOr4zA4CqWtHeAL78E5KLB/7aV7YlGXFFhXs4gJFmxWgTTLbBralnRX5mA8/EMAhuUujO+lZH5JnxKWYoWBZ+qbKtoqSYMdpHJjNz0Cy9IjuDWnXQvxp0VzO9C1Qdueean50Oai4J57va1B/zMa3xUm698w2YLn4SSczsNQIQuKVqGDclEzDSZZcz2hUZxv2LYoJMzB9IfqYe8aW1/SaxfZErnuRQ0YlPOb/nDno9rnNl4PV1Mf2l+2LW9QCo2mzBhLoSUjA6uEqxKFEqtQYecTUcvF7JTjBtPIsF67OTMJ7+Ae+/BG5J0y4890n+Yw+Ce8nriGc8z2XbZIqY3MYpk=
+  app: nameless-waters-86419
+  on:
+    repo: amandareilly/purchase-order-app

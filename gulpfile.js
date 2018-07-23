@@ -70,14 +70,14 @@ gulp.task('compile-templates', function() {
     //output both the partials and the templates as js/templates.js
     return merge(partials, templates)
         .pipe(concat('templates.js'))
-        .pipe(gulp.dest('source/js/templates'));
+        .pipe(gulp.dest('source/js/client/templates'));
 
 });
 
 gulp.task('build-js', function() {
-    return gulp.src('source/js/classes/*.js')
-        .pipe(addsrc.append('source/js/templates/*.js'))
-        .pipe(addsrc.append('source/js/*.js'))
+    return gulp.src('source/js/client/classes/*.js')
+        .pipe(addsrc.append('source/js/client/templates/*.js'))
+        .pipe(addsrc.append('source/js/client/*.js'))
         .pipe(sourcemaps.init())
         .pipe(concat('bundle.js'))
         .pipe(babel({
@@ -89,6 +89,16 @@ gulp.task('build-js', function() {
         .pipe(gulp.dest('public/assets/js'))
         .pipe(livereload());
 });
+
+gulp.task('copy-server-js', function() {
+    return gulp.src('source/js/server/*.js')
+        .pipe(sourcemaps.init())
+        //only uglify if run with '--type production'
+        .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('public/assets/js/server'))
+        .pipe(livereload());
+})
 
 gulp.task('copy-html', function() {
     gulp.src('source/*.html').pipe(gulp.dest('public'))
@@ -105,7 +115,7 @@ gulp.task('watch', function() {
 
 gulp.task('build', function() {
     runSequence(
-        ['build-css', 'compile-templates', 'copy-html'],
+        ['build-css', 'compile-templates', 'copy-html', 'copy-server-js'],
         'build-js'
     );
 });
