@@ -5,6 +5,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const requestRouter = require('./routes/requestRouter');
 
 const app = express();
 
@@ -26,5 +27,8 @@ app.set('view engine', 'hbs');
 app.get('/', function(req, res) {
     res.render('home');
 });
+
+// Request Routes
+app.use('/requests', requestRouter);
 
 module.exports = app;
