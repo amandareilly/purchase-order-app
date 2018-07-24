@@ -2,6 +2,14 @@ const app = require('./app');
 
 let server;
 
+function connectToDb(databaseUrl) {
+    return mongoose.connect(databaseUrl)
+}
+
+function disconnectDb() {
+    return mongoose.disconnect();
+}
+
 function runServer() {
     const port = process.env.PORT || 8080;
     return new Promise((res, rej) => {
@@ -31,4 +39,4 @@ if (require.main === module) {
     runServer().catch(err => console.error(err));
 };
 
-module.exports = { runServer, closeServer };
+module.exports = { runServer, closeServer, connectToDb, disconnectDb };

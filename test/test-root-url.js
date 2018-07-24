@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http')
 
-const { runServer, closeServer } = require('../server/server');
+const { connectToDb, disconnectDb } = require('../server/server');
 const app = require('../server/app');
 
 const expect = chai.expect;
@@ -11,12 +11,12 @@ describe('Root URL', function() {
 
     // starts the server before running tests
     before(function() {
-        return runServer();
+        // return connectToDb();
     });
 
     // closes the server after running tests
     after(function() {
-        return closeServer();
+        //return disconnectDb();
     });
 
     // should receive 200 status and html when hitting root
