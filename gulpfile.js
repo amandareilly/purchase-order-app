@@ -13,6 +13,7 @@ const addsrc = require('gulp-add-src');
 const runSequence = require('run-sequence');
 const babel = require('gulp-babel');
 const webpack = require('webpack-stream');
+const mocha = require('gulp-mocha');
 
 gulp.task('default', ['watch']);
 
@@ -46,14 +47,22 @@ gulp.task('build-js', function() {
         .pipe(livereload());
 });
 
+gulp.task('test', function() {
+    return gulp.src(['test/*.js'], { read: false })
+        .pipe(mocha({ reporter: 'list' }))
+        .on('error', gutil.log);
+});
+
 gulp.task('watch', function() {
     livereload.listen();
     gulp.watch('source/scss/**/*.scss', ['build-css']);
     gulp.watch('source/js/**/*.js', ['build-js']);
+    gulp.watch(['server/**', 'test/**'], ['test']);
 });
 
 gulp.task('build', function() {
     runSequence(
+        'test',
         'build-css',
         'build-js'
     );
