@@ -1,6 +1,8 @@
 {
     "env": {
-        "browser": true
+        "browser": true,
+        "mongo": true,
+        "node": true
     },
     "extends": "airbnb",
     "parser": "babel-eslint",
@@ -10,6 +12,8 @@
     "rules": {
         "linebreak-style": ["error", "windows"],
         "eol-last": ["error", "never"],
-        "indent": ["error", 4]
+        "indent": ["error", 4],
+        "prefer-arrow-callback": "off",
+        "func-names": "off"
     }
 }
