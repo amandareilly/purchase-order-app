@@ -34,9 +34,13 @@
     },
     "devDependencies": {
         "babel-core": "^6.26.3",
+        "babel-eslint": "^8.2.6",
         "babel-preset-env": "^1.7.0",
         "chai": "^4.1.2",
         "chai-http": "^4.0.0",
+        "eslint": "^5.2.0",
+        "eslint-config-airbnb": "^17.0.0",
+        "eslint-plugin-jsx-a11y": "^6.1.1",
         "faker": "^4.1.0",
         "gulp": "^3.9.1",
         "gulp-add-src": "^1.0.0",
