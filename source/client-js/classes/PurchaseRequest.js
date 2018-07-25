@@ -1,6 +1,4 @@
-// import requestData from '../MOCK-DATA/mock-request-data';
-
-const requestData = require('../MOCK-DATA/mock-request-data');
+import requestData from '../MOCK-DATA/mock-request-data';
 
 class PurchaseRequest {
     constructor(userId, json = null) {
@@ -13,10 +11,7 @@ class PurchaseRequest {
             this.status = 'created';
             this.items = [];
         } else {
-            console.log(json);
-            // const data = JSON.parse(json);
             const data = json;
-            console.log(data);
             this.id = data.id;
             this.requestorId = data.requestorId;
             this.requestorName = data.requestorName;
@@ -81,19 +76,19 @@ class PurchaseRequest {
     }
 }
 
-// const testRequest = new PurchaseRequest('aaaaaa', requestData.purchase_requests[0]);
-// console.log(testRequest);
-// testRequest.removeItem(1529798401);
-// console.log(testRequest);
-// testRequest.addItem("test item", 1, 5, 1529798400, false);
-// console.log(testRequest);
-// testRequest.setStatus("reviewed");
-// console.log(testRequest);
-// console.log(requestData.purchase_requests);
-// testRequest.save();
-// console.log(requestData.purchase_requests);
+const testRequest = new PurchaseRequest('aaaaaa', requestData.purchase_requests[0]);
+console.log(testRequest);
+testRequest.removeItem(1529798401);
+console.log(testRequest);
+testRequest.addItem("test item", 1, 5, 1529798400, false);
+console.log(testRequest);
+testRequest.setStatus("reviewed");
+console.log(testRequest);
+console.log(requestData.purchase_requests);
+testRequest.save();
+console.log(requestData.purchase_requests);
 
-// const newRequest = PurchaseRequest.getRequestById(2);
-// console.log(newRequest);
+const newRequest = PurchaseRequest.getRequestById(2);
+console.log(newRequest);
 
-// module.exports = PurchaseRequest;
+module.exports = PurchaseRequest;
