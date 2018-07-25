@@ -1,4 +1,3 @@
-/* eslint-disable */
 'use strict';
 
 const gulp = require('gulp');
@@ -13,6 +12,7 @@ const cssnano = require('gulp-cssnano');
 const addsrc = require('gulp-add-src');
 const runSequence = require('run-sequence');
 const babel = require('gulp-babel');
+const webpack = require('webpack-stream');
 
 gulp.task('default', ['watch']);
 
@@ -34,10 +34,11 @@ gulp.task('build-css', function() {
 gulp.task('build-js', function() {
     return gulp.src('source/client-js/*.js')
         .pipe(sourcemaps.init())
-        .pipe(concat('bundle.js'))
+        // .pipe(concat('bundle.js'))
         .pipe(babel({
             presets: ['env']
         }))
+        .pipe(webpack())
         //only uglify if run with '--type production'
         .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
         .pipe(sourcemaps.write())
