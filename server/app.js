@@ -1,10 +1,10 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+// const favicon = require('serve-favicon');
+// const logger = require('morgan');
+// const cookieParser = require('cookie-parser');
+// const bodyParser = require('body-parser');
 const requestRouter = require('./routes/requestRouter');
 
 const app = express();
@@ -16,7 +16,11 @@ app.use(express.static('public'));
 const hbs = exphbs.create({
     extname: 'hbs',
     layoutsDir: 'public/views/layouts',
-    defaultLayout: 'main'
+    partialsDir: 'public/views/partials',
+    defaultLayout: 'main',
+    helpers: {
+        dateFormat: require('handlebars-dateformat')
+    },
 });
 
 app.set('views', path.resolve(__dirname, '../', 'public/views'));
@@ -24,9 +28,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 // Root URL
-app.get('/', function(req, res) {
-    res.render('home');
-});
+app.get('/', (req, res) => res.render('home', { loggedIn: true }));
 
 // Request Routes
 app.use('/requests', requestRouter);
