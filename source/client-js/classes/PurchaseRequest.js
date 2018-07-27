@@ -1,7 +1,7 @@
 import requestData from '../MOCK-DATA/mock-request-data';
 
 class PurchaseRequest {
-    constructor(userId, json = null) {
+    constructor(userId = null, json = null) {
         if (!json) {
             this.requestorId = userId;
             // change or remove requestor name when hooking up API
@@ -75,20 +75,5 @@ class PurchaseRequest {
         return new PurchaseRequest('aaaaaaa', requestData.purchase_requests[requestIndex]);
     }
 }
-
-const testRequest = new PurchaseRequest('aaaaaa', requestData.purchase_requests[0]);
-console.log(testRequest);
-testRequest.removeItem(1529798401);
-console.log(testRequest);
-testRequest.addItem("test item", 1, 5, 1529798400, false);
-console.log(testRequest);
-testRequest.setStatus("reviewed");
-console.log(testRequest);
-console.log(requestData.purchase_requests);
-testRequest.save();
-console.log(requestData.purchase_requests);
-
-const newRequest = PurchaseRequest.getRequestById(2);
-console.log(newRequest);
 
 module.exports = PurchaseRequest;
