@@ -13,7 +13,7 @@
             <th>Submitter</th>
             <th></th>
         </tr>
-        {{#each data.purchase_requests}} {{>request/requestTableRow this}} {{/each}}
+        {{#each data}} {{>request/requestTableRow this}} {{/each}}
     </table>
 {{else}}
 <p>no data received</p>

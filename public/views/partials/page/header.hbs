@@ -3,7 +3,7 @@
         {{#if loggedIn}}
             <div class="user-info">
                 <img src="https://placeimg.com/100/100/people" alt="user profile picture" class="user-img">
-                <p class="user-name">Joe User</p>
+                <p class="user-name">{{user.name}}</p>
             </div>
         {{else}}
             <button class="login">Log In</button>
