@@ -19,7 +19,10 @@ const hbs = exphbs.create({
     partialsDir: 'public/views/partials',
     defaultLayout: 'main',
     helpers: {
-        dateFormat: require('handlebars-dateformat')
+        dateFormat: require('handlebars-dateformat'),
+        capitalizeFirstLetter: require('./viewHelpers/capitalizeFirstLetter'),
+        prettifyTrueFalse: require('./viewHelpers/prettifyTrueFalse'),
+        checkForComplete: require('./viewHelpers/checkForComplete'),
     },
 });
 
