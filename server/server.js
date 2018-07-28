@@ -1,9 +1,10 @@
+const mongoose = require('mongoose');
 const app = require('./app');
 
 let server;
 
 function connectToDb(databaseUrl) {
-    return mongoose.connect(databaseUrl)
+    return mongoose.connect(databaseUrl);
 }
 
 function disconnectDb() {
@@ -16,8 +17,8 @@ function runServer() {
         server = app.listen(port, () => {
             console.log(`App listening on port ${port}`);
             res(server);
-        }).on('error', err => {
-            rej(err)
+        }).on('error', (err) => {
+            rej(err);
         });
     });
 }
@@ -25,7 +26,7 @@ function runServer() {
 function closeServer() {
     return new Promise((res, rej) => {
         console.log('Closing server');
-        server.close(err => {
+        server.close((err) => {
             if (err) {
                 rej(err);
                 return;
@@ -37,6 +38,11 @@ function closeServer() {
 
 if (require.main === module) {
     runServer().catch(err => console.error(err));
-};
+}
 
-module.exports = { runServer, closeServer, connectToDb, disconnectDb };
+module.exports = {
+    runServer,
+    closeServer,
+    connectToDb,
+    disconnectDb,
+};
