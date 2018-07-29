@@ -7,7 +7,7 @@ const app = require('../server/app');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
-describe('Request Routes', function() {
+describe('Purchase Request Routes', function() {
 
     // starts the server before running tests
     before(function() {

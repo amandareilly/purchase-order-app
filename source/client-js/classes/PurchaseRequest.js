@@ -1,12 +1,11 @@
-import requestData from '../MOCK-DATA/mock-request-data';
+const requestData = require('../../../server/MOCK-DATA/mock-request-data');
+const PurchaseRequestApi = require('../../../server/controllers/PurchaseRequestApiController');
 
 class PurchaseRequest {
     constructor(userId = null, json = null) {
         if (!json) {
             this.requestorId = userId;
-            // change or remove requestor name when hooking up API
-            // because user name will be populated with a query
-            this.requestorName = 'John Smith';
+            this.requestorName = PurchaseRequestApi.getRequestor(userId);
             this.createdAt = Date.now();
             this.status = 'created';
             this.items = [];
@@ -56,11 +55,8 @@ class PurchaseRequest {
             const requestIndex = PurchaseRequest.findRequestIndex(this.id);
             requestData.purchase_requests[requestIndex] = this;
         } else {
-            // if it doesn't already have an id, we need to
-            // create one - temporarily using timestamp for
-            // unique value
-            this.id = Date.now();
-            requestData.purchase_requests.push(this);
+            const savedRequest = PurchaseRequestApi.create(this);
+            this.id = savedRequest.id;
         }
     }
 

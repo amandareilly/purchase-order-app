@@ -21,6 +21,7 @@
         "no-else-return": "off",
         "global-require": "off",
         "no-console": "off",
-        "eqeqeq": "off"
+        "eqeqeq": "off",
+        "space-unary-ops": "off"
     }
 }

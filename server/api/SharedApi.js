@@ -9,17 +9,6 @@ class SharedApi {
         }
         return message;
     }
-
-    static setUpdatableFields(fieldList, request) {
-        const updated = {};
-        fieldList.forEach((field) => {
-            if (field in request) {
-                updated[field] = request[field];
-            }
-        });
-
-        return updated;
-    }
 }
 
 module.exports = SharedApi;
