@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../../server/app');
-const PurchaseRequest = require('../../source/client-js/classes/PurchaseRequest');
+const PurchaseRequest = require('../../source/client-js/PurchaseRequest');
 
 const { expect } = chai;
 chai.use(chaiHttp);

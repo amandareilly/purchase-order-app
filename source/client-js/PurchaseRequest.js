@@ -1,5 +1,5 @@
-const requestData = require('../../../server/MOCK-DATA/mock-request-data');
-const PurchaseRequestApi = require('../../../server/controllers/PurchaseRequestApiController');
+const requestData = require('../../server/MOCK-DATA/mock-request-data');
+const PurchaseRequestApi = require('../../server/controllers/PurchaseRequestApiController');
 
 class PurchaseRequest {
     constructor(userId = null, json = null) {

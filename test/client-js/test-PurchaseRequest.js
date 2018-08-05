@@ -1,4 +1,4 @@
-import PurchaseRequest from '../../source/client-js/classes/PurchaseRequest';
+import PurchaseRequest from '../../source/client-js/PurchaseRequest';
 const chai = require('chai');
 chai.use(require('chai-datetime'));
 
