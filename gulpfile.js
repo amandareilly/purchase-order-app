@@ -55,22 +55,14 @@ gulp.task('build-js', ['clean-js'], function() {
         .pipe(livereload());
 });
 
-gulp.task('test', function() {
-    return gulp.src(['test/*.js'], { read: false })
-        .pipe(mocha({ reporter: 'list' }))
-        .on('error', gutil.log);
-});
-
 gulp.task('watch', function() {
     livereload.listen();
     gulp.watch('source/scss/**/*.scss', ['build-css']);
     gulp.watch('source/client-js/**/*.js', ['build-js']);
-    gulp.watch(['server/**', 'test/**'], ['test']);
 });
 
 gulp.task('build', function() {
     runSequence(
-        'test',
         'build-css',
         'build-js'
     );

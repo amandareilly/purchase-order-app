@@ -7,6 +7,7 @@ const path = require('path');
 // const logger = require('morgan');
 // const cookieParser = require('cookie-parser');
 // const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const requestRouter = require('./routes/requestRouter');
 const apiRouter = require('./routes/apiRouter');
 
@@ -14,6 +15,7 @@ const app = express();
 
 
 app.use(express.static('public'));
+app.use(morgan('default'));
 
 // handlebars view engine setup
 const hbs = exphbs.create({

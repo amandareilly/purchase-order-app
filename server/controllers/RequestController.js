@@ -12,14 +12,7 @@ class RequestController {
         const url = apiUrl + 'requests';
         fetch(url)
             .then(response => response.json())
-            .then((data) => {
-                res.render('requestDashboard', {
-                    loggedIn,
-                    user,
-                    data,
-                    pageTitle: 'All Purchase Requests',
-                });
-            })
+            .then(data => RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data, 'All Purchase Requests'))
             .catch(error => console.error('Fetch Error: ', error));
     }
 
@@ -37,23 +30,32 @@ class RequestController {
                 body: JSON.stringify(new PurchaseRequest(userId))
             })
             .then(response => response.json())
-            .then((data) => {
-                res.render('requestDetail', {
-                    loggedIn,
-                    user,
-                    data,
-                    pageTitle: 'Create Purchase Request',
-                });
+            .then(data => {
+                res.redirect('/requests/' + data.id);
             })
             .catch(error => console.error('Fetch Error: ', error));
     }
 
     static getExistingRequest(req, res) {
-        const data = null;
-        res.render('requestDetail', {
+        const url = apiUrl + 'requests/' + req.params.id;
+        fetch(url)
+            .then(response => response.json())
+            .then((data) => {
+                let pageTitle = 'Request Not Found';
+                if (!data.error) {
+                    pageTitle = `Request # ${data.id}`;
+                }
+                RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle);
+            })
+            .catch(error => console.error('Fetch Error: ', error));
+    }
+
+    static renderRequestPage(res, view, loggedIn, user, data, pageTitle) {
+        res.render(view, {
             loggedIn,
             user,
             data,
+            pageTitle
         });
     }
 }

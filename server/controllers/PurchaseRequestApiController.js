@@ -71,8 +71,12 @@ class PurchaseRequestApi {
         const requestIndex = mockRequestData.purchase_requests.findIndex(function(element) {
             return element.id == req.params.id;
         });
-
-        res.json(mockRequestData.purchase_requests[requestIndex]);
+        console.log('Request Index: ', requestIndex);
+        if (requestIndex === -1) {
+            res.json({ "error": "Request not found" });
+        } else {
+            res.json(mockRequestData.purchase_requests[requestIndex]);
+        }
     }
 
     static updateRequest(req, res) {

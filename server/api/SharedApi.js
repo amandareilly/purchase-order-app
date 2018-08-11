@@ -1,6 +1,5 @@
 class SharedApi {
     static checkForRequiredFields(fieldList, request) {
-        console.log(request);
         let message = '';
         for (let i = 0; i < fieldList.length; i++) {
             const field = fieldList[i];

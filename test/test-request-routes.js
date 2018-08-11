@@ -40,9 +40,9 @@ describe('Purchase Request Routes', function() {
     });
 
     // should receive 200 status and html when hitting /requests/:id
-    it('/requests/123 should return status 200 and html on GET', function() {
+    it('/requests/1 should return status 200 and html on GET', function() {
         return chai.request(app)
-            .get('/requests/123')
+            .get('/requests/1')
             .then(function(res) {
                 expect(res).to.have.status(200);
                 expect(res).to.be.html;
