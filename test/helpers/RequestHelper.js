@@ -12,7 +12,6 @@ class RequestHelper {
             seedData.push(this.generateRequestData());
         }
         return Request.insertMany(seedData);
-        done();
     }
 
     static generateRequestData() {
