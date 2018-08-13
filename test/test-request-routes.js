@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http')
 
-const { connectToDb, disconnectDb } = require('../server/server');
+const { runServer, closeServer } = require('../server/server');
 const app = require('../server/app');
 
 const expect = chai.expect;
@@ -11,12 +11,12 @@ describe('Purchase Request Routes', function() {
 
     // starts the server before running tests
     before(function() {
-        // return connectToDb();
+        return runServer();
     });
 
     // closes the server after running tests
     after(function() {
-        //return disconnectDb();
+        return closeServer();
     });
 
     // should receive 200 status and html when hitting /requests
