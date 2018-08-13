@@ -1,9 +1,13 @@
 require('isomorphic-fetch');
 
-const mockUserData = require('../MOCK-DATA/mock-user-data');
-
+//temporary
+const User = require('../models/User');
+// temporary
+const user = User.findById('5b70f8d709110643dc2320c8');
+// temporary
+const mongoose = require('mongoose');
 const PurchaseRequest = require('../../source/client-js/PurchaseRequest');
-const user = mockUserData.getUserById(67891);
+
 const loggedIn = true;
 const apiUrl = process.env.API_URL || 'http://localhost:8080/api/';
 
@@ -12,13 +16,16 @@ class RequestController {
         const url = apiUrl + 'requests';
         fetch(url)
             .then(response => response.json())
-            .then(data => RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data, 'All Purchase Requests'))
+            .then(data => {
+                console.log(data);
+                RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests')
+            })
             .catch(error => console.error('Fetch Error: ', error));
     }
 
     static createNewRequest(req, res) {
-        //TEMPORARY until we creat user system.
-        const userId = 67891;
+        //TEMPORARY until we create user system.
+        const userId = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
         // end temporary
 
         const url = apiUrl + 'requests';

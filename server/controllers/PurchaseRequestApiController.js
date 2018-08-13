@@ -4,22 +4,35 @@ const mockRequestData = require('../MOCK-DATA/mock-request-data');
 // temporary until we hook up mongoose
 const mockUserData = require('../MOCK-DATA/mock-user-data');
 
+const Request = require('../models/Request');
+
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
-        // temporary - update when we hook up mongoose
-        res.json(mockRequestData.purchase_requests);
+        Request
+            .find()
+            .then(requests => {
+                res.json({
+                    requests: requests.map(
+                        (request) => request.serialize()
+                    )
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error' });
+            });
     }
 
     static validateRequest(type, req) {
         let requiredFields = [];
         if (type === 'new') {
-            requiredFields = ['requestorId', 'createdAt', 'status', 'items'];
+            requiredFields = ['requestorId', 'status', 'items'];
             // make sure there is no id
             if (req.body.id) {
                 return 'Cannot recreate existing purchase request.';
             }
         } else {
-            requiredFields = ['id', 'requestorId', 'createdAt', 'status', 'items'];
+            requiredFields = ['id', 'status', 'items'];
             // make sure param id and body id match
             if (req.params.id != req.body.id) {
                 return `Request path id (${req.params.id}) and request body id (${req.body.id}) must match`;
@@ -54,29 +67,27 @@ class PurchaseRequestApi {
             res.status(400).send(validation);
         }
 
-        // temporary until we hook up mongoose
-        // use timestamp as dummy id
-        req.body.id = Date.now();
-
-        // temporary until we hook up mongoose
-        // persist request
-        mockRequestData.purchase_requests.push(req.body);
-
-        // temporary - update when we hook up mongoose
-        return res.status(201).json(req.body);
+        Request
+            .create({
+                requestor: req.body.requestorId,
+                status: req.body.status,
+                items: req.body.items,
+            })
+            .then(request => res.status(201).json(request.serialize()))
+            .catch(err => {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error.' });
+            });
     }
 
     static getRequestById(req, res) {
-        // temporary - update when we hook up mongoose
-        const requestIndex = mockRequestData.purchase_requests.findIndex(function(element) {
-            return element.id == req.params.id;
-        });
-        console.log('Request Index: ', requestIndex);
-        if (requestIndex === -1) {
-            res.json({ "error": "Request not found" });
-        } else {
-            res.json(mockRequestData.purchase_requests[requestIndex]);
-        }
+        Request
+            .findById(req.params.id)
+            .then(request => res.json(request.serialize()))
+            .catch(err => {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error' });
+            });
     }
 
     static updateRequest(req, res) {

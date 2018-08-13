@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-const itemSchema = require('./item');
-const autopopulate = require('mongoose-autopopulate');
+const itemSchema = require('./Item');
 
 const requestSchema = mongoose.Schema({
     requestor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

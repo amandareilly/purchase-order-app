@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const PurchaseRequestApiController = require('../controllers/PurchaseRequestApiController');
+const UserApiController = require('../controllers/UserApiController');
 
 const router = express.Router();
 const jsonParser = bodyParser.json();
@@ -15,5 +16,16 @@ router.post('/requests', jsonParser, PurchaseRequestApiController.saveNewRequest
 router.put('/requests/:id', jsonParser, PurchaseRequestApiController.updateRequest);
 // delete an existing request
 router.delete('/requests/:id', jsonParser, PurchaseRequestApiController.deleteRequest);
+
+//user endpoints
+//get all users
+router.get('/users', UserApiController.getAllUsers);
+//get a specific user by id
+router.get('/users/byId/:id', jsonParser, UserApiController.getUserById);
+// get a specific user by email
+router.get('/users/byEmail/:email', jsonParser, UserApiController.getUserByEmail);
+//create a new user
+router.post('/users', jsonParser,
+    UserApiController.createUser);
 
 module.exports = router;

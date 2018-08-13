@@ -23,8 +23,8 @@ userSchema.methods.serialize = function() {
     }
 };
 
-userSchema.query.byEmail = function(email, cb) {
-    return this.find({ email: new RegExp(email, 'i') }, cb);
+userSchema.query.byEmail = function(email) {
+    return this.findOne({ email: new RegExp(email, 'i') });
 }
 
 const User = mongoose.model('User', userSchema);
