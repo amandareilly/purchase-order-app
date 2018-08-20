@@ -149,7 +149,6 @@ describe('Purchase Request API', function() {
         it('should delete a request with a status of created', function() {
             const newRequestData = RequestHelper.generateRequestData();
             newRequestData.status = 'created';
-            const request = Request.create(newRequestData);
             return Request.create(newRequestData)
                 .then((request) => {
                     return chai.request(app)
@@ -161,6 +160,29 @@ describe('Purchase Request API', function() {
                     then(function(_request) {
                         expect(_request).to.be.null;
                     });
+                });
+        });
+
+        it('should not delete a request with a status other than created', function() {
+            let request;
+            const newRequestData = RequestHelper.generateRequestData();
+            newRequestData.status = 'somethingelse';
+            return Request.create(newRequestData)
+                .then((_request) => {
+                    request = _request;
+                    return chai.request(app)
+                        .delete(`/api/requests/${request.id}`)
+                        .then(function(res) {
+                            expect(res).to.have.status(400)
+                            return Request.findById(request.id);
+                        })
+                        .then(function(_request) {
+                            console.log("_request: ", _request);
+                            console.log("request: ", request);
+                            expect(_request.id).to.equal(request.id);
+                            expect(_request.status).to.equal(request.status);
+                            expect(_request.items.length).to.equal(request.items.length);
+                        });
                 });
         });
     });

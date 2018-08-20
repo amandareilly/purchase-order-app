@@ -121,6 +121,7 @@ class PurchaseRequestApi {
             .then((request) => {
                 if (request.status != 'created') {
                     res.status(400).send(`Only requests with status 'created' can be deleted.  The specified request currently has a status of ${request.status}.`);
+                    return;
                 }
                 request.remove();
                 res.status(204).end();

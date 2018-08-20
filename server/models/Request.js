@@ -9,7 +9,6 @@ const requestSchema = mongoose.Schema({
 }, { timestamps: true });
 
 requestSchema.pre('find', function(next) {
-    console.log("Running pre-find middleware");
     this.populate('requestor');
     next();
 });
