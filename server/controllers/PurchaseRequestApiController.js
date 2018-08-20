@@ -26,13 +26,13 @@ class PurchaseRequestApi {
     static validateRequest(type, req) {
         let requiredFields = [];
         if (type === 'new') {
-            requiredFields = ['requestorId', 'status', 'items'];
+            requiredFields = ['requestor', 'status', 'items'];
             // make sure there is no id
             if (req.body.id) {
                 return 'Cannot recreate existing purchase request.';
             }
         } else {
-            requiredFields = ['id', 'status', 'items'];
+            requiredFields = ['id', 'status'];
             // make sure param id and body id match
             if (req.params.id != req.body.id) {
                 return `Request path id (${req.params.id}) and request body id (${req.body.id}) must match`;
@@ -45,15 +45,17 @@ class PurchaseRequestApi {
         }
 
         // if items are present, make sure they have all required fields
-        let itemIdCounter = 1;
-        for (const item of req.body.items) {
-            const itemMessage = PurchaseRequestApi.checkItemForRequired(item);
-            if (itemMessage) {
-                return itemMessage;
-            } else {
-                // temporary until we hook up mongoose
-                item.id = itemIdCounter;
-                itemIdCounter++;
+        if (req.body.items) {
+            let itemIdCounter = 1;
+            for (const item of req.body.items) {
+                const itemMessage = PurchaseRequestApi.checkItemForRequired(item);
+                if (itemMessage) {
+                    return itemMessage;
+                } else {
+                    // temporary until we hook up mongoose
+                    item.id = itemIdCounter;
+                    itemIdCounter++;
+                }
             }
         }
         return req.body;
@@ -69,7 +71,7 @@ class PurchaseRequestApi {
 
         Request
             .create({
-                requestor: req.body.requestorId,
+                requestor: req.body.requestor,
                 status: req.body.status,
                 items: req.body.items,
             })
@@ -97,21 +99,32 @@ class PurchaseRequestApi {
             console.error(validation);
             res.status(400).send(validation);
         }
-
-        // temporary - update when we hook up mongoose
-        const requestIndex = mockRequestData.purchase_requests.findIndex(function(element) {
-            return element.id == req.params.id;
-        });
-
-        mockRequestData.purchase_requests[requestIndex] = req.body;
-        res.status(200).json(req.body);
+        Request.findById(req.body.id)
+            .then(request => {
+                request.status = req.body.status;
+                return request;
+            })
+            .then(request => request.save())
+            .then(updatedRequest => res.status(204).json(updatedRequest.serialize()))
+            .catch((err) => {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error' });
+            });
     }
 
     static deleteRequest(req, res) {
-        // temporary - update when we hook up mongoose
-        const index = PurchaseRequestApi.getRequestById(req.params.id);
-        mockRequestData.purchase_requests.splice(index, 1);
-        res.status(204).end();
+        Request.findById(req.params.id)
+            .then((request) => {
+                if (request.status != 'created') {
+                    res.status(400).send(`Only requests with status 'created' can be deleted.  The specified request currently has a status of ${request.status}.`);
+                }
+                request.remove();
+                res.status(204).end();
+            })
+            .catch((err) => {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error' });
+            });
     }
 
     static getRequestor(userId) {

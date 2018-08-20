@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 const itemSchema = mongoose.Schema({
     name: { type: String, required: true },

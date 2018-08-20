@@ -1,11 +1,14 @@
 const faker = require('faker');
 const Request = require('../../server/models/Request');
+const mongoose = require('mongoose');
 const UserHelper = require('./UserHelper');
 const User = require('../../server/models/User');
 
 class RequestHelper {
     static seedRequestData() {
-
+        const userData = UserHelper.generateUserData();
+        userData._id = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
+        User.create(userData);
         console.info('seeding request data');
         const seedData = [];
         for (let i = 1; i <= 10; i++) {
@@ -15,12 +18,10 @@ class RequestHelper {
     }
 
     static generateRequestData() {
-        const userData = UserHelper.generateUserData();
-        const user = User.create(userData);
         return {
-            requestor: user.id,
-            status: this.generateRequestStatus(),
-            items: this.generateItems()
+            requestor: mongoose.Types.ObjectId('5b70f8d709110643dc2320c8'),
+            status: RequestHelper.generateRequestStatus(),
+            items: RequestHelper.generateItems()
         };
     }
 

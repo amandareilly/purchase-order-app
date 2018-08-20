@@ -6,7 +6,6 @@ const { runServer, closeServer } = require('../../server/server');
 const { TEST_DATABASE_URL, TEST_PORT } = require('../../server/config');
 const GeneralHelper = require('../helpers/GeneralHelper');
 const RequestHelper = require('../helpers/RequestHelper');
-
 const { expect } = chai;
 chai.use(chaiHttp);
 
@@ -64,15 +63,16 @@ describe('Purchase Request API', function() {
                     return Request.findById(resRequest.id);
                 })
                 .then(function(request) {
-                    expect(resRequest).to.deep.equal(request);
+                    expect(resRequest.id).to.equal(request.id);
+                    expect(resRequest.status).to.equal(request.status);
                 });
         });
     });
 
     describe('POST Endpoint', function() {
         it('should add a new request', function() {
-            const newRequest = generateRequestData();
-
+            let resRequest;
+            const newRequest = RequestHelper.generateRequestData();
             return chai.request(app)
                 .post('/api/requests')
                 .send(newRequest)
@@ -82,14 +82,16 @@ describe('Purchase Request API', function() {
                     expect(res.body).to.be.a('object');
                     expect(res.body).to.include.keys('id', 'requestor', 'status', 'items', 'createdAt', 'updatedAt');
                     expect(res.body.id).to.not.be.null;
-                    expect(res.body.requestor).to.equal(newRequest.requestor);
+                    expect(res.body.requestor.id).to.equal(newRequest.requestor.toHexString());
                     expect(res.body.status).to.equal(newRequest.status);
-                    expect(res.body.items).to.deep.equal(newRequest.items);
-                    const resRequest = res.body;
+                    expect(res.body.items[0].name).to.equal(newRequest.items[0].name);
+                    expect(res.body.items[0].qty).to.equal(newRequest.items[0].qty);
+                    resRequest = res.body;
                     return Request.findById(res.body.id);
                 })
-                .then(function(request) {
-                    expect(resRequest).to.deep.equal(request);
+                .then(function(res) {
+                    expect(res.id).to.equal(resRequest.id);
+                    expect(res.status).to.equal(resRequest.status);
                 });
         });
     });
@@ -123,19 +125,21 @@ describe('Purchase Request API', function() {
 
     describe('DELETE Endpoint', function() {
         it('should delete a request with a status of created', function() {
-            const newRequestData = generateRequestData();
+            const newRequestData = RequestHelper.generateRequestData();
             newRequestData.status = 'created';
             const request = Request.create(newRequestData);
-
-            return chai.request(app)
-                .delete(`/api/requests/${request.id}`)
-                .then(function(res) {
-                    expect(res).to.have.status(204);
-                    return Request.findById(request.id);
-                })
-            then(function(_request) {
-                expect(_request).to.be.null;
-            });
+            return Request.create(newRequestData)
+                .then((request) => {
+                    return chai.request(app)
+                        .delete(`/api/requests/${request.id}`)
+                        .then(function(res) {
+                            expect(res).to.have.status(204);
+                            return Request.findById(request.id);
+                        })
+                    then(function(_request) {
+                        expect(_request).to.be.null;
+                    });
+                });
         });
     });
 });

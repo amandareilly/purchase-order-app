@@ -1,6 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http')
-
+const { TEST_DATABASE_URL, TEST_PORT } = require('../server/config');
 const { runServer, closeServer } = require('../server/server');
 const app = require('../server/app');
 
@@ -11,7 +11,7 @@ describe('Purchase Request Routes', function() {
 
     // starts the server before running tests
     before(function() {
-        return runServer();
+        return runServer(TEST_DATABASE_URL, TEST_PORT);
     });
 
     // closes the server after running tests

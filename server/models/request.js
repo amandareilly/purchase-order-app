@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 const itemSchema = require('./Item');
 
 const requestSchema = mongoose.Schema({
@@ -8,7 +9,15 @@ const requestSchema = mongoose.Schema({
 }, { timestamps: true });
 
 requestSchema.pre('find', function() {
-    this.populate('requestor', '_id, fullName email');
+    this.populate('requestor');
+});
+
+requestSchema.post('save', function(doc, next) {
+    doc.populate('requestor')
+        .execPopulate()
+        .then(function() {
+            next()
+        });
 });
 
 requestSchema.methods.serialize = function() {
@@ -16,11 +25,13 @@ requestSchema.methods.serialize = function() {
         id: this._id,
         requestor: {
             id: this.requestor.id,
-            name: this.requestor.fullName,
+            name: `${this.requestor.name.first} ${this.requestor.name.last}`,
             email: this.requestor.email
         },
         status: this.status,
         items: this.items,
+        createdAt: this.createdAt,
+        updatedAt: this.updatedAt,
     }
 };
 
@@ -58,7 +69,6 @@ requestSchema.methods.updateItem = function(updatedItem) {
         console.log(`Item #${updatedItem._id} was updated.`);
     });
 }
-
 const Request = mongoose.model('Request', requestSchema);
 
 module.exports = Request;

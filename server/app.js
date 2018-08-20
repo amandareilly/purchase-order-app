@@ -13,7 +13,7 @@ const app = express();
 
 
 app.use(express.static('public'));
-app.use(morgan('default'));
+// app.use(morgan('default'));
 
 // handlebars view engine setup
 const hbs = exphbs.create({

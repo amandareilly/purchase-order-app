@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 const isEmail = require('validator').isEmail;
 
 const userSchema = mongoose.Schema({
