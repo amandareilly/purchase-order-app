@@ -7,3 +7,5 @@ deploy:
   app: nameless-waters-86419
   on:
     repo: amandareilly/purchase-order-app
+services:
+- mongodb
