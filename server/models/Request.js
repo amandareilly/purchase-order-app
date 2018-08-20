@@ -8,8 +8,10 @@ const requestSchema = mongoose.Schema({
     items: [itemSchema]
 }, { timestamps: true });
 
-requestSchema.pre('find', function() {
+requestSchema.pre('find', function(next) {
+    console.log("Running pre-find middleware");
     this.populate('requestor');
+    next();
 });
 
 requestSchema.post('save', function(doc, next) {

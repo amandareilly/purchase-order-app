@@ -83,9 +83,13 @@ class PurchaseRequestApi {
     }
 
     static getRequestById(req, res) {
-        Request
+        return Request
             .findById(req.params.id)
-            .then(request => res.json(request.serialize()))
+            .populate('requestor')
+            .exec()
+            .then(request => {
+                res.json(request.serialize());
+            })
             .catch(err => {
                 console.error(err);
                 res.status(500).json({ message: 'Internal server error' });

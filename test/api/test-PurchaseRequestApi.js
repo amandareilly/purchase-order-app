@@ -67,6 +67,28 @@ describe('Purchase Request API', function() {
                     expect(resRequest.status).to.equal(request.status);
                 });
         });
+        it('should return a specific request by id', function() {
+            let testRequest;
+            return chai.request(app)
+                .get('/api/requests')
+                .then(function(res) {
+                    const requestToFind = res.body.requests[0];
+                    testRequest = requestToFind;
+                    return requestToFind;
+                })
+                .then(function(requestToFind) {
+                    const url = `/api/requests/${requestToFind.id}`;
+                    console.log("URL: ", url);
+                    return chai.request(app)
+                        .get(url)
+                        .then(function(res) {
+                            expect(res.body.id).to.equal(testRequest.id);
+                            expect(res.body.status).to.equal(testRequest.status);
+                            expect(res.body.requestor.id).to.equal(testRequest.requestor.id);
+                            expect(res.body.items.length).to.equal(testRequest.items.length);
+                        })
+                });
+        });
     });
 
     describe('POST Endpoint', function() {

@@ -31,7 +31,7 @@ class RequestHelper {
     }
 
     static generateItems() {
-        const numItems = Math.floor(Math.random() * 5);
+        const numItems = Math.max(1, Math.floor(Math.random() * 5));
         const items = [];
         for (let i = 0; i < numItems; i++) {
             items.push(this.generateItem());
