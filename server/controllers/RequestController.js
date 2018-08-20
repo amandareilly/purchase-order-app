@@ -1,7 +1,7 @@
 require('isomorphic-fetch');
 
 //temporary
-const User = require('../models/User');
+const User = require('./../models/User');
 // temporary
 const user = User.findById('5b70f8d709110643dc2320c8');
 // temporary
