@@ -9,6 +9,11 @@ class SharedApi {
         }
         return message;
     }
+
+    static constructApiUrl(req, endpoint) {
+
+        return req.protocol + "://" + req.get('host') + '/api/' + endpoint;
+    }
 }
 
 module.exports = SharedApi;

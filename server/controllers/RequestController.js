@@ -7,14 +7,11 @@ const mongoose = require('mongoose');
 
 const loggedIn = true;
 
+const SharedApi = require('../api/SharedApi');
+
 class RequestController {
-    static constructApiUrl(req, endpoint) {
-
-        return req.protocol + "://" + req.get('host') + '/api/' + endpoint;
-    }
-
     static getAllRequests(req, res) {
-        const url = RequestController.constructApiUrl(req, 'requests');
+        const url = SharedApi.constructApiUrl(req, 'requests');
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -28,7 +25,7 @@ class RequestController {
         const userId = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
         // end temporary
 
-        const url = RequestController.constructApiUrl(req, 'requests');
+        const url = SharedApi.constructApiUrl(req, 'requests');
 
         const requestData = {
             requestor: userId,
@@ -51,7 +48,7 @@ class RequestController {
     }
 
     static getExistingRequest(req, res) {
-        const url = RequestController.constructApiUrl(req, 'requests/' + req.params.id);
+        const url = SharedApi.constructApiUrl(req, 'requests/' + req.params.id);
         fetch(url)
             .then(response => response.json())
             .then((data) => {
