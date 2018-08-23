@@ -1,8 +1,4 @@
 const SharedApi = require('../api/SharedApi');
-// temporary until we hook up mongoose
-const mockRequestData = require('../MOCK-DATA/mock-request-data');
-// temporary until we hook up mongoose
-const mockUserData = require('../MOCK-DATA/mock-user-data');
 
 const Request = require('../models/Request');
 
@@ -130,10 +126,6 @@ class PurchaseRequestApi {
                 console.error(err);
                 res.status(500).json({ message: 'Internal server error' });
             });
-    }
-
-    static getRequestor(userId) {
-        return mockUserData.getUserById(userId);
     }
 
     static checkItemForRequired(item) {

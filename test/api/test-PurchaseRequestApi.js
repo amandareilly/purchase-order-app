@@ -78,7 +78,6 @@ describe('Purchase Request API', function() {
                 })
                 .then(function(requestToFind) {
                     const url = `/api/requests/${requestToFind.id}`;
-                    console.log("URL: ", url);
                     return chai.request(app)
                         .get(url)
                         .then(function(res) {
@@ -177,8 +176,6 @@ describe('Purchase Request API', function() {
                             return Request.findById(request.id);
                         })
                         .then(function(_request) {
-                            console.log("_request: ", _request);
-                            console.log("request: ", request);
                             expect(_request.id).to.equal(request.id);
                             expect(_request.status).to.equal(request.status);
                             expect(_request.items.length).to.equal(request.items.length);

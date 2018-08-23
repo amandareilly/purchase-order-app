@@ -1,19 +1,20 @@
 require('isomorphic-fetch');
 
-//temporary
 const User = require('./../models/User');
 // temporary
 const user = User.findById('5b70f8d709110643dc2320c8');
-// temporary
 const mongoose = require('mongoose');
-const PurchaseRequest = require('../../source/client-js/PurchaseRequest');
 
 const loggedIn = true;
-const apiUrl = process.env.API_URL || 'http://localhost:8080/api/';
 
 class RequestController {
+    static constructApiUrl(req, endpoint) {
+
+        return req.protocol + "://" + req.get('host') + '/api/' + endpoint;
+    }
+
     static getAllRequests(req, res) {
-        const url = apiUrl + 'requests';
+        const url = RequestController.constructApiUrl(req, 'requests');
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -27,13 +28,20 @@ class RequestController {
         const userId = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
         // end temporary
 
-        const url = apiUrl + 'requests';
+        const url = RequestController.constructApiUrl(req, 'requests');
+
+        const requestData = {
+            requestor: userId,
+            status: 'created',
+            items: []
+        };
+
         fetch(url, {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(new PurchaseRequest(userId))
+                body: JSON.stringify(requestData)
             })
             .then(response => response.json())
             .then(data => {
@@ -43,7 +51,7 @@ class RequestController {
     }
 
     static getExistingRequest(req, res) {
-        const url = apiUrl + 'requests/' + req.params.id;
+        const url = RequestController.constructApiUrl(req, 'requests/' + req.params.id);
         fetch(url)
             .then(response => response.json())
             .then((data) => {
