@@ -5,18 +5,18 @@ const { PORT, DATABASE_URL } = require('./config');
 let server;
 
 function runServer(databaseUrl = DATABASE_URL, port = PORT) {
-    return new Promise((res, rej) => {
-        mongoose.connect(databaseUrl, err => {
+    return new Promise((resolve, reject) => {
+        mongoose.connect(databaseUrl, { useNewUrlParser: true }, err => {
             if (err) {
                 return reject(err);
             }
         })
         server = app.listen(port, () => {
             console.log(`App listening on port ${port}`);
-            res(server);
+            resolve(server);
         }).on('error', (err) => {
             mongoose.disconnect();
-            rej(err);
+            reject(err);
         });
     });
 }
