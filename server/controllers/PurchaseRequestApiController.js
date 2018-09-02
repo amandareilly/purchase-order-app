@@ -7,11 +7,15 @@ class PurchaseRequestApi {
         Request
             .find()
             .then(requests => {
-                res.json({
-                    requests: requests.map(
-                        (request) => request.serialize()
-                    )
-                });
+                if (requests) {
+                    res.json({
+                        requests: requests.map(
+                            (request) => request.serialize()
+                        )
+                    });
+                } else {
+                    res.json({ requests: false });
+                }
             })
             .catch(err => {
                 console.error(err);
