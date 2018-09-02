@@ -22,13 +22,21 @@ requestSchema.post('save', function(doc, next) {
 });
 
 requestSchema.methods.serialize = function() {
+    const requestor = {
+        id: 'Unknown',
+        name: 'Unknown',
+        email: 'Unknown',
+    };
+    if (this.requestor) {
+        requestor.id = this.requestor._id;
+        requestor.email = this.requestor.email;
+        if (this.requestor.name.first && this.requestor.name.last) {
+            requestor.name = `${this.requestor.name.first} ${this.requestor.name.last}`;
+        }
+    }
     return {
         id: this._id,
-        requestor: {
-            id: this.requestor.id,
-            name: `${this.requestor.name.first} ${this.requestor.name.last}`,
-            email: this.requestor.email
-        },
+        requestor: requestor,
         status: this.status,
         items: this.items,
         createdAt: this.createdAt,
