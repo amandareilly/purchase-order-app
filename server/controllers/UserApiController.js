@@ -4,7 +4,7 @@ const User = require('../models/User');
 class UserApi {
     static createUser(req, res) {
         const validate = SharedApi.checkForRequiredFields(
-            ['firstName', 'lastName', 'email'], req.body
+            ['email'], req.body
         );
         if (validate) {
             res.status(400).send(validate);
@@ -12,10 +12,6 @@ class UserApi {
 
         User
             .create({
-                name: {
-                    first: req.body.firstName,
-                    last: req.body.lastName,
-                },
                 role: req.body.role || 'basic',
                 email: req.body.email
             })

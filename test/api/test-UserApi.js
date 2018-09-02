@@ -59,7 +59,7 @@ describe('User API', function() {
 
                     res.body.users.forEach(function(user) {
                         expect(user).to.be.a('object');
-                        expect(user).to.include.keys('id', 'name', 'role', 'email');
+                        expect(user).to.include.keys('id', 'role', 'email');
                     });
 
                     resUser = res.body.users[0];
@@ -67,7 +67,6 @@ describe('User API', function() {
                 })
                 .then(function(user) {
                     expect(resUser.id).to.equal(user.id);
-                    expect(resUser.name).to.equal(`${user.name.first} ${user.name.last}`);
                     expect(resUser.role).to.equal(user.role);
                     expect(resUser.email).to.equal(user.email);
 
@@ -75,7 +74,6 @@ describe('User API', function() {
                 })
                 .then(function(user) {
                     expect(resUser.id).to.equal(user.id);
-                    expect(resUser.name).to.equal(`${user.name.first} ${user.name.last}`);
                     expect(resUser.role).to.equal(user.role);
                     expect(resUser.email).to.equal(user.email);
                 });
