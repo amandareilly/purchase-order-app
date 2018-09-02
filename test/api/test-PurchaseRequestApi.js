@@ -134,12 +134,12 @@ describe('Purchase Request API', function() {
                         .send(updateData);
                 })
                 .then(function(res) {
-                    expect(res).to.have.status(204);
+                    expect(res).to.have.status(200);
                     return Request.findById(updateData.id);
                 })
                 .then(function(request) {
                     expect(request.status).to.equal(updateData.status);
-                    expect(request.requestor).to.not.equal(updateData.status);
+                    expect(request.requestor).to.not.equal(updateData.requestor);
                 });
         });
     });

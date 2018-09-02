@@ -28,9 +28,15 @@ requestSchema.methods.serialize = function() {
         email: 'Unknown',
     };
     if (this.requestor) {
-        requestor.id = this.requestor._id;
-        requestor.email = this.requestor.email;
-        if (this.requestor.name.first && this.requestor.name.last) {
+        if (this.requestor.id) {
+            requestor.id = this.requestor._id;
+        } else {
+            requestor.id = this.requestor;
+        }
+        if (this.requestor.email) {
+            requestor.email = this.requestor.email;
+        }
+        if (this.requestor.name) {
             requestor.name = `${this.requestor.name.first} ${this.requestor.name.last}`;
         }
     }

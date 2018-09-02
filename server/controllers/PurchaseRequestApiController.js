@@ -1,6 +1,7 @@
 const SharedApi = require('../api/SharedApi');
 
 const Request = require('../models/Request');
+const ItemApi = require('./ItemApiController');
 
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
@@ -48,13 +49,9 @@ class PurchaseRequestApi {
         if (req.body.items) {
             let itemIdCounter = 1;
             for (const item of req.body.items) {
-                const itemMessage = PurchaseRequestApi.checkItemForRequired(item);
+                const itemMessage = ItemApi.checkItemForRequired(item);
                 if (itemMessage) {
                     return itemMessage;
-                } else {
-                    // temporary until we hook up mongoose
-                    item.id = itemIdCounter;
-                    itemIdCounter++;
                 }
             }
         }
@@ -100,7 +97,7 @@ class PurchaseRequestApi {
             });
     }
 
-    static updateRequest(req, res) {
+    static updateRequest(req, res, next) {
         // check for required fields
         const validation = PurchaseRequestApi.validateRequest('update', req);
         if (typeof(validation) === 'string') {
@@ -113,7 +110,9 @@ class PurchaseRequestApi {
                 return request;
             })
             .then(request => request.save())
-            .then(updatedRequest => res.status(204).json(updatedRequest.serialize()))
+            .then((updatedRequest) => {
+                res.status(200).json(updatedRequest.serialize());
+            })
             .catch((err) => {
                 console.error(err);
                 res.status(500).json({ message: 'Internal server error' });
@@ -136,12 +135,7 @@ class PurchaseRequestApi {
             });
     }
 
-    static checkItemForRequired(item) {
-        const itemRequiredFields = ['name', 'qty', 'pricePer', 'neededBy', 'expeditedShipping'];
-        const message = SharedApi.checkForRequiredFields(itemRequiredFields, item);
 
-        return message;
-    }
 }
 
 module.exports = PurchaseRequestApi;
