@@ -84,7 +84,11 @@ class PurchaseRequestApi {
             .populate('requestor')
             .exec()
             .then(request => {
-                res.json(request.serialize());
+                if (request) {
+                    res.json(request.serialize());
+                } else {
+                    res.json({ request: "Not Found" });
+                }
             })
             .catch(err => {
                 console.error(err);

@@ -3,6 +3,8 @@ const chaiHttp = require('chai-http')
 const { TEST_DATABASE_URL, TEST_PORT } = require('../server/config');
 const { runServer, closeServer } = require('../server/server');
 const app = require('../server/app');
+const RequestHelper = require('./helpers/RequestHelper');
+const GeneralHelper = require('./helpers/GeneralHelper');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -17,6 +19,14 @@ describe('Purchase Request Routes', function() {
     // closes the server after running tests
     after(function() {
         return closeServer();
+    });
+
+    beforeEach(function() {
+        return RequestHelper.seedRequestData();
+    });
+
+    afterEach(function() {
+        return GeneralHelper.tearDownDb();
     });
 
     // should receive 200 status and html when hitting /requests

@@ -15,7 +15,6 @@ class RequestController {
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log("data: ", data);
                 RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests')
             })
             .catch(error => console.error('Fetch Error: ', error));
