@@ -7,7 +7,31 @@ const itemSchema = mongoose.Schema({
     pricePer: { type: Number, min: 0 },
     neededBy: { type: Date, min: Date.now },
     expeditedShipping: { type: Boolean, required: true, default: false },
+    link: { type: String },
+    notes: { type: String }
 });
+
+itemSchema.methods.serialize = function() {
+    let link = null;
+    let notes = null;
+    if (this.link) {
+        link = this.link;
+    }
+    if (this.notes) {
+        notes = this.notes;
+    }
+
+    return {
+        id: this._id,
+        name: this.name,
+        qty: this.qty,
+        pricePer: this.pricePer,
+        neededBy: this.neededBy,
+        expeditedShipping: this.expeditedShipping,
+        link: link,
+        notes: notes,
+    };
+}
 
 // only export the schema because this will
 // only be used as a nested sub-document

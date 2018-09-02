@@ -40,11 +40,17 @@ requestSchema.methods.serialize = function() {
             requestor.name = `${this.requestor.name.first} ${this.requestor.name.last}`;
         }
     }
+
+    const serializedItems = [];
+    this.items.forEach((item) => {
+        serializedItems.push(item.serialize());
+    });
+
     return {
         id: this._id,
         requestor: requestor,
         status: this.status,
-        items: this.items,
+        items: serializedItems,
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
     }
