@@ -1,5 +1,5 @@
 // this is a static class
-
+require('isomorphic-fetch');
 const ClickHandler = {
     apiUrl: process.env.API_URL || 'http://localhost:8080/api/',
     addClickListeners: function() {
@@ -30,7 +30,26 @@ const ClickHandler = {
                 })
                 .catch(error => console.error('Fetch Error: ', error));
         }
-        console.log(requestId);
+    },
+    submitRequest: function(element) {
+        const requestId = element.getAttribute('data-reqId');
+        const url = this.apiUrl + 'requests/' + requestId;
+        const updateData = {
+            id: requestId,
+            status: 'submitted'
+        };
+        fetch(url, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            })
+            .then((response) => {
+                const redirectUrl = window.location.origin + '/requests/' + requestId;
+                window.location.href = redirectUrl;
+            })
+            .catch(error => console.error('Fetch Error: ', error));
     },
 }
 

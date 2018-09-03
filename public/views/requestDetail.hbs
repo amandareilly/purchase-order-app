@@ -28,8 +28,9 @@
             <label for="itemLink">Vendor Link (optional): <input type="url" name="itemLink" id="itemLink"></label><br>
             <label for="itemNotes">Notes (optional): <textarea name="itemNotes" id="itemNotes" cols="30" rows="10"></textarea></label><br>
             <button type="submit">Add Item</button><button type="reset">Clear Form</button>
-        </form>
-        <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a>
+        </form><br>
+        <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a><br>
+        <a href="/requests/{{data.id}}/submit" class="submit-request" data-clickable="submitRequest" data-reqId="{{data.id}}">Submit Request</a>
     {{/checkForSubmitted}}
 {{else}}
 <h2>Request Not Found</h2>
