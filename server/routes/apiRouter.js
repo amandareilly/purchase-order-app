@@ -21,6 +21,10 @@ router.delete('/requests/:id', jsonParser, PurchaseRequestApiController.deleteRe
 // request item endpoints
 // add an item to a request
 router.post('/requests/:id/addItem', jsonParser, ItemApiController.addItem);
+// delete an item from a request
+router.delete('/requests/:id/item/:itemId', jsonParser, ItemApiController.deleteItem);
+// update an item in a request
+router.put('/requests/:id/item/:itemId', jsonParser, ItemApiController.updateItem);
 
 //user endpoints
 //get all users
