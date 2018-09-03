@@ -71,7 +71,6 @@ class RequestController {
     }
 
     static deleteItem(req, res) {
-        console.log("Hit Delete Item");
         const endpoint = 'requests/' + req.params.id + '/item/' + req.params.itemId;
         const url = SharedApi.constructApiUrl(req, endpoint);
 
@@ -79,7 +78,6 @@ class RequestController {
                 method: 'DELETE'
             })
             .then((response) => {
-                console.log(response);
                 return res.redirect('/requests/' + req.params.id);
             })
     }

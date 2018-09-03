@@ -56,30 +56,6 @@ requestSchema.methods.serialize = function() {
     }
 };
 
-requestSchema.methods.addItem = function(itemObject) {
-    this.items.push(itemObject);
-    this.save(function(err) {
-        if (err) {
-            return handleError(err);
-        }
-        console.log(`Item ${itemObject.name} added.`);
-    });
-}
-
-requestSchema.methods.removeItem = function(id) {
-    this.items.id(id).remove();
-    this.save(function(err) {
-        if (err) {
-            return handleError(err);
-        }
-        console.log(`Item #${id} was removed.`);
-    });
-}
-
-requestSchema.methods.getItem = function(id) {
-    return this.items.id(id);
-}
-
 requestSchema.methods.updateItem = function(updatedItem) {
     const item = this.items.id(updatedItem._id);
     item.set(updatedItem);
