@@ -17,7 +17,6 @@ class ItemApi {
         // }
 
         // link and notes are not required fields
-
         const requestId = req.params.id;
         // request ID in URL must match request id in body
         if (requestId != req.body.requestId) {
@@ -93,10 +92,11 @@ class ItemApi {
                 const updatable = ['name', 'qty', 'pricePer', 'neededBy', 'expeditedShipping', 'link', 'notes'];
                 const updateData = {}
                 updatable.forEach((property) => {
-                    if (req.body[property]) {
+                    if (property in req.body) {
                         updateData[property] = req.body[property];
                     }
                 });
+
                 const itemToUpdate = request.items.id(itemId);
                 itemToUpdate.set(updateData);
                 return request.save();

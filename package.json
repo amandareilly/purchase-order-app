@@ -67,6 +67,7 @@
         "gulp-uglify": "^3.0.0",
         "gulp-util": "^3.0.8",
         "mocha": "^5.2.0",
+        "moment": "^2.22.2",
         "run-sequence": "^2.2.1",
         "webpack-stream": "^5.0.0"
     }

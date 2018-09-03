@@ -25,7 +25,7 @@ itemSchema.methods.serialize = function() {
         id: this._id,
         name: this.name,
         qty: this.qty,
-        pricePer: this.pricePer,
+        pricePer: this.pricePer.toFixed(2),
         neededBy: this.neededBy,
         expeditedShipping: this.expeditedShipping,
         link: link,

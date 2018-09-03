@@ -5,23 +5,23 @@ const UserHelper = require('./UserHelper');
 const User = require('../../server/models/User');
 
 class RequestHelper {
-    static seedRequestData() {
+    static seedRequestData(withItems = true) {
         const userData = UserHelper.generateUserData();
         userData._id = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
         User.create(userData);
         console.info('seeding request data');
         const seedData = [];
         for (let i = 1; i <= 10; i++) {
-            seedData.push(this.generateRequestData());
+            seedData.push(this.generateRequestData(withItems));
         }
         return Request.insertMany(seedData);
     }
 
-    static generateRequestData() {
+    static generateRequestData(withItems = true) {
         return {
             requestor: mongoose.Types.ObjectId('5b70f8d709110643dc2320c8'),
             status: RequestHelper.generateRequestStatus(),
-            items: RequestHelper.generateItems()
+            items: (withItems ? RequestHelper.generateItems() : [])
         };
     }
 
