@@ -6,8 +6,12 @@
     <td>{{dateFormat this.neededBy "MMMM Do YYYY"}}</td>
     <td>{{prettifyTrueFalse this.expeditedShipping}}</td>
     <td rowspan="2">
-        <a href="#" class="view-request-link" data-item="{{this.id}}">Remove</a>
+        <a href="{{parent.data.id}}/items/delete/{{this.id}}" class="view-request-link" data-item="{{this.id}}">Remove</a>
     </td>
+</tr>
+<tr class="link">
+    <td class="link">Link:</td>
+    <td colspan="5"><a href="{{this.link}}" target="_new" class="item-link"></a>{{this.link}}</td>
 </tr>
 <tr class="notes">
     <td class="notes">Notes:</td>

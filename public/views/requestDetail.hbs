@@ -15,7 +15,7 @@
                 <th>Expedited Shipping?</th>
                 <th></th>
             </tr>
-            {{#each data.items}} {{>request/itemTableRow this}} {{/each}}
+            {{#each data.items}} {{>request/itemTableRow parent=..}} {{/each}}
         </table>
     {{/if}}
     {{#checkForComplete data.status}}
