@@ -1,11 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 const PurchaseRequestApiController = require('../controllers/PurchaseRequestApiController');
 const UserApiController = require('../controllers/UserApiController');
+const AuthController = require('../controllers/AuthController');
 const ItemApiController = require('../controllers/ItemApiController');
 
 const router = express.Router();
 const jsonParser = bodyParser.json();
+
+const localAuth = passport.authenticate('local', { session: false });
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
 // requests endpoints
 // get all requests
 router.get('/requests', PurchaseRequestApiController.getAllRequests);
@@ -34,7 +40,10 @@ router.get('/users/byId/:id', jsonParser, UserApiController.getUserById);
 // get a specific user by email
 router.get('/users/byEmail/:email', jsonParser, UserApiController.getUserByEmail);
 //create a new user
-router.post('/users', jsonParser,
-    UserApiController.createUser);
+router.post('/users', jsonParser, UserApiController.createUser);
+
+// auth api endpoints
+router.post('/auth/login', localAuth, AuthController.issueToken);
+router.post('/auth/refresh', jwtAuth, AuthController.issueToken);
 
 module.exports = router;
