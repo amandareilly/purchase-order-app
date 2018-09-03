@@ -18,7 +18,7 @@
             {{#each data.items}} {{>request/itemTableRow parent=..}} {{/each}}
         </table>
     {{/if}}
-    {{#checkForComplete data.status}}
+    {{#checkForSubmitted data.status}}
         <form action="{{data.id}}/addItem" method="post">
             <label for="itemName">Item Name: <input type="text" name="itemName" id="itemName"></label><br>
             <label for="itemQty">Quantity Needed: <input type="number" name="itemQty" id="itemQty"></label><br>
@@ -30,7 +30,7 @@
             <button type="submit">Add Item</button><button type="reset">Clear Form</button>
         </form>
         <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a>
-    {{/checkForComplete}}
+    {{/checkForSubmitted}}
 {{else}}
 <h2>Request Not Found</h2>
 {{/if}}

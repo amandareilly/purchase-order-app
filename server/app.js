@@ -26,7 +26,7 @@ const hbs = exphbs.create({
         dateFormat: require('handlebars-dateformat'),
         capitalizeFirstLetter: require('./viewHelpers/capitalizeFirstLetter'),
         prettifyTrueFalse: require('./viewHelpers/prettifyTrueFalse'),
-        checkForComplete: require('./viewHelpers/checkForComplete'),
+        checkForSubmitted: require('./viewHelpers/checkForSubmitted'),
     },
 });
 
