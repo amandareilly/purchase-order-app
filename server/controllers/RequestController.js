@@ -83,7 +83,36 @@ class RequestController {
     }
 
     static addItem(req, res) {
-        console.log('req: ', req);
+        const endpoint = 'requests/' + req.params.id + '/addItem';
+        const url = SharedApi.constructApiUrl(req, endpoint);
+        const itemRequest = {
+            requestId: req.params.id,
+            name: req.body.itemName,
+            qty: req.body.itemQty,
+            pricePer: req.body.itemPrice,
+            neededBy: req.body.neededBy,
+            expeditedShipping: false,
+        };
+        if (req.body.expeditedShipping === 'on') {
+            itemRequest.expeditedShipping = true;
+        }
+        if (req.body.itemLink) {
+            itemRequest.link = req.body.itemLink;
+        }
+        if (req.body.itemNotes) {
+            itemRequest.notes = req.body.itemNotes;
+        }
+
+        fetch(url, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(itemRequest)
+            })
+            .then((response) => {
+                return res.redirect('/requests/' + req.params.id);
+            });
     }
 }
 
