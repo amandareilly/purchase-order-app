@@ -14,4 +14,7 @@ router.get('/:id', RequestController.getExistingRequest);
 // Delete Item
 router.get('/:id/items/delete/:itemId', RequestController.deleteItem);
 
+// Add Item
+router.post('/:id/addItem', RequestController.addItem);
+
 module.exports = router;

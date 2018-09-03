@@ -81,6 +81,10 @@ class RequestController {
                 return res.redirect('/requests/' + req.params.id);
             })
     }
+
+    static addItem(req, res) {
+        console.log('req: ', req);
+    }
 }
 
 module.exports = RequestController;

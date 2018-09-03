@@ -13,10 +13,10 @@ const ClickHandler = {
             ClickHandler[clicked.getAttribute('data-clickable')](clicked);
         }
     },
-    addItemToReq: function(element) {
-        const requestId = element.getAttribute('data-reqId');
-        console.log(requestId);
-    },
+    // addItemToReq: function(element) {
+    //     const requestId = element.getAttribute('data-reqId');
+    //     console.log(requestId);
+    // },
     deleteRequest: function(element) {
         const requestId = element.getAttribute('data-reqId');
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {

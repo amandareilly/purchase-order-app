@@ -55,17 +55,6 @@ requestSchema.methods.serialize = function() {
         updatedAt: this.updatedAt,
     }
 };
-
-requestSchema.methods.updateItem = function(updatedItem) {
-    const item = this.items.id(updatedItem._id);
-    item.set(updatedItem);
-    this.save(function(err) {
-        if (err) {
-            return handleError(err);
-        }
-        console.log(`Item #${updatedItem._id} was updated.`);
-    });
-}
 const Request = mongoose.model('Request', requestSchema);
 
 module.exports = Request;

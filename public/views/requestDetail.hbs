@@ -19,7 +19,16 @@
         </table>
     {{/if}}
     {{#checkForComplete data.status}}
-        <a href="/requests/{{data.id}}/addItem" class="add-item" data-clickable="addItemToReq" data-reqId="{{data.id}}">Add an item</a>
+        <form action="{{data.id}}/addItem" method="post">
+            <label for="itemName">Item Name: <input type="text" name="itemName" id="itemName"></label><br>
+            <label for="itemQty">Quantity Needed: <input type="number" name="itemQty" id="itemQty"></label><br>
+            <label for="itemPrice">Price Each: <input type="number" name="itemPrice" id="itemPrice" step="0.01" min=0></label>    <br>
+            <label for="neededBy">Needed By: <input type="date" name="neededBy" id="neededBy"></label><br>
+            <label for="expeditedShipping">Request Expedited Shipping: <input type="checkbox" name="expeditedShipping" id="expeditedShipping"></label><br>
+            <label for="itemLink">Vendor Link (optional): <input type="url" name="itemLink" id="itemLink"></label><br>
+            <label for="itemNotes">Notes (optional): <textarea name="itemNotes" id="itemNotes" cols="30" rows="10"></textarea></label><br>
+            <button type="submit">Add Item</button><button type="reset">Clear Form</button>
+        </form>
         <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a>
     {{/checkForComplete}}
 {{else}}
