@@ -4,14 +4,16 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
-const concat = require('gulp-concat');
 const gutil = require('gulp-util');
 const livereload = require('gulp-livereload');
 const autoprefixer = require('gulp-autoprefixer');
 const cssnano = require('gulp-cssnano');
-const addsrc = require('gulp-add-src');
 const runSequence = require('run-sequence');
 const babel = require('gulp-babel');
+const webpackStream = require('webpack-stream');
+const mocha = require('gulp-mocha');
+const webpack = require('webpack');
+const del = require('del');
 
 gulp.task('default', ['watch']);
 
@@ -30,13 +32,22 @@ gulp.task('build-css', function() {
         .pipe(livereload());
 });
 
-gulp.task('build-js', function() {
-    return gulp.src('source/client-js/*.js')
+gulp.task('clean-js', function() {
+    return del(['public/assets/js/*.js']);
+});
+
+gulp.task('build-js', ['clean-js'], function() {
+    let options = { mode: 'development', output: { filename: 'bundle.js' } };
+    if (gutil.env.type === 'production') {
+        options.mode = 'production';
+        options.output.filename = '[name].[chunkhash].js';
+    }
+    return gulp.src('source/client-js/**/*.js')
         .pipe(sourcemaps.init())
-        .pipe(concat('bundle.js'))
         .pipe(babel({
             presets: ['env']
         }))
+        .pipe(webpackStream(options, webpack))
         //only uglify if run with '--type production'
         .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
         .pipe(sourcemaps.write())
@@ -47,7 +58,7 @@ gulp.task('build-js', function() {
 gulp.task('watch', function() {
     livereload.listen();
     gulp.watch('source/scss/**/*.scss', ['build-css']);
-    gulp.watch('source/js/**/*.js', ['build-js']);
+    gulp.watch('source/client-js/**/*.js', ['build-js']);
 });
 
 gulp.task('build', function() {

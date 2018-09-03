@@ -1,0 +1,37 @@
+{{>page/header}}
+<h1>Request Detail Page</h1>
+{{#if data.id}}
+    <h2>Request #{{data.id}}</h2>
+    <h2>Created on {{dateFormat data.createdAt "MMMM Do YYYY"}}</h2>
+    <h2>Status: {{capitalizeFirstLetter data.status}}</h2>
+    {{#if data.items}}
+        <table class="item-listing">
+            <tr>
+                <th>Item Id</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price Each</th>
+                <th>Needed By</th>
+                <th>Expedited Shipping?</th>
+                <th></th>
+            </tr>
+            {{#each data.items}} {{>request/itemTableRow parent=..}} {{/each}}
+        </table>
+    {{/if}}
+    {{#checkForSubmitted data.status}}
+        <form action="{{data.id}}/addItem" method="post">
+            <label for="itemName">Item Name: <input type="text" name="itemName" id="itemName"></label><br>
+            <label for="itemQty">Quantity Needed: <input type="number" name="itemQty" id="itemQty"></label><br>
+            <label for="itemPrice">Price Each: <input type="number" name="itemPrice" id="itemPrice" step="0.01" min=0></label>    <br>
+            <label for="neededBy">Needed By: <input type="date" name="neededBy" id="neededBy"></label><br>
+            <label for="expeditedShipping">Request Expedited Shipping: <input type="checkbox" name="expeditedShipping" id="expeditedShipping"></label><br>
+            <label for="itemLink">Vendor Link (optional): <input type="url" name="itemLink" id="itemLink"></label><br>
+            <label for="itemNotes">Notes (optional): <textarea name="itemNotes" id="itemNotes" cols="30" rows="10"></textarea></label><br>
+            <button type="submit">Add Item</button><button type="reset">Clear Form</button>
+        </form><br>
+        <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a><br>
+        <a href="/requests/{{data.id}}/submit" class="submit-request" data-clickable="submitRequest" data-reqId="{{data.id}}">Submit Request</a>
+    {{/checkForSubmitted}}
+{{else}}
+<h2>Request Not Found</h2>
+{{/if}}

@@ -1,0 +1,27 @@
+{
+    "env": {
+        "browser": true,
+        "mongo": true,
+        "node": true
+    },
+    "extends": "airbnb",
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "rules": {
+        "linebreak-style": ["error", "windows"],
+        "eol-last": ["error", "never"],
+        "indent": ["error", 4],
+        "prefer-arrow-callback": "off",
+        "func-names": "off",
+        "space-before-function-paren": "off",
+        "no-plusplus": "off",
+        "no-restricted-syntax": "off",
+        "no-else-return": "off",
+        "global-require": "off",
+        "no-console": "off",
+        "eqeqeq": "off",
+        "space-unary-ops": "off"
+    }
+}
