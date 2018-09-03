@@ -8,6 +8,7 @@ const path = require('path');
 const morgan = require('morgan');
 const requestRouter = require('./routes/requestRouter');
 const apiRouter = require('./routes/apiRouter');
+const authRouter = require('./routes/authRouter');
 
 const app = express();
 
@@ -39,6 +40,9 @@ app.get('/', (req, res) => res.render('home', { loggedIn: true }));
 
 // Request Routes
 app.use('/requests', requestRouter);
+
+// Login and Auth
+app.use('/login', authRouter);
 
 // API Routes
 app.use('/api', apiRouter);

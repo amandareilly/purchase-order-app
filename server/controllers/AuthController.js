@@ -7,35 +7,28 @@ const { JWT_SECRET, JWT_EXPIRY } = require('../config');
 
 class Auth {
     // check to see if email exists and create user if it does not
-    static processEmail(req, res, next) {
+
+    static loginForm(req, res) {
+        console.log("hit login form")
+        res.render('login');
+    }
+
+    static processEmail(req, res) {
         const email = req.body.email;
+        console.log('email');
         let url = SharedApi.constructApiUrl(req, 'users/byEmail/' + email);
         fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (!data) {
-                    data = Auth.createUser(req);
+            .then((response) => {
+                if (response.status === 204) {
+                    return Auth.createUser(req);
+                } else {
+                    return response.json();
                 }
-                return data;
             })
-            .then(data => {
-                url = SharedApi.constructApiUrl(req, 'auth/login/');
-                const requestBody = {
-                    email: email
-                };
-
-                return fetch(url, {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(requestBody)
-                    })
-                    .then(response => {
-                        res.locals.authToken = response.headers.get('Auth-Token');
-                        res.locals.user = data;
-                        next();
-                    });
+            .then((data) => {
+                console.log("Data: ", data);
+                const authToken = Auth.createAuthToken(data);
+                res.json({ authToken });
             });
     }
 
@@ -45,7 +38,7 @@ class Auth {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
             email: req.body.email,
-            role: "basic"
+            role: ("role" in req.body ? req.body.role : "basic")
         };
         return fetch(url, {
                 method: 'post',
@@ -55,7 +48,6 @@ class Auth {
                 body: JSON.stringify(user)
             })
             .then(response => response.json())
-            .then(response => { return response; })
             .catch(error => console.error('Fetch Error: ', error));
     }
 
@@ -70,8 +62,13 @@ class Auth {
     static issueToken(req, res) {
         const user = req.user;
         const authToken = Auth.createAuthToken(user);
-        return res.set('Auth-Token', authToken).status(202).send({ authToken });
+        return res.json({ authToken });
+    }
+
+    static redirect(req, res) {
+        console.log("redirect", "/n", " ");
+        console.log(req);
     }
 }
 
-module.exports = Auth;
+module.exports = Auth;;
