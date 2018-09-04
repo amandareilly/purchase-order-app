@@ -35,6 +35,10 @@ const ClickHandler = {
         console.log("hit submit");
         this.updateRequest(element, 'submitted');
     },
+    unsubmit: function(element) {
+        console.log("hit unsubmit");
+        this.updateRequest(element, 'created');
+    },
     approveRequest: function(element) {
         console.log("hit approve");
         this.updateRequest(element, 'approved');

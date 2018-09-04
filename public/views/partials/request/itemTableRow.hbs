@@ -5,9 +5,12 @@
     <td>{{this.pricePer}}</td>
     <td>{{dateFormat this.neededBy "MMMM Do YYYY"}}</td>
     <td>{{prettifyTrueFalse this.expeditedShipping}}</td>
-    <td rowspan="2">
-        <a href="{{parent.data.id}}/items/delete/{{this.id}}" class="view-request-link" data-item="{{this.id}}">Remove</a>
-    </td>
+    
+     {{#checkForApproved parent.data.status}}
+        <td rowspan="3">
+            <a href="{{parent.data.id}}/items/delete/{{this.id}}" class="view-request-link" data-item="{{this.id}}">Remove</a>
+        </td>
+    {{/checkForApproved}}
 </tr>
 <tr class="link">
     <td class="link">Link:</td>

@@ -23,7 +23,7 @@ class RequestController {
 
     static createNewRequest(req, res) {
         //TEMPORARY until we create user system.
-        const userId = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
+        const userId = mongoose.Types.ObjectId('5b8e02299d1ef71040226a14');
         // end temporary
 
         const vendorName = req.body.vendorName || 'System Vendor';
