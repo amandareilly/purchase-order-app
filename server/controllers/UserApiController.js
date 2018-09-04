@@ -56,7 +56,13 @@ class UserApi {
         User
             .find()
             .byEmail(req.params.email)
-            .then(user => res.json(user.serialize()))
+            .then((user) => {
+                if (user) {
+                    return res.json(user.serialize());
+                } else {
+                    return res.status(204).end();
+                }
+            })
             .catch(err => {
                 console.error(err);
                 res.status(500).json({ message: 'Internal server error' });

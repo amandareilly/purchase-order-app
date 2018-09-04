@@ -1,21 +1,24 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
+const cookieSession = require('cookie-session');
 // const favicon = require('serve-favicon');
 // const logger = require('morgan');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 // const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const requestRouter = require('./routes/requestRouter');
 const apiRouter = require('./routes/apiRouter');
 const authRouter = require('./routes/authRouter');
-
+const passport = require('passport');
+const { localStrategy, jwtStrategy } = require('./authStrategies');
 const app = express();
 
-
+passport.use(jwtStrategy);
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 // app.use(morgan('default'));
+app.use(cookieParser());
 
 // handlebars view engine setup
 const hbs = exphbs.create({

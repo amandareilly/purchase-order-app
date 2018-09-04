@@ -1,9 +1,11 @@
 const express = require('express');
 const RequestController = require('../controllers/RequestController');
 
+const passport = require('passport');
+const auth = passport.authenticate('jwt', { session: false });
 const router = express.Router();
 // List All Requests
-router.get('/', RequestController.getAllRequests);
+router.get('/', auth, RequestController.getAllRequests);
 
 // Create new Request
 router.post('/new', RequestController.createNewRequest);

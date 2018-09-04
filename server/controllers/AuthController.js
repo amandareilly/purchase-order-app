@@ -28,7 +28,7 @@ class Auth {
             .then((data) => {
                 console.log("Data: ", data);
                 const authToken = Auth.createAuthToken(data);
-                res.json({ authToken });
+                res.cookie('jwt', authToken).end();
             });
     }
 
