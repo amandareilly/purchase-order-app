@@ -12,13 +12,17 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.virtual('fullName').get(function() {
-    return `${this.name.first} ${this.name.last}`;
+    if (this.name) {
+        return `${this.name.first} ${this.name.last}`;
+    } else {
+        return 'Unknown Name';
+    }
 });
 
 userSchema.methods.serialize = function() {
     return {
         id: this._id,
-        // name: this.fullName,
+        name: this.fullName,
         role: this.role,
         email: this.email,
     }

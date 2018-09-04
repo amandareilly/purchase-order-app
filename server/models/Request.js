@@ -56,6 +56,19 @@ requestSchema.methods.serialize = function() {
         notes: (this.notes ? this.notes : null),
     }
 };
+
+requestSchema.query.byStatus = function(statusArray) {
+    if (!statusArray) {
+        return this.find();
+    } else {
+        const orConditions = [];
+        statusArray.forEach(function(status) {
+            let condition = { status: status };
+            orConditions.push(condition);
+        });
+        return this.find({ $or: orConditions });
+    }
+}
 const Request = mongoose.model('Request', requestSchema);
 
 module.exports = Request;
