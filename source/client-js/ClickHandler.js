@@ -32,11 +32,23 @@ const ClickHandler = {
         }
     },
     submitRequest: function(element) {
+        console.log("hit submit");
+        this.updateRequest(element, 'submitted');
+    },
+    approveRequest: function(element) {
+        console.log("hit approve");
+        this.updateRequest(element, 'approved');
+    },
+    denyRequest: function(element) {
+        console.log("hit deny");
+        this.updateRequest(element, 'denied');
+    },
+    updateRequest: function(element, status) {
         const requestId = element.getAttribute('data-reqId');
         const url = this.apiUrl + 'requests/' + requestId;
         const updateData = {
             id: requestId,
-            status: 'submitted'
+            status: status
         };
         fetch(url, {
                 method: 'put',

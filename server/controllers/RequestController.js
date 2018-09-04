@@ -2,7 +2,7 @@ require('isomorphic-fetch');
 
 const User = require('./../models/User');
 // temporary
-const user = User.findById('5b70f8d709110643dc2320c8');
+const user = User.findById('5b8e02299d1ef71040226a14');
 const mongoose = require('mongoose');
 
 const loggedIn = true;
