@@ -11,7 +11,8 @@ const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
-        const url = SharedApi.constructApiUrl(req, 'requests');
+        const query = req.url || null;
+        const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -25,7 +26,6 @@ class RequestController {
         const userId = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
         // end temporary
 
-        //TEMPORARY UNTIL WE CREATE FORM
         const vendorName = req.body.vendorName || 'System Vendor';
 
         const url = SharedApi.constructApiUrl(req, 'requests');
