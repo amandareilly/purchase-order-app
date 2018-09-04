@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', RequestController.getAllRequests);
 
 // Create new Request
-router.get('/new', RequestController.createNewRequest);
+router.post('/new', RequestController.createNewRequest);
 
 // View existing request
 router.get('/:id', RequestController.getExistingRequest);

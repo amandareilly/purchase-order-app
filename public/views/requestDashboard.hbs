@@ -1,6 +1,11 @@
 {{>page/header}}
 <h1>Request Dashboard Page</h1>
-<a href="/requests/new" class="new-request">New Request</a>
+<nav>
+    <a href="/requests" class="all-requests">All Requests</a> | <a href="/requests?status=submitted" class="submitted-requests">Submitted Requests</a> | <a href="/requests?status=created" class="created-requests">Created Requests</a> | <a href="/requests?status=approved" class="approved-requests">Approved Requests</a> | <a href="/requests?status=denied" class="denied-requests">Denied Requests</a>
+</nav>
+<form action="/requests/new" method="post">
+    <label for="vendorName">Create a new Purchase Request for Vendor: <input type="text" name="vendorName" id="vendorName" required></label><button type="submit">Create Request</button>
+</form>
 {{#if data}}
 
     <table class="request-listing">

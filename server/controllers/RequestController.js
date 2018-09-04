@@ -2,7 +2,7 @@ require('isomorphic-fetch');
 
 const User = require('./../models/User');
 // temporary
-const user = User.findById('5b70f8d709110643dc2320c8');
+const user = User.findById('5b8e02299d1ef71040226a14');
 const mongoose = require('mongoose');
 
 const loggedIn = true;
@@ -11,7 +11,8 @@ const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
-        const url = SharedApi.constructApiUrl(req, 'requests');
+        const query = req.url || null;
+        const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -22,15 +23,18 @@ class RequestController {
 
     static createNewRequest(req, res) {
         //TEMPORARY until we create user system.
-        const userId = mongoose.Types.ObjectId('5b70f8d709110643dc2320c8');
+        const userId = mongoose.Types.ObjectId('5b8e02299d1ef71040226a14');
         // end temporary
+
+        const vendorName = req.body.vendorName || 'System Vendor';
 
         const url = SharedApi.constructApiUrl(req, 'requests');
 
         const requestData = {
             requestor: userId,
             status: 'created',
-            items: []
+            items: [],
+            vendorName
         };
 
         fetch(url, {

@@ -5,8 +5,12 @@ const ItemApi = require('./ItemApiController');
 
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
+        const status = (req.query.status ? req.query.status.split(' ') : null);
+        console.log("Status:", status);
+
         Request
             .find()
+            .byStatus(status)
             .then(requests => {
                 if (requests) {
                     res.json({
@@ -27,7 +31,7 @@ class PurchaseRequestApi {
     static validateRequest(type, req) {
         let requiredFields = [];
         if (type === 'new') {
-            requiredFields = ['requestor', 'status', 'items'];
+            requiredFields = ['requestor', 'status', 'items', 'vendorName'];
             // make sure there is no id
             if (req.body.id) {
                 return 'Cannot recreate existing purchase request.';
@@ -71,6 +75,9 @@ class PurchaseRequestApi {
                 requestor: req.body.requestor,
                 status: req.body.status,
                 items: req.body.items,
+                vendor: {
+                    name: req.body.vendorName,
+                }
             })
             .then(request => res.status(201).json(request.serialize()))
             .catch(err => {

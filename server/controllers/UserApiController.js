@@ -13,7 +13,11 @@ class UserApi {
         User
             .create({
                 role: req.body.role || 'basic',
-                email: req.body.email
+                email: req.body.email,
+                name: {
+                    first: req.body.firstName || 'Unknown',
+                    last: req.body.lastName || 'Name'
+                }
             })
             .then(user => res.status(201).json(user.serialize()))
             .catch(err => {

@@ -17,12 +17,20 @@ class RequestHelper {
         return Request.insertMany(seedData);
     }
 
-    static generateRequestData(withItems = true) {
-        return {
+    static generateRequestData(withItems = true, apiFormat = false) {
+        const requestData = {
             requestor: mongoose.Types.ObjectId('5b70f8d709110643dc2320c8'),
             status: RequestHelper.generateRequestStatus(),
-            items: (withItems ? RequestHelper.generateItems() : [])
+            items: (withItems ? RequestHelper.generateItems() : []),
+            vendor: RequestHelper.generateVendor(),
+            notes: faker.lorem.paragraph(),
         };
+        if (apiFormat) {
+            requestData.vendorName = requestData.vendor.name;
+            delete requestData.vendor;
+        }
+
+        return requestData;
     }
 
     static generateRequestStatus() {
@@ -47,6 +55,16 @@ class RequestHelper {
             neededBy: faker.date.future(),
             expeditedShipping: faker.random.boolean()
         };
+    }
+
+    static generateVendor() {
+        return {
+            name: faker.company.companyName(),
+            url: faker.internet.url(),
+            phone: faker.phone.phoneNumber(),
+            contactName: faker.name.findName(),
+            notes: faker.lorem.paragraph(),
+        }
     }
 }
 

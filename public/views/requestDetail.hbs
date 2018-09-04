@@ -1,9 +1,12 @@
 {{>page/header}}
 <h1>Request Detail Page</h1>
+<a href="/requests" class="back-to-dashboard">Return to Dashboard</a>
 {{#if data.id}}
     <h2>Request #{{data.id}}</h2>
     <h2>Created on {{dateFormat data.createdAt "MMMM Do YYYY"}}</h2>
+    <h2>Created By: {{user.name}}</h2>
     <h2>Status: {{capitalizeFirstLetter data.status}}</h2>
+    <h2>Vendor: {{data.vendor.name}}</h2>
     {{#if data.items}}
         <table class="item-listing">
             <tr>
@@ -13,7 +16,9 @@
                 <th>Price Each</th>
                 <th>Needed By</th>
                 <th>Expedited Shipping?</th>
-                <th></th>
+                {{#checkForApproved data.status}}
+                    <th></th>
+                {{/checkForApproved}}
             </tr>
             {{#each data.items}} {{>request/itemTableRow parent=..}} {{/each}}
         </table>
@@ -31,6 +36,10 @@
         </form><br>
         <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a><br>
         <a href="/requests/{{data.id}}/submit" class="submit-request" data-clickable="submitRequest" data-reqId="{{data.id}}">Submit Request</a>
+    {{else}}
+        {{#checkForApproved data.status}}
+            <a href="/requests/{{data.id}}/approve" class="approve-request" data-clickable="approveRequest" data-reqId="{{data.id}}">Approve Request</a> | <a href="/request/{{data.id}}/deny" class="deny-request" data-clickable="denyRequest" data-reqId="{{data.id}}">Deny Request</a> | <a href="/request/{{data.id}}/unsubmit" class="undo-submit" data-clickable="unsubmit" data-reqId="{{data.id}}">Unsubmit Request</a>
+        {{/checkForApproved}}
     {{/checkForSubmitted}}
 {{else}}
 <h2>Request Not Found</h2>
