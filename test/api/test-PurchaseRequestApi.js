@@ -39,7 +39,7 @@ describe('Purchase Request API', function() {
                     res = _res;
                     expect(res).to.have.status(200);
                     expect(res.body.requests).to.have.lengthOf.at.least(1);
-                    return Request.count();
+                    return Request.countDocuments();
                 })
                 .then(function(count) {
                     expect(res.body.requests).to.have.lengthOf(count);
@@ -57,7 +57,7 @@ describe('Purchase Request API', function() {
 
                     res.body.requests.forEach(function(request) {
                         expect(request).to.be.a('object');
-                        expect(request).to.include.keys('id', 'requestor', 'status', 'items', 'createdAt', 'updatedAt');
+                        expect(request).to.include.keys('id', 'requestor', 'status', 'items', 'createdAt', 'updatedAt', 'vendor', 'notes');
                     });
                     resRequest = res.body.requests[0];
                     return Request.findById(resRequest.id);
@@ -93,7 +93,7 @@ describe('Purchase Request API', function() {
     describe('POST Endpoint', function() {
         it('should add a new request', function() {
             let resRequest;
-            const newRequest = RequestHelper.generateRequestData();
+            const newRequest = RequestHelper.generateRequestData(true, true);
             return chai.request(app)
                 .post('/api/requests')
                 .send(newRequest)
@@ -104,6 +104,7 @@ describe('Purchase Request API', function() {
                     expect(res.body).to.include.keys('id', 'requestor', 'status', 'items', 'createdAt', 'updatedAt');
                     expect(res.body.id).to.not.be.null;
                     expect(res.body.requestor.id).to.equal(newRequest.requestor.toHexString());
+                    expect(res.body.vendor.name).to.equal(newRequest.vendorName);
                     expect(res.body.status).to.equal(newRequest.status);
                     expect(res.body.items[0].name).to.equal(newRequest.items[0].name);
                     expect(res.body.items[0].qty).to.equal(newRequest.items[0].qty);

@@ -27,7 +27,7 @@ class PurchaseRequestApi {
     static validateRequest(type, req) {
         let requiredFields = [];
         if (type === 'new') {
-            requiredFields = ['requestor', 'status', 'items'];
+            requiredFields = ['requestor', 'status', 'items', 'vendorName'];
             // make sure there is no id
             if (req.body.id) {
                 return 'Cannot recreate existing purchase request.';
@@ -71,6 +71,9 @@ class PurchaseRequestApi {
                 requestor: req.body.requestor,
                 status: req.body.status,
                 items: req.body.items,
+                vendor: {
+                    name: req.body.vendorName,
+                }
             })
             .then(request => res.status(201).json(request.serialize()))
             .catch(err => {

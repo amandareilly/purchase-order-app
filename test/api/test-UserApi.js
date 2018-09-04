@@ -40,7 +40,7 @@ describe('User API', function() {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
                     expect(res.body.users).to.have.lengthOf.at.least(1);
-                    return User.count();
+                    return User.countDocuments();
                 })
                 .then(count => {
                     expect(res.body.users).to.have.lengthOf(count);
