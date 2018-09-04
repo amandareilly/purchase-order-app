@@ -4,6 +4,7 @@
     <h2>Request #{{data.id}}</h2>
     <h2>Created on {{dateFormat data.createdAt "MMMM Do YYYY"}}</h2>
     <h2>Status: {{capitalizeFirstLetter data.status}}</h2>
+    <h2>Vendor: {{data.vendor.name}}</h2>
     {{#if data.items}}
         <table class="item-listing">
             <tr>

@@ -1,6 +1,8 @@
 {{>page/header}}
 <h1>Request Dashboard Page</h1>
-<a href="/requests/new" class="new-request">New Request</a>
+<form action="/requests/new" method="post">
+    <label for="vendorName">Create a new Purchase Request for Vendor: <input type="text" name="vendorName" id="vendorName" required></label><button type="submit">Create Request</button>
+</form>
 {{#if data}}
 
     <table class="request-listing">

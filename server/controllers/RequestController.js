@@ -26,7 +26,7 @@ class RequestController {
         // end temporary
 
         //TEMPORARY UNTIL WE CREATE FORM
-        const vendorName = 'Test Vendor';
+        const vendorName = req.body.vendorName || 'System Vendor';
 
         const url = SharedApi.constructApiUrl(req, 'requests');
 
