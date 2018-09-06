@@ -6,7 +6,6 @@ const ItemApi = require('./ItemApiController');
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
         const status = (req.query.status ? req.query.status.split(' ') : null);
-        console.log("Status:", status);
 
         Request
             .find()

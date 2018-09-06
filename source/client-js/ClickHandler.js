@@ -13,10 +13,6 @@ const ClickHandler = {
             ClickHandler[clicked.getAttribute('data-clickable')](clicked);
         }
     },
-    // addItemToReq: function(element) {
-    //     const requestId = element.getAttribute('data-reqId');
-    //     console.log(requestId);
-    // },
     deleteRequest: function(element) {
         const requestId = element.getAttribute('data-reqId');
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {
@@ -32,19 +28,15 @@ const ClickHandler = {
         }
     },
     submitRequest: function(element) {
-        console.log("hit submit");
         this.updateRequest(element, 'submitted');
     },
     unsubmit: function(element) {
-        console.log("hit unsubmit");
         this.updateRequest(element, 'created');
     },
     approveRequest: function(element) {
-        console.log("hit approve");
         this.updateRequest(element, 'approved');
     },
     denyRequest: function(element) {
-        console.log("hit deny");
         this.updateRequest(element, 'denied');
     },
     updateRequest: function(element, status) {

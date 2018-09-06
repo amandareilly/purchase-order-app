@@ -13,8 +13,15 @@ class RequestController {
     static getAllRequests(req, res) {
         const query = req.url || null;
         const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
-        fetch(url)
-            .then(response => response.json())
+        fetch(url, {
+                credentials: 'include'
+            })
+            .then((response) => {
+                if (response.status === 401) {
+                    res.redirect('/login');
+                }
+                return response.json();
+            })
             .then(data => {
                 RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests')
             })

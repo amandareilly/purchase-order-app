@@ -11,10 +11,12 @@ const requestRouter = require('./routes/requestRouter');
 const apiRouter = require('./routes/apiRouter');
 const authRouter = require('./routes/authRouter');
 const passport = require('passport');
-const { localStrategy, jwtStrategy } = require('./authStrategies');
 const app = express();
 
+const { localStrategy, jwtStrategy } = require('./authStrategies');
+
 passport.use(jwtStrategy);
+passport.use(localStrategy);
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 // app.use(morgan('default'));

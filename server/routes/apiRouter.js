@@ -9,8 +9,7 @@ const ItemApiController = require('../controllers/ItemApiController');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-const localAuth = passport.authenticate('local', { session: false });
-const jwtAuth = passport.authenticate('jwt', { session: false });
+const { localAuth, jwtAuth } = require('../middleware/authentication');
 
 // requests endpoints
 // get all requests
