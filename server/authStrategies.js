@@ -25,7 +25,7 @@ const localStrategy = new LocalStrategy({
 
 const jwtStrategy = new JwtStrategy({
         secretOrKey: JWT_SECRET,
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor, ExtractJwt.fromAuthHeaderAsBearerToken()]),
         algorithms: ['HS256']
     },
     (payload, done) => {
@@ -33,4 +33,14 @@ const jwtStrategy = new JwtStrategy({
     }
 );
 
-module.exports = { localStrategy, jwtStrategy };
+const bearerStrategy = new JwtStrategy({
+        secretOrKey: JWT_SECRET,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        algorithms: ['HS256']
+    },
+    (payload, done) => {
+        done(null, payload.user);
+    }
+);
+
+module.exports = { localStrategy, jwtStrategy, bearerStrategy };

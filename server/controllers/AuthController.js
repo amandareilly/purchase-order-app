@@ -13,7 +13,6 @@ class Auth {
     }
 
     static createAuthToken(user) {
-        console.log('AuthController.createAuthToken');
         return jwt.sign({ user }, JWT_SECRET, {
             subject: user.email,
             expiresIn: JWT_EXPIRY,
@@ -23,6 +22,7 @@ class Auth {
 
     static issueToken(req, res) {
         const user = req.user;
+        req.session.user = user;
         const authToken = Auth.createAuthToken(user);
         res.cookie('jwt', authToken).redirect('/requests');
     }

@@ -1,20 +1,17 @@
 require('isomorphic-fetch');
 
-const User = require('./../models/User');
-// temporary
-const user = User.findById('5b8e02299d1ef71040226a14');
-const mongoose = require('mongoose');
-
 const loggedIn = true;
 
 const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
+        const token = req.cookies.jwt;
         const query = req.url || null;
+        const user = SharedApi.getUser(req);
         const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
         fetch(url, {
-                credentials: 'include'
+                headers: SharedApi.getHeadersWithToken(req)
             })
             .then((response) => {
                 if (response.status === 401) {
@@ -23,15 +20,14 @@ class RequestController {
                 return response.json();
             })
             .then(data => {
-                RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests')
+                RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user._id, data.requests, 'All Purchase Requests')
             })
             .catch(error => console.error('Fetch Error: ', error));
     }
 
     static createNewRequest(req, res) {
-        //TEMPORARY until we create user system.
-        const userId = mongoose.Types.ObjectId('5b8e02299d1ef71040226a14');
-        // end temporary
+        const user = SharedApi.getUser(req);
+        const userId = user._id;
 
         const vendorName = req.body.vendorName || 'System Vendor';
 
@@ -46,9 +42,7 @@ class RequestController {
 
         fetch(url, {
                 method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: SharedApi.getHeadersWithToken(req, true),
                 body: JSON.stringify(requestData)
             })
             .then(response => response.json())
@@ -59,8 +53,11 @@ class RequestController {
     }
 
     static getExistingRequest(req, res) {
+        const user = SharedApi.getUser(req);
         const url = SharedApi.constructApiUrl(req, 'requests/' + req.params.id);
-        fetch(url)
+        fetch(url, {
+                headers: SharedApi.getHeadersWithToken(req)
+            })
             .then(response => response.json())
             .then((data) => {
                 let pageTitle = 'Request Not Found';
@@ -86,7 +83,8 @@ class RequestController {
         const url = SharedApi.constructApiUrl(req, endpoint);
 
         fetch(url, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: SharedApi.getHeadersWithToken(req)
             })
             .then((response) => {
                 return res.redirect('/requests/' + req.params.id);
@@ -116,9 +114,7 @@ class RequestController {
 
         fetch(url, {
                 method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: SharedApi.getHeadersWithToken(req, true),
                 body: JSON.stringify(itemRequest)
             })
             .then((response) => {

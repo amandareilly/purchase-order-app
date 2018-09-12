@@ -1,5 +1,6 @@
 // this is a static class
 require('isomorphic-fetch');
+const SharedApi = require('../../server/api/SharedApi');
 const ClickHandler = {
     apiUrl: process.env.API_URL || 'http://localhost:8080/api/',
     addClickListeners: function() {
@@ -18,7 +19,8 @@ const ClickHandler = {
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {
             const url = this.apiUrl + 'requests/' + requestId;
             fetch(url, {
-                    method: 'delete'
+                    method: 'delete',
+                    headers: SharedApi.getHeadersWithToken(null, false, document.cookie)
                 })
                 .then((response) => {
                     const redirectUrl = window.location.origin + '/requests';
@@ -46,11 +48,11 @@ const ClickHandler = {
             id: requestId,
             status: status
         };
+        const headers = SharedApi.getHeadersWithToken(null, true, document.cookie);
+        console.log("headers", headers);
         fetch(url, {
                 method: 'put',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify(updateData)
             })
             .then((response) => {

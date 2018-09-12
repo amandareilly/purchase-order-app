@@ -97,6 +97,40 @@ eval("// the whatwg-fetch polyfill installs the fetch() function\n// on the glob
 
 /***/ }),
 
+/***/ "./node_modules/jwt-decode/lib/atob.js":
+/*!*********************************************!*\
+  !*** ./node_modules/jwt-decode/lib/atob.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("/**\n * The code was extracted from:\n * https://github.com/davidchambers/Base64.js\n */\n\nvar chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';\n\nfunction InvalidCharacterError(message) {\n  this.message = message;\n}\n\nInvalidCharacterError.prototype = new Error();\nInvalidCharacterError.prototype.name = 'InvalidCharacterError';\n\nfunction polyfill (input) {\n  var str = String(input).replace(/=+$/, '');\n  if (str.length % 4 == 1) {\n    throw new InvalidCharacterError(\"'atob' failed: The string to be decoded is not correctly encoded.\");\n  }\n  for (\n    // initialize result and counters\n    var bc = 0, bs, buffer, idx = 0, output = '';\n    // get next character\n    buffer = str.charAt(idx++);\n    // character found in table? initialize bit storage and add its ascii value;\n    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,\n      // and if not first of each 4 characters,\n      // convert the first 8 bits to one ascii character\n      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0\n  ) {\n    // try to find character in table (0-63, not found => -1)\n    buffer = chars.indexOf(buffer);\n  }\n  return output;\n}\n\n\nmodule.exports = typeof window !== 'undefined' && window.atob && window.atob.bind(window) || polyfill;\n\n\n//# sourceURL=webpack:///./node_modules/jwt-decode/lib/atob.js?");
+
+/***/ }),
+
+/***/ "./node_modules/jwt-decode/lib/base64_url_decode.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/jwt-decode/lib/base64_url_decode.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var atob = __webpack_require__(/*! ./atob */ \"./node_modules/jwt-decode/lib/atob.js\");\n\nfunction b64DecodeUnicode(str) {\n  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {\n    var code = p.charCodeAt(0).toString(16).toUpperCase();\n    if (code.length < 2) {\n      code = '0' + code;\n    }\n    return '%' + code;\n  }));\n}\n\nmodule.exports = function(str) {\n  var output = str.replace(/-/g, \"+\").replace(/_/g, \"/\");\n  switch (output.length % 4) {\n    case 0:\n      break;\n    case 2:\n      output += \"==\";\n      break;\n    case 3:\n      output += \"=\";\n      break;\n    default:\n      throw \"Illegal base64url string!\";\n  }\n\n  try{\n    return b64DecodeUnicode(output);\n  } catch (err) {\n    return atob(output);\n  }\n};\n\n\n//# sourceURL=webpack:///./node_modules/jwt-decode/lib/base64_url_decode.js?");
+
+/***/ }),
+
+/***/ "./node_modules/jwt-decode/lib/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/jwt-decode/lib/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\nvar base64_url_decode = __webpack_require__(/*! ./base64_url_decode */ \"./node_modules/jwt-decode/lib/base64_url_decode.js\");\n\nfunction InvalidTokenError(message) {\n  this.message = message;\n}\n\nInvalidTokenError.prototype = new Error();\nInvalidTokenError.prototype.name = 'InvalidTokenError';\n\nmodule.exports = function (token,options) {\n  if (typeof token !== 'string') {\n    throw new InvalidTokenError('Invalid token specified');\n  }\n\n  options = options || {};\n  var pos = options.header === true ? 0 : 1;\n  try {\n    return JSON.parse(base64_url_decode(token.split('.')[pos]));\n  } catch (e) {\n    throw new InvalidTokenError('Invalid token specified: ' + e.message);\n  }\n};\n\nmodule.exports.InvalidTokenError = InvalidTokenError;\n\n\n//# sourceURL=webpack:///./node_modules/jwt-decode/lib/index.js?");
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -119,6 +153,17 @@ eval("(function(self) {\n  'use strict';\n\n  if (self.fetch) {\n    return\n  }
 
 /***/ }),
 
+/***/ "./server/api/SharedApi.js":
+/*!*********************************!*\
+  !*** ./server/api/SharedApi.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const jwtDecode = __webpack_require__(/*! jwt-decode */ \"./node_modules/jwt-decode/lib/index.js\");\r\n\r\nclass SharedApi {\r\n    static checkForRequiredFields(fieldList, request) {\r\n        let message = null;\r\n        for (let i = 0; i < fieldList.length; i++) {\r\n            const field = fieldList[i];\r\n            if (!(field in request)) {\r\n                message += `* Missing \\`${field}\\` in request. `;\r\n            }\r\n        }\r\n        return message;\r\n    }\r\n\r\n    static constructApiUrl(req, endpoint) {\r\n\r\n        return req.protocol + \"://\" + req.get('host') + '/api/' + endpoint;\r\n    }\r\n\r\n    static getUser(req) {\r\n        if (req.user) {\r\n            return req.user;\r\n        } else if (req.cookies.jwt) {\r\n            const token = req.cookies.jwt;\r\n            return jwtDecode(token).user;\r\n        }\r\n    }\r\n\r\n    static getHeadersWithToken(req, contentType = false, cookieString = false) {\r\n\r\n        let token;\r\n        if (req && req.cookies.jwt) {\r\n            token = req.cookies.jwt;\r\n        } else if (cookieString) {\r\n            console.log(\"cookies string\", cookieString);\r\n            token = this.getFrontEndCookie('jwt', cookieString);\r\n            console.log(\"cookie string token\", token);\r\n        } else {\r\n            throw new Error('no valid token received')\r\n        }\r\n        const headers = {\r\n            authorization: `Bearer ${token}`\r\n        };\r\n        if (contentType) {\r\n            headers['Content-Type'] = 'application/json';\r\n        }\r\n        return headers;\r\n    }\r\n\r\n    static getFrontEndCookie(name, cookieString) {\r\n        const cookies = cookieString.split('; ');\r\n        const keyValMap = {};\r\n        cookies.forEach((cookie) => {\r\n            cookie = cookie.split('=');\r\n            keyValMap[cookie[0]] = cookie[1];\r\n        })\r\n        console.log(keyValMap);\r\n        return (keyValMap[name] ? keyValMap[name] : null);\r\n    }\r\n}\r\n\r\nmodule.exports = SharedApi;\n\n//# sourceURL=webpack:///./server/api/SharedApi.js?");
+
+/***/ }),
+
 /***/ "./source/client-js/ClickHandler.js":
 /*!******************************************!*\
   !*** ./source/client-js/ClickHandler.js ***!
@@ -126,7 +171,7 @@ eval("(function(self) {\n  'use strict';\n\n  if (self.fetch) {\n    return\n  }
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function(process) {// this is a static class\r\n__webpack_require__(/*! isomorphic-fetch */ \"./node_modules/isomorphic-fetch/fetch-npm-browserify.js\");\r\nconst ClickHandler = {\r\n    apiUrl: process.env.API_URL || 'http://localhost:8080/api/',\r\n    addClickListeners: function() {\r\n        const body = document.querySelector('body');\r\n        body.addEventListener('click', this.handleClicked);\r\n    },\r\n    handleClicked: function(e) {\r\n        const clicked = e.target;\r\n        if (clicked.hasAttribute('data-clickable')) {\r\n            e.preventDefault();\r\n            ClickHandler[clicked.getAttribute('data-clickable')](clicked);\r\n        }\r\n    },\r\n    // addItemToReq: function(element) {\r\n    //     const requestId = element.getAttribute('data-reqId');\r\n    //     console.log(requestId);\r\n    // },\r\n    deleteRequest: function(element) {\r\n        const requestId = element.getAttribute('data-reqId');\r\n        if (confirm(\"Are you sure you want to delete this request?  This action CANNOT be undone!\")) {\r\n            const url = this.apiUrl + 'requests/' + requestId;\r\n            fetch(url, {\r\n                    method: 'delete'\r\n                })\r\n                .then((response) => {\r\n                    const redirectUrl = window.location.origin + '/requests';\r\n                    window.location.href = redirectUrl;\r\n                })\r\n                .catch(error => console.error('Fetch Error: ', error));\r\n        }\r\n    },\r\n    submitRequest: function(element) {\r\n        console.log(\"hit submit\");\r\n        this.updateRequest(element, 'submitted');\r\n    },\r\n    unsubmit: function(element) {\r\n        this.updateRequest(element, 'created');\r\n    },\r\n    approveRequest: function(element) {\r\n        console.log(\"hit approve\");\r\n        this.updateRequest(element, 'approved');\r\n    },\r\n    denyRequest: function(element) {\r\n        console.log(\"hit deny\");\r\n        this.updateRequest(element, 'denied');\r\n    },\r\n    updateRequest: function(element, status) {\r\n        const requestId = element.getAttribute('data-reqId');\r\n        const url = this.apiUrl + 'requests/' + requestId;\r\n        const updateData = {\r\n            id: requestId,\r\n            status: status\r\n        };\r\n        fetch(url, {\r\n                method: 'put',\r\n                headers: {\r\n                    'Content-Type': 'application/json'\r\n                },\r\n                body: JSON.stringify(updateData)\r\n            })\r\n            .then((response) => {\r\n                const redirectUrl = window.location.origin + '/requests/' + requestId;\r\n                window.location.href = redirectUrl;\r\n            })\r\n            .catch(error => console.error('Fetch Error: ', error));\r\n    },\r\n}\r\n\r\nmodule.exports = ClickHandler;\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ \"./node_modules/process/browser.js\")))\n\n//# sourceURL=webpack:///./source/client-js/ClickHandler.js?");
+eval("/* WEBPACK VAR INJECTION */(function(process) {// this is a static class\r\n__webpack_require__(/*! isomorphic-fetch */ \"./node_modules/isomorphic-fetch/fetch-npm-browserify.js\");\r\nconst SharedApi = __webpack_require__(/*! ../../server/api/SharedApi */ \"./server/api/SharedApi.js\");\r\nconst ClickHandler = {\r\n    apiUrl: process.env.API_URL || 'http://localhost:8080/api/',\r\n    addClickListeners: function() {\r\n        const body = document.querySelector('body');\r\n        body.addEventListener('click', this.handleClicked);\r\n    },\r\n    handleClicked: function(e) {\r\n        const clicked = e.target;\r\n        if (clicked.hasAttribute('data-clickable')) {\r\n            e.preventDefault();\r\n            ClickHandler[clicked.getAttribute('data-clickable')](clicked);\r\n        }\r\n    },\r\n    deleteRequest: function(element) {\r\n        const requestId = element.getAttribute('data-reqId');\r\n        if (confirm(\"Are you sure you want to delete this request?  This action CANNOT be undone!\")) {\r\n            const url = this.apiUrl + 'requests/' + requestId;\r\n            fetch(url, {\r\n                    method: 'delete',\r\n                    headers: SharedApi.getHeadersWithToken(null, false, document.cookie)\r\n                })\r\n                .then((response) => {\r\n                    const redirectUrl = window.location.origin + '/requests';\r\n                    window.location.href = redirectUrl;\r\n                })\r\n                .catch(error => console.error('Fetch Error: ', error));\r\n        }\r\n    },\r\n    submitRequest: function(element) {\r\n        this.updateRequest(element, 'submitted');\r\n    },\r\n    unsubmit: function(element) {\r\n        this.updateRequest(element, 'created');\r\n    },\r\n    approveRequest: function(element) {\r\n        this.updateRequest(element, 'approved');\r\n    },\r\n    denyRequest: function(element) {\r\n        this.updateRequest(element, 'denied');\r\n    },\r\n    updateRequest: function(element, status) {\r\n        const requestId = element.getAttribute('data-reqId');\r\n        const url = this.apiUrl + 'requests/' + requestId;\r\n        const updateData = {\r\n            id: requestId,\r\n            status: status\r\n        };\r\n        const headers = SharedApi.getHeadersWithToken(null, true, document.cookie);\r\n        console.log(\"headers\", headers);\r\n        fetch(url, {\r\n                method: 'put',\r\n                headers: headers,\r\n                body: JSON.stringify(updateData)\r\n            })\r\n            .then((response) => {\r\n                const redirectUrl = window.location.origin + '/requests/' + requestId;\r\n                window.location.href = redirectUrl;\r\n            })\r\n            .catch(error => console.error('Fetch Error: ', error));\r\n    },\r\n}\r\n\r\nmodule.exports = ClickHandler;\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ \"./node_modules/process/browser.js\")))\n\n//# sourceURL=webpack:///./source/client-js/ClickHandler.js?");
 
 /***/ }),
 

@@ -7,6 +7,6 @@ router.use(jsonParser);
 const { localAuth, jwtAuth } = require('../middleware/authentication');
 
 router.get('/', AuthController.loginForm);
-router.post('/', localAuth, AuthController.issueToken, AuthController.redirect);
+router.post('/', localAuth, AuthController.issueToken);
 
 module.exports = router;

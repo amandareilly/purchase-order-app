@@ -1,11 +1,10 @@
 const express = require('express');
 const RequestController = require('../controllers/RequestController');
-
-const passport = require('passport');
-const { localAuth, jwtAuth } = require('../middleware/authentication');
+const { jwtAuth } = require('../middleware/authentication');
 const router = express.Router();
+router.use(jwtAuth);
 // List All Requests
-router.get('/', jwtAuth, RequestController.getAllRequests);
+router.get('/', RequestController.getAllRequests);
 
 // Create new Request
 router.post('/new', RequestController.createNewRequest);

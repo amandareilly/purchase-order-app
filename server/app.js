@@ -1,11 +1,8 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
-const cookieSession = require('cookie-session');
-// const favicon = require('serve-favicon');
-// const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-// const bodyParser = require('body-parser');
+const session = require('express-session');
 const morgan = require('morgan');
 const requestRouter = require('./routes/requestRouter');
 const apiRouter = require('./routes/apiRouter');
@@ -13,13 +10,17 @@ const authRouter = require('./routes/authRouter');
 const passport = require('passport');
 const app = express();
 
-const { localStrategy, jwtStrategy } = require('./authStrategies');
+const { localStrategy, jwtStrategy, bearerStrategy } = require('./authStrategies');
 
-passport.use(jwtStrategy);
-passport.use(localStrategy);
+passport.use('jwt', jwtStrategy);
+passport.use('local', localStrategy);
+passport.use('bearer', bearerStrategy);
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 // app.use(morgan('default'));
+app.use(session({
+    secret: 'My lobster is a monkey.'
+}));
 app.use(cookieParser());
 
 // handlebars view engine setup
