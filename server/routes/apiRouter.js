@@ -8,10 +8,23 @@ const ItemApiController = require('../controllers/ItemApiController');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-const { localAuth, jwtAuth, bearerAuth } = require('../middleware/authentication');
+const { localAuth, jwtAuth } = require('../middleware/authentication');
 
-// requests endpoints
-// get all requests
+let authMiddleware;
+if (process.env.NODE_ENV !== "TEST") {
+    authMiddleware = jwtAuth;
+} else {
+    authMiddleware = (req, res, next) => {
+        if (req.header('X-TEST-BYPASS-AUTH')) {
+            next();
+        } else {
+            jwtAuth(req, res, next);
+        }
+    };
+}
+router.use(authMiddleware)
+    // requests endpoints
+    // get all requests
 router.get('/requests', jwtAuth, PurchaseRequestApiController.getAllRequests);
 // get a specific request
 router.get('/requests/:id', jsonParser, jwtAuth, PurchaseRequestApiController.getRequestById);
@@ -24,7 +37,7 @@ router.delete('/requests/:id', jsonParser, jwtAuth, PurchaseRequestApiController
 
 // request item endpoints
 // add an item to a request
-router.post('/requests/:id/addItem', jsonParser, jwtAuth, ItemApiController.addItem);
+router.post('/requests/:id/addItem', jsonParser, ItemApiController.addItem);
 // delete an item from a request
 router.delete('/requests/:id/item/:itemId', jsonParser, jwtAuth, ItemApiController.deleteItem);
 // update an item in a request

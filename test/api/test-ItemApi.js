@@ -11,6 +11,13 @@ const RequestHelper = require('../helpers/RequestHelper');
 const { expect } = chai;
 chai.use(chaiHttp);
 
+
+const postAuthenticated = (app, url) => {
+    return chai.request(app)
+        .post(url)
+        .set('X-TEST-BYPASS-AUTH', true)
+}
+
 describe('Item API', function() {
     // starts the server before running tests
     before(function() {
@@ -31,15 +38,14 @@ describe('Item API', function() {
     });
 
     describe('POST Endpoint', function() {
-        it('should add an item to the selected request', function() {
+        it.only('should add an item to the selected request', function() {
             const itemData = ItemHelper.generateItemData();
             return Request
                 .findOne()
                 .then(function(request) {
                     itemData.requestId = request.id;
 
-                    return chai.request(app)
-                        .post(`/api/requests/${request.id}/addItem`)
+                    return postAuthenticated(app, `/api/requests/${request.id}/addItem`)
                         .send(itemData);
                 })
                 .then(function(res) {
