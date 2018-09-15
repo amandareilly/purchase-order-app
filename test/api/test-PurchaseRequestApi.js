@@ -5,6 +5,8 @@ const { runServer, closeServer } = require('../../server/server');
 const { TEST_DATABASE_URL, TEST_PORT } = require('../../server/config');
 const GeneralHelper = require('../helpers/GeneralHelper');
 const RequestHelper = require('../helpers/RequestHelper');
+const User = require('../../server/models/User');
+const Auth = require('../../server/controllers/AuthController');
 const { expect } = chai;
 
 
@@ -114,25 +116,34 @@ describe('Purchase Request API', function() {
     describe('PUT Endpoint', function() {
         it('should update status only', function() {
             const updateData = {
-                status: 'jkljkljkljkl',
+                status: 'jkljkljl',
                 requestor: 'lmnop'
             };
 
-            return Request
-                .findOne()
-                .then(function(request) {
-                    updateData.id = request.id;
+            return User.findById('5b70f8d709110643dc2320c8')
+                .then(user => user.serialize())
+                .then((user) => {
+                    user.role = 'basic';
+                    const token = Auth.createAuthToken(user);
 
-                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}`, 'put')
-                        .send(updateData);
-                })
-                .then(function(res) {
-                    expect(res).to.have.status(200);
-                    return Request.findById(updateData.id);
-                })
-                .then(function(request) {
-                    expect(request.status).to.equal(updateData.status);
-                    expect(request.requestor).to.not.equal(updateData.requestor);
+                    return Request
+                        .findOne()
+                        .then(function(request) {
+                            updateData.id = request.id;
+
+                            return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}`, 'put')
+                                .set('Cookie', `jwt=${token}`)
+                                .send(updateData);
+                        })
+                        .then(function(res) {
+                            expect(res).to.have.status(200);
+                            return Request.findById(updateData.id);
+                        })
+                        .then(function(request) {
+                            expect(request.status).to.equal(updateData.status);
+                            expect(request.requestor).to.not.equal(updateData.requestor);
+                        });
+
                 });
         });
     });

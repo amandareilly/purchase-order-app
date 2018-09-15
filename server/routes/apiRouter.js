@@ -8,20 +8,8 @@ const ItemApiController = require('../controllers/ItemApiController');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-const { localAuth, jwtAuth, authMiddleware } = require('../middleware/authentication');
+const { authMiddleware } = require('../middleware/authentication');
 
-// let authMiddleware;
-// if (process.env.NODE_ENV !== "TEST") {
-//     authMiddleware = jwtAuth;
-// } else {
-//     authMiddleware = (req, res, next) => {
-//         if (req.header('X-TEST-BYPASS-AUTH')) {
-//             next();
-//         } else {
-//             jwtAuth(req, res, next);
-//         }
-//     };
-// }
 router.use(jsonParser);
 router.use(authMiddleware)
     // requests endpoints
