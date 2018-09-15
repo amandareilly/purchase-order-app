@@ -68,10 +68,19 @@ describe('Purchase Request Routes', function() {
 
     // should receive 200 status and html when hitting /requests/:id
     it('/requests/5b70f8d709110643dc2320c8 should return status 200 and html on GET', function() {
-        return GeneralHelper.httpAuthenticated(app, '/requests/5b70f8d709110643dc2320c8', 'get')
-            .then(function(res) {
-                expect(res).to.have.status(200);
-                expect(res).to.be.html;
+
+        return User.findById('5b70f8d709110643dc2320c8')
+            .then(user => user.serialize())
+            .then((user) => {
+                const token = Auth.createAuthToken(user);
+                return GeneralHelper.httpAuthenticated(app, '/requests/5b70f8d709110643dc2320c8', 'get')
+                    .set('Cookie', `jwt=${token}`)
+                    .then(function(res) {
+                        expect(res).to.have.status(200);
+                        expect(res).to.be.html;
+                    });
+
             });
+
     });
 });
