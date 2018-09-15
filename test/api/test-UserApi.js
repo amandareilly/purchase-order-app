@@ -1,5 +1,4 @@
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const app = require('../../server/app');
 const { runServer, closeServer } = require('../../server/server');
 const { TEST_DATABASE_URL, TEST_PORT, API_URL } = require('../../server/config');
@@ -8,7 +7,6 @@ const GeneralHelper = require('../helpers/GeneralHelper');
 const UserHelper = require('../helpers/UserHelper');
 
 const { expect } = chai;
-chai.use(chaiHttp);
 
 describe('User API', function() {
     // starts the server before running tests
@@ -32,8 +30,7 @@ describe('User API', function() {
     describe('GET Endpoints', function() {
         let res;
         it('Should return all existing users', function() {
-            return chai.request(app)
-                .get('/api/users')
+            return GeneralHelper.httpAuthenticated(app, '/api/users', 'get')
                 .then(function(_res) {
                     // so subsequent .then blocks can access response object
                     res = _res;
@@ -49,8 +46,7 @@ describe('User API', function() {
 
         it('Should return users with the correct fields', function() {
             let resUser;
-            return chai.request(app)
-                .get('/api/users')
+            return GeneralHelper.httpAuthenticated(app, '/api/users', 'get')
                 .then(function(res) {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
