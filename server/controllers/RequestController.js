@@ -39,30 +39,39 @@ class RequestController {
     }
 
     static createNewRequest(req, res) {
-        const user = SharedApi.getUser(req);
-        const userId = user._id;
+        let user;
+        let userId;
+        let requestData;
 
         const vendorName = req.body.vendorName || 'System Vendor';
-
         const url = SharedApi.constructApiUrl(req, 'requests');
 
-        const requestData = {
-            requestor: userId,
-            status: 'created',
-            items: [],
-            vendorName
-        };
+        return SharedApi.getUser(req)
+            .then((foundUser) => {
+                user = foundUser;
 
-        fetch(url, {
-                method: 'post',
-                headers: SharedApi.getHeadersWithToken(req, true),
-                body: JSON.stringify(requestData)
+                userId = user.id;
+
+                requestData = {
+                    requestor: userId,
+                    status: 'created',
+                    items: [],
+                    vendorName
+                };
             })
-            .then(response => response.json())
-            .then(data => {
-                res.redirect('/requests/' + data.id);
-            })
-            .catch(error => console.error('Fetch Error: ', error));
+            .then(() => {
+                fetch(url, {
+                        method: 'post',
+                        headers: SharedApi.getHeadersWithToken(req, true),
+                        body: JSON.stringify(requestData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        res.redirect('/requests/' + data.id);
+                    })
+                    .catch(error => console.error('Fetch Error: ', error));
+            });
+
     }
 
     static getExistingRequest(req, res) {

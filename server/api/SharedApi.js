@@ -26,10 +26,11 @@ class SharedApi {
                 const token = req.cookies.jwt;
                 user = jwtDecode(token).user;
             }
+
             if (user) {
                 resolve(user);
             } else {
-                resolve(false);
+                reject(false);
             }
         })
 
