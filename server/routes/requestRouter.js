@@ -1,8 +1,8 @@
 const express = require('express');
 const RequestController = require('../controllers/RequestController');
-const { jwtAuth } = require('../middleware/authentication');
+const { authMiddleware } = require('../middleware/authentication');
 const router = express.Router();
-router.use(jwtAuth);
+router.use(authMiddleware);
 // List All Requests
 router.get('/', RequestController.getAllRequests);
 
