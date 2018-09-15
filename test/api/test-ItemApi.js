@@ -1,5 +1,4 @@
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const moment = require('moment');
 const app = require('../../server/app');
 const Request = require('../../server/models/Request');
@@ -9,14 +8,7 @@ const ItemHelper = require('../helpers/ItemHelper');
 const GeneralHelper = require('../helpers/GeneralHelper');
 const RequestHelper = require('../helpers/RequestHelper');
 const { expect } = chai;
-chai.use(chaiHttp);
 
-
-const postAuthenticated = (app, url) => {
-    return chai.request(app)
-        .post(url)
-        .set('X-TEST-BYPASS-AUTH', true)
-}
 
 describe('Item API', function() {
     // starts the server before running tests
@@ -38,14 +30,14 @@ describe('Item API', function() {
     });
 
     describe('POST Endpoint', function() {
-        it.only('should add an item to the selected request', function() {
+        it('should add an item to the selected request', function() {
             const itemData = ItemHelper.generateItemData();
             return Request
                 .findOne()
                 .then(function(request) {
                     itemData.requestId = request.id;
 
-                    return postAuthenticated(app, `/api/requests/${request.id}/addItem`)
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}/addItem`, 'post')
                         .send(itemData);
                 })
                 .then(function(res) {
@@ -57,14 +49,6 @@ describe('Item API', function() {
 
                     expect(item).to.be.a('object');
                     expect(item).to.include.keys('id', 'name', 'qty', 'pricePer', 'neededBy', 'expeditedShipping', 'link', 'notes');
-                    expect(item.id).to.not.be.null;
-                    expect(item.name).to.equal(itemData.name);
-                    expect(item.qty).to.equal(itemData.qty);
-                    expect(item.pricePer).to.equal(itemData.pricePer);
-                    expect(moment(item.neededBy).valueOf()).to.equal(moment(itemData.neededBy).valueOf());
-                    expect(item.expeditedShipping).to.equal(itemData.expeditedShipping);
-                    expect(item.link).to.equal(itemData.link);
-                    expect(item.notes).to.equal(itemData.notes);
                 });
         });
     });
@@ -79,15 +63,14 @@ describe('Item API', function() {
                     requestId = request.id;
                     itemData.requestId = requestId;
 
-                    return chai.request(app)
-                        .post(`/api/requests/${requestId}/addItem`)
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${requestId}/addItem`, 'post')
                         .send(itemData);
                 })
                 .then(function(res) {
                     expect(res.body.items.length).to.equal(1);
                     const itemId = res.body.items[0].id;
-                    return chai.request(app)
-                        .delete(`/api/requests/${requestId}/item/${itemId}`);
+
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${requestId}/item/${itemId}`, 'delete');
 
 
                 })
@@ -112,8 +95,7 @@ describe('Item API', function() {
                     requestId = request.id;
                     itemData.requestId = requestId;
 
-                    return chai.request(app)
-                        .post(`/api/requests/${requestId}/addItem`)
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${requestId}/addItem`, 'post')
                         .send(itemData);
                 })
                 .then(function(res) {
@@ -121,8 +103,7 @@ describe('Item API', function() {
                     updatedItem.reqId = requestId;
                     updatedItem.itemId = res.body.items[0].id;
 
-                    return chai.request(app)
-                        .put(`/api/requests/${requestId}/item/${res.body.items[0].id}`)
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${requestId}/item/${res.body.items[0].id}`, 'put')
                         .send(updatedItem);
                 })
                 .then(function(res) {
