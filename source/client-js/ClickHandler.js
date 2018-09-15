@@ -49,7 +49,6 @@ const ClickHandler = {
             status: status
         };
         const headers = SharedApi.getHeadersWithToken(null, true, document.cookie);
-        console.log("headers", headers);
         fetch(url, {
                 method: 'put',
                 headers: headers,

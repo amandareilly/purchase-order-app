@@ -25,13 +25,11 @@ class SharedApi {
             } else if (req.cookies.jwt) {
                 const token = req.cookies.jwt;
                 user = jwtDecode(token).user;
-            } else if (req.header('x-test-bypass-auth')) {
-                user = User.findOne().exec();
             }
             if (user) {
                 resolve(user);
             } else {
-                reject('user not found');
+                resolve(false);
             }
         })
 
@@ -40,20 +38,17 @@ class SharedApi {
     static getHeadersWithToken(req, contentType = false, cookieString = false) {
         let headers = {};
         if (req.headers['x-test-bypass-auth']) {
-            console.log("setting bypass auth header");
-            headers['X-TEST-BYPASS-AUTH'] = true;
+            headers['X-TEST-BYPASS-AUTH'] = 'true';
         } else {
             let token;
             if (req && req.cookies.jwt) {
                 token = req.cookies.jwt;
             } else if (cookieString) {
-                console.log("cookies string", cookieString);
                 token = this.getFrontEndCookie('jwt', cookieString);
-                console.log("cookie string token", token);
             } else {
                 throw new Error('no valid token received')
             }
-            headers['authorization'] = `Bearer ${token}`
+            headers['authorization'] = `Bearer ${token}`;
         };
         if (contentType) {
             headers['Content-Type'] = 'application/json';
@@ -68,7 +63,6 @@ class SharedApi {
             cookie = cookie.split('=');
             keyValMap[cookie[0]] = cookie[1];
         })
-        console.log(keyValMap);
         return (keyValMap[name] ? keyValMap[name] : null);
     }
 }

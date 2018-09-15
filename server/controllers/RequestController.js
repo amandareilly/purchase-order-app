@@ -8,21 +8,34 @@ class RequestController {
     static getAllRequests(req, res) {
         const token = req.cookies.jwt;
         const query = req.url || null;
-        const user = SharedApi.getUser(req);
         const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
-        fetch(url, {
-                headers: SharedApi.getHeadersWithToken(req)
+        const headers = SharedApi.getHeadersWithToken(req);
+
+        let user;
+        return SharedApi.getUser(req)
+            .then((foundUser) => {
+                user = foundUser;
             })
-            .then((response) => {
-                if (response.status === 401) {
-                    res.redirect('/login');
-                }
-                return response.json();
+            .then(() => {
+                return fetch(url, {
+                        mode: 'same-origin',
+                        headers: headers
+                    })
+                    .then((response) => {
+                        if (response.status === 401) {
+                            res.redirect('/login');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user._id, data.requests, 'All Purchase Requests')
+                    })
+                    .catch(error => console.error('Fetch Error: ', error));
             })
-            .then(data => {
-                RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user._id, data.requests, 'All Purchase Requests')
-            })
-            .catch(error => console.error('Fetch Error: ', error));
+            .catch((error) => {
+                console.error(error);
+            });
+
     }
 
     static createNewRequest(req, res) {
