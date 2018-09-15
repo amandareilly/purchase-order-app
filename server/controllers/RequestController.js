@@ -18,7 +18,6 @@ class RequestController {
             })
             .then(() => {
                 return fetch(url, {
-                        mode: 'same-origin',
                         headers: headers
                     })
                     .then((response) => {
@@ -49,8 +48,9 @@ class RequestController {
         return SharedApi.getUser(req)
             .then((foundUser) => {
                 user = foundUser;
-
-                userId = user.id;
+                console.log('user', user);
+                userId = user.id || user._id;
+                console.log('userId', userId);
 
                 requestData = {
                     requestor: userId,

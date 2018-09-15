@@ -38,19 +38,22 @@ class SharedApi {
 
     static getHeadersWithToken(req, contentType = false, cookieString = false) {
         let headers = {};
-        if (req.headers['x-test-bypass-auth']) {
-            headers['X-TEST-BYPASS-AUTH'] = 'true';
-        } else {
-            let token;
-            if (req && req.cookies.jwt) {
+        let token;
+        if (req) {
+            if (req.headers['x-test-bypass-auth']) {
+                headers['X-TEST-BYPASS-AUTH'] = 'true';
+            } else if (req.cookies.jwt) {
                 token = req.cookies.jwt;
-            } else if (cookieString) {
-                token = this.getFrontEndCookie('jwt', cookieString);
-            } else {
-                throw new Error('no valid token received')
             }
-            headers['authorization'] = `Bearer ${token}`;
-        };
+
+        } else if (cookieString) {
+            token = this.getFrontEndCookie('jwt', cookieString);
+        } else {
+            throw new Error('no valid token received')
+        }
+
+        headers['authorization'] = `Bearer ${token}`;
+
         if (contentType) {
             headers['Content-Type'] = 'application/json';
         }
