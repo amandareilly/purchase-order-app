@@ -2,8 +2,9 @@
     <header>
         {{#if loggedIn}}
             <div class="user-info">
-                <img src="https://placeimg.com/100/100/people" alt="user profile picture" class="user-img">
-                <p class="user-name">{{user.name}}</p>
+                <p class="user-name"><b>User Name: </b>{{user.name.first}} {{user.name.last}}</p>
+                <p class="user-email"><b>User Email: </b>{{user.email}}</p>
+                <p class="user-role"><b>User Role: </b>{{user.role}}</p>
             </div>
         {{else}}
             <button class="login">Log In</button>

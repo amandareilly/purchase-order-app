@@ -6,7 +6,6 @@ const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
-        const token = req.cookies.jwt;
         const query = req.url || null;
         const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
         const headers = SharedApi.getHeadersWithToken(req);
@@ -27,7 +26,7 @@ class RequestController {
                         return response.json();
                     })
                     .then(data => {
-                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user._id, data.requests, 'All Purchase Requests')
+                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests')
                     })
                     .catch(error => console.error('Fetch Error: ', error));
             })
@@ -75,20 +74,25 @@ class RequestController {
     }
 
     static getExistingRequest(req, res) {
-        const user = SharedApi.getUser(req);
-        const url = SharedApi.constructApiUrl(req, 'requests/' + req.params.id);
-        fetch(url, {
-                headers: SharedApi.getHeadersWithToken(req)
+        let user;
+        SharedApi.getUser(req)
+            .then((foundUser) => {
+                user = foundUser;
+                const url = SharedApi.constructApiUrl(req, 'requests/' + req.params.id);
+                fetch(url, {
+                        headers: SharedApi.getHeadersWithToken(req)
+                    })
+                    .then(response => response.json())
+                    .then((data) => {
+                        let pageTitle = 'Request Not Found';
+                        if (!data.error) {
+                            pageTitle = `Request # ${data.id}`;
+                        }
+                        RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle);
+                    })
+                    .catch(error => console.error('Fetch Error: ', error));
             })
-            .then(response => response.json())
-            .then((data) => {
-                let pageTitle = 'Request Not Found';
-                if (!data.error) {
-                    pageTitle = `Request # ${data.id}`;
-                }
-                RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle);
-            })
-            .catch(error => console.error('Fetch Error: ', error));
+
     }
 
     static renderRequestPage(res, view, loggedIn, user, data, pageTitle) {
