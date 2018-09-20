@@ -48,7 +48,6 @@ class RequestController {
             .then((foundUser) => {
                 user = foundUser;
                 userId = user.id || user._id;
-                console.log('userId', userId);
 
                 requestData = {
                     requestor: userId,
