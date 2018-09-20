@@ -2,11 +2,13 @@
 <h1>Request Detail Page</h1>
 <a href="/requests" class="back-to-dashboard">Return to Dashboard</a>
 {{#if data.id}}
-    <h2>Request #{{data.id}}</h2>
-    <h2>Created on {{dateFormat data.createdAt "MMMM Do YYYY"}}</h2>
-    <h2>Created By: {{user.name}}</h2>
-    <h2>Status: {{capitalizeFirstLetter data.status}}</h2>
-    <h2>Vendor: {{data.vendor.name}}</h2>
+    <div class="request-header">
+        <p class="request-id"><b>Request # </b>{{data.id}}</p>
+        <p class="request-date"><b>Created on </b>{{dateFormat data.createdAt "MMMM Do YYYY"}}</p>
+        <p class="requestor"><b>Created By: </b>{{user.name.first}} {{user.name.last}} | {{user.email}}</p>
+        <p class="request-status"><b>Status: </b>{{capitalizeFirstLetter data.status}}</p>
+        <p class="request-vendor"><b>Vendor: </b>{{data.vendor.name}}</p>
+    </div>
     {{#if data.items}}
         <table class="item-listing">
             <tr>

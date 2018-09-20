@@ -2,8 +2,15 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const itemSchema = require('./Item');
 const vendorSchema = require('./Vendor');
+const Sequence = require('./Sequence');
 
 const requestSchema = mongoose.Schema({
+    sequence: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true,
+    },
     requestor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     vendor: { type: vendorSchema, required: true },
     status: { type: String, required: true, default: 'created', trim: true, lowercase: true },
@@ -17,6 +24,16 @@ requestSchema.virtual('vendorName')
 
 requestSchema.pre('find', function(next) {
     this.populate('requestor');
+    next();
+});
+
+requestSchema.pre('validate', function(next) {
+    if (!this.sequence) {
+        return Sequence.findOne()
+            .then((sequence) => {
+                this.sequence = sequence.getNextSequence();
+            });
+    }
     next();
 });
 
@@ -47,6 +64,7 @@ requestSchema.methods.serialize = function() {
 
     return {
         id: this._id,
+        sequence: this.sequence,
         requestor: requestor,
         vendor: (this.vendor !== undefined ? this.vendor.serialize() : null),
         status: this.status,

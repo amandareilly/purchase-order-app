@@ -1,13 +1,13 @@
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const app = require('../../server/app');
 const Request = require('../../server/models/Request');
 const { runServer, closeServer } = require('../../server/server');
 const { TEST_DATABASE_URL, TEST_PORT } = require('../../server/config');
 const GeneralHelper = require('../helpers/GeneralHelper');
 const RequestHelper = require('../helpers/RequestHelper');
+const User = require('../../server/models/User');
+const Auth = require('../../server/controllers/AuthController');
 const { expect } = chai;
-chai.use(chaiHttp);
 
 
 
@@ -33,8 +33,7 @@ describe('Purchase Request API', function() {
     describe('GET Endpoint', function() {
         it('should return all existing requests', function() {
             let res;
-            return chai.request(app)
-                .get('/api/requests')
+            return GeneralHelper.httpAuthenticated(app, '/api/requests', 'get')
                 .then(function(_res) {
                     res = _res;
                     expect(res).to.have.status(200);
@@ -47,8 +46,7 @@ describe('Purchase Request API', function() {
         });
         it('should return requests with right fields', function() {
             let resRequest;
-            return chai.request(app)
-                .get('/api/requests')
+            return GeneralHelper.httpAuthenticated(app, '/api/requests', 'get')
                 .then(function(res) {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
@@ -69,8 +67,7 @@ describe('Purchase Request API', function() {
         });
         it('should return a specific request by id', function() {
             let testRequest;
-            return chai.request(app)
-                .get('/api/requests')
+            return GeneralHelper.httpAuthenticated(app, '/api/requests', 'get')
                 .then(function(res) {
                     const requestToFind = res.body.requests[0];
                     testRequest = requestToFind;
@@ -78,8 +75,7 @@ describe('Purchase Request API', function() {
                 })
                 .then(function(requestToFind) {
                     const url = `/api/requests/${requestToFind.id}`;
-                    return chai.request(app)
-                        .get(url)
+                    return GeneralHelper.httpAuthenticated(app, url, 'get')
                         .then(function(res) {
                             expect(res.body.id).to.equal(testRequest.id);
                             expect(res.body.status).to.equal(testRequest.status);
@@ -94,8 +90,7 @@ describe('Purchase Request API', function() {
         it('should add a new request', function() {
             let resRequest;
             const newRequest = RequestHelper.generateRequestData(true, true);
-            return chai.request(app)
-                .post('/api/requests')
+            return GeneralHelper.httpAuthenticated(app, '/api/requests', 'post')
                 .send(newRequest)
                 .then(function(res) {
                     expect(res).to.have.status(201);
@@ -121,26 +116,34 @@ describe('Purchase Request API', function() {
     describe('PUT Endpoint', function() {
         it('should update status only', function() {
             const updateData = {
-                status: 'jkljkljkljkl',
+                status: 'jkljkljl',
                 requestor: 'lmnop'
             };
 
-            return Request
-                .findOne()
-                .then(function(request) {
-                    updateData.id = request.id;
+            return User.findById('5b70f8d709110643dc2320c8')
+                .then(user => user.serialize())
+                .then((user) => {
+                    user.role = 'basic';
+                    const token = Auth.createAuthToken(user);
 
-                    return chai.request(app)
-                        .put(`/api/requests/${request.id}`)
-                        .send(updateData);
-                })
-                .then(function(res) {
-                    expect(res).to.have.status(200);
-                    return Request.findById(updateData.id);
-                })
-                .then(function(request) {
-                    expect(request.status).to.equal(updateData.status);
-                    expect(request.requestor).to.not.equal(updateData.requestor);
+                    return Request
+                        .findOne()
+                        .then(function(request) {
+                            updateData.id = request.id;
+
+                            return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}`, 'put')
+                                .set('Cookie', `jwt=${token}`)
+                                .send(updateData);
+                        })
+                        .then(function(res) {
+                            expect(res).to.have.status(200);
+                            return Request.findById(updateData.id);
+                        })
+                        .then(function(request) {
+                            expect(request.status).to.equal(updateData.status);
+                            expect(request.requestor).to.not.equal(updateData.requestor);
+                        });
+
                 });
         });
     });
@@ -151,8 +154,7 @@ describe('Purchase Request API', function() {
             newRequestData.status = 'created';
             return Request.create(newRequestData)
                 .then((request) => {
-                    return chai.request(app)
-                        .delete(`/api/requests/${request.id}`)
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}`, 'delete')
                         .then(function(res) {
                             expect(res).to.have.status(204);
                             return Request.findById(request.id);
@@ -170,8 +172,7 @@ describe('Purchase Request API', function() {
             return Request.create(newRequestData)
                 .then((_request) => {
                     request = _request;
-                    return chai.request(app)
-                        .delete(`/api/requests/${request.id}`)
+                    return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}`, 'delete')
                         .then(function(res) {
                             expect(res).to.have.status(400)
                             return Request.findById(request.id);

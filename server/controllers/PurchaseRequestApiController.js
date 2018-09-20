@@ -6,7 +6,6 @@ const ItemApi = require('./ItemApiController');
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
         const status = (req.query.status ? req.query.status.split(' ') : null);
-        console.log("Status:", status);
 
         Request
             .find()
@@ -105,25 +104,38 @@ class PurchaseRequestApi {
     }
 
     static updateRequest(req, res, next) {
-        // check for required fields
-        const validation = PurchaseRequestApi.validateRequest('update', req);
-        if (typeof(validation) === 'string') {
-            console.error(validation);
-            res.status(400).send(validation);
-        }
-        Request.findById(req.body.id)
-            .then(request => {
-                request.status = req.body.status;
-                return request;
-            })
-            .then(request => request.save())
-            .then((updatedRequest) => {
-                res.status(200).json(updatedRequest.serialize());
-            })
-            .catch((err) => {
-                console.error(err);
-                res.status(500).json({ message: 'Internal server error' });
+        let user;
+        SharedApi.getUser(req)
+            .then((foundUser) => {
+                user = foundUser;
+                if (req.body.status == 'approved' || req.body.status == 'denied') {
+                    if (user.role.toUpperCase() !== 'APPROVER') {
+                        res.status(403).send('Forbidden').end();
+                    }
+                } else {
+                    // check for required fields
+                    const validation = PurchaseRequestApi.validateRequest('update', req);
+                    if (typeof(validation) === 'string') {
+                        console.error(validation);
+                        res.status(400).send(validation);
+                    }
+                    Request.findById(req.body.id)
+                        .then(request => {
+                            request.status = req.body.status;
+                            return request;
+                        })
+                        .then(request => request.save())
+                        .then((updatedRequest) => {
+                            res.status(200).json(updatedRequest.serialize());
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                            res.status(500).json({ message: 'Internal server error' });
+                        });
+                }
+
             });
+
     }
 
     static deleteRequest(req, res) {

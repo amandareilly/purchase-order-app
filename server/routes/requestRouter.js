@@ -1,7 +1,8 @@
 const express = require('express');
 const RequestController = require('../controllers/RequestController');
-
+const { authMiddleware } = require('../middleware/authentication');
 const router = express.Router();
+router.use(authMiddleware);
 // List All Requests
 router.get('/', RequestController.getAllRequests);
 

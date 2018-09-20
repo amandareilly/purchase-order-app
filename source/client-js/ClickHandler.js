@@ -1,5 +1,6 @@
 // this is a static class
 require('isomorphic-fetch');
+const SharedApi = require('../../server/api/SharedApi');
 const ClickHandler = {
     apiUrl: process.env.API_URL || 'http://localhost:8080/api/',
     addClickListeners: function() {
@@ -13,16 +14,13 @@ const ClickHandler = {
             ClickHandler[clicked.getAttribute('data-clickable')](clicked);
         }
     },
-    // addItemToReq: function(element) {
-    //     const requestId = element.getAttribute('data-reqId');
-    //     console.log(requestId);
-    // },
     deleteRequest: function(element) {
         const requestId = element.getAttribute('data-reqId');
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {
             const url = this.apiUrl + 'requests/' + requestId;
             fetch(url, {
-                    method: 'delete'
+                    method: 'delete',
+                    headers: SharedApi.getHeadersWithToken(null, false, document.cookie)
                 })
                 .then((response) => {
                     const redirectUrl = window.location.origin + '/requests';
@@ -32,19 +30,15 @@ const ClickHandler = {
         }
     },
     submitRequest: function(element) {
-        console.log("hit submit");
         this.updateRequest(element, 'submitted');
     },
     unsubmit: function(element) {
-        console.log("hit unsubmit");
         this.updateRequest(element, 'created');
     },
     approveRequest: function(element) {
-        console.log("hit approve");
         this.updateRequest(element, 'approved');
     },
     denyRequest: function(element) {
-        console.log("hit deny");
         this.updateRequest(element, 'denied');
     },
     updateRequest: function(element, status) {
@@ -54,11 +48,10 @@ const ClickHandler = {
             id: requestId,
             status: status
         };
+        const headers = SharedApi.getHeadersWithToken(null, true, document.cookie);
         fetch(url, {
                 method: 'put',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify(updateData)
             })
             .then((response) => {
