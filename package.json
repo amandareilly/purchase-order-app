@@ -5,7 +5,7 @@
     "main": "server/server.js",
     "scripts": {
         "start": "node server/server.js",
-        "test": "SET \"NODE_ENV=TEST\" && mocha --require babel-polyfill --require babel-register  --recursive --timeout 10000",
+        "test": "mocha --require babel-polyfill --require babel-register  --recursive --timeout 10000",
         "build": "gulp build"
     },
     "repository": {
@@ -36,6 +36,7 @@
         "jsonwebtoken": "^8.3.0",
         "jwt-decode": "^2.2.0",
         "mongoose": "^5.2.4",
+        "mongoose-find-one-or-create": "^0.2.0",
         "morgan": "^1.9.0",
         "passport": "^0.4.0",
         "passport-jwt": "^4.0.0",

@@ -47,7 +47,6 @@ class RequestController {
         return SharedApi.getUser(req)
             .then((foundUser) => {
                 user = foundUser;
-                console.log('user', user);
                 userId = user.id || user._id;
                 console.log('userId', userId);
 

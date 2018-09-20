@@ -11,9 +11,9 @@ const jsonParser = bodyParser.json();
 const { authMiddleware } = require('../middleware/authentication');
 
 router.use(jsonParser);
-router.use(authMiddleware)
-    // requests endpoints
-    // get all requests
+// router.use(authMiddleware)
+// requests endpoints
+// get all requests
 router.get('/requests', PurchaseRequestApiController.getAllRequests);
 // get a specific request
 router.get('/requests/:id', PurchaseRequestApiController.getRequestById);
