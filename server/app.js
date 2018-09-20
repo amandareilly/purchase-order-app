@@ -45,6 +45,10 @@ app.set('view engine', 'hbs');
 // Root URL
 app.get('/', (req, res) => res.render('home', { loggedIn: true }));
 
+const SeedData = require('./SeedData');
+// Test Route for Seeding
+app.get('/seed', SeedData.seedData);
+
 // Request Routes
 app.use('/requests', requestRouter);
 
