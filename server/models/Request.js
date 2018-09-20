@@ -87,6 +87,15 @@ requestSchema.query.byStatus = function(statusArray) {
         return this.find({ $or: orConditions });
     }
 }
+
+requestSchema.query.byRequestor = function(userId) {
+    if (!userId) {
+        return this.find();
+    } else {
+        return this.find({ requestor: userId });
+    }
+}
+
 const Request = mongoose.model('Request', requestSchema);
 
 module.exports = Request;

@@ -34,7 +34,8 @@ const hbs = exphbs.create({
         capitalizeFirstLetter: require('./viewHelpers/capitalizeFirstLetter'),
         prettifyTrueFalse: require('./viewHelpers/prettifyTrueFalse'),
         checkForSubmitted: require('./viewHelpers/checkForSubmitted'),
-        checkForApproved: require('./viewHelpers/checkForApproved')
+        checkForApproved: require('./viewHelpers/checkForApproved'),
+        setToggleable: require('./viewHelpers/setToggleable')
     },
 });
 

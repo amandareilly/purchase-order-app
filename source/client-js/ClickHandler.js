@@ -10,9 +10,40 @@ const ClickHandler = {
     handleClicked: function(e) {
         const clicked = e.target;
         if (clicked.hasAttribute('data-clickable')) {
-            e.preventDefault();
+            if (!clicked.hasAttribute('data-allow-default')) {
+                e.preventDefault();
+            }
             ClickHandler[clicked.getAttribute('data-clickable')](clicked);
         }
+    },
+    toggleAllRequests: function(element) {
+        const userId = element.getAttribute('data-user-id');
+        let swap;
+
+        const links = document.querySelectorAll("[data-toggleable]");
+        links.forEach(function(link) {
+            swap = link.dataset.toggleable;
+            link.dataset.toggleable = link.attributes.href.nodeValue;
+            link.attributes.href.nodeValue = swap;
+        });
+        console.log(window.location);
+        let search = window.location.search;
+        let queryLoc = search.indexOf('user=');
+        console.log("queryLoc", queryLoc)
+
+        let redirect = window.location.origin + window.location.pathname;
+        let updated;
+        if (search) {
+            if (queryLoc == -1) {
+                redirect += `${search}&user=${userId}`
+            } else if (queryLoc != 1) {
+                redirect += `${search.substring(0,queryLoc-1)}`
+            }
+        } else {
+            redirect += `?user=${userId}`;
+        }
+
+        window.location.href = redirect;
     },
     deleteRequest: function(element) {
         const requestId = element.getAttribute('data-reqId');

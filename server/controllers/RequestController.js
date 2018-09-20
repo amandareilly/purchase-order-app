@@ -6,6 +6,10 @@ const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
+        let filterByUser = false;
+        if (req.query.user && req.query.user == req.user._id) {
+            filterByUser = true;
+        }
         const query = req.url || null;
         const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
         const headers = SharedApi.getHeadersWithToken(req);
@@ -26,7 +30,7 @@ class RequestController {
                         return response.json();
                     })
                     .then(data => {
-                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests')
+                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests', filterByUser)
                     })
                     .catch(error => console.error('Fetch Error: ', error));
             })
@@ -93,12 +97,13 @@ class RequestController {
 
     }
 
-    static renderRequestPage(res, view, loggedIn, user, data, pageTitle) {
+    static renderRequestPage(res, view, loggedIn, user, data, pageTitle, filterByUser) {
         res.render(view, {
             loggedIn,
             user,
             data,
-            pageTitle
+            pageTitle,
+            filterByUser
         });
     }
 

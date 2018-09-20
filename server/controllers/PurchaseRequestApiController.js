@@ -6,9 +6,11 @@ const ItemApi = require('./ItemApiController');
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
         const status = (req.query.status ? req.query.status.split(' ') : null);
+        const user = (req.query.user ? req.query.user : null);
 
         Request
             .find()
+            .byRequestor(user)
             .byStatus(status)
             .then(requests => {
                 if (requests) {

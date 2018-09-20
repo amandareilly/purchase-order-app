@@ -1,9 +1,6 @@
 <tr>
-    <td>{{this.id}}</td>
+    <td><a href="/requests/{{this.id}}" class="view-request-link" data-request="{{id}}">{{this.sequence}}</a></td>
     <td>{{dateFormat this.createdAt "MMMM Do YYYY"}}</td>
     <td>{{this.status}}</td>
-    <td>{{this.requestorName}}</td>
-    <td>
-        <a href="/requests/{{this.id}}" class="view-request-link" data-request="{{id}}">View</a>
-    </td>
+    <td>{{this.requestor.name}}</td>
 </tr>
