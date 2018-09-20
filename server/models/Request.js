@@ -45,6 +45,14 @@ requestSchema.post('save', function(doc, next) {
         });
 });
 
+requestSchema.virtual('requestTotal').get(function() {
+    let total = 0;
+    this.items.forEach(function(item) {
+        total += item.lineTotal;
+    });
+    return total;
+})
+
 requestSchema.methods.serialize = function() {
     const requestor = {};
     if (this.requestor) {
@@ -72,6 +80,7 @@ requestSchema.methods.serialize = function() {
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
         notes: (this.notes ? this.notes : null),
+        requestTotal: this.requestTotal.toFixed(2),
     }
 };
 

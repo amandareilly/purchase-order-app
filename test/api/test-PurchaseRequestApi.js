@@ -55,7 +55,7 @@ describe('Purchase Request API', function() {
 
                     res.body.requests.forEach(function(request) {
                         expect(request).to.be.a('object');
-                        expect(request).to.include.keys('id', 'requestor', 'status', 'items', 'createdAt', 'updatedAt', 'vendor', 'notes');
+                        expect(request).to.include.keys('id', 'requestor', 'status', 'items', 'createdAt', 'updatedAt', 'vendor', 'notes', 'requestTotal');
                     });
                     resRequest = res.body.requests[0];
                     return Request.findById(resRequest.id);

@@ -47,7 +47,7 @@ describe('Item API', function() {
                     const item = res.body.items[0];
 
                     expect(item).to.be.a('object');
-                    expect(item).to.include.keys('id', 'name', 'qty', 'pricePer', 'neededBy', 'expeditedShipping', 'link', 'notes');
+                    expect(item).to.include.keys('id', 'name', 'qty', 'pricePer', 'neededBy', 'expeditedShipping', 'link', 'notes', 'lineTotal');
                 });
         });
     });

@@ -11,6 +11,10 @@ const itemSchema = mongoose.Schema({
     notes: { type: String }
 });
 
+itemSchema.virtual('lineTotal').get(function() {
+    return this.pricePer * this.qty;
+});
+
 itemSchema.methods.serialize = function() {
     let link = null;
     let notes = null;
@@ -30,6 +34,7 @@ itemSchema.methods.serialize = function() {
         expeditedShipping: this.expeditedShipping,
         link: link,
         notes: notes,
+        lineTotal: this.lineTotal.toFixed(2),
     };
 }
 
