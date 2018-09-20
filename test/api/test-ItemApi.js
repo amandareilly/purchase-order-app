@@ -36,7 +36,6 @@ describe('Item API', function() {
                 .findOne()
                 .then(function(request) {
                     itemData.requestId = request.id;
-                    console.log(itemData);
                     return GeneralHelper.httpAuthenticated(app, `/api/requests/${request.id}/addItem`, 'post')
                         .send(itemData);
                 })
