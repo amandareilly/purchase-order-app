@@ -10,14 +10,22 @@ class RequestController {
         if (req.query.user && req.query.user == req.user._id) {
             filterByUser = true;
         }
-        const query = req.url || null;
-        const url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
+        let query = req.url || null;
+        let url;
         const headers = SharedApi.getHeadersWithToken(req);
 
         let user;
         return SharedApi.getUser(req)
             .then((foundUser) => {
                 user = foundUser;
+                if (user.role == 'basic') {
+                    if (query && query != '/') {
+                        query += `&user=${user._id}`;
+                    } else {
+                        query = `?user=${user._id}`
+                    }
+                }
+                url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
             })
             .then(() => {
                 return fetch(url, {

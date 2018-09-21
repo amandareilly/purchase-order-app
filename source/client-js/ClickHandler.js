@@ -45,6 +45,14 @@ const ClickHandler = {
 
         window.location.href = redirect;
     },
+    viewRequest: function(element) {
+        const requestId = element.getAttribute('data-reqId');
+        window.location.href = `${window.location.origin}/requests/${requestId}`;
+    },
+    editRequest: function(element) {
+        const requestId = element.getAttribute('data-reqId');
+        window.location.href = `${window.location.origin}/requests/${requestId}`;
+    },
     deleteRequest: function(element) {
         const requestId = element.getAttribute('data-reqId');
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {
@@ -71,6 +79,12 @@ const ClickHandler = {
     },
     denyRequest: function(element) {
         this.updateRequest(element, 'denied');
+    },
+    markOrdered: function(element) {
+        this.updateRequest(element, 'ordered');
+    },
+    markComplete: function(element) {
+        this.updateRequest(element, 'complete');
     },
     updateRequest: function(element, status) {
         const requestId = element.getAttribute('data-reqId');

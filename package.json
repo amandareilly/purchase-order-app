@@ -31,6 +31,7 @@
         "express": "^4.16.3",
         "express-handlebars": "^3.0.0",
         "express-session": "^1.15.6",
+        "handlebars": "^4.0.12",
         "handlebars-dateformat": "^1.1.1",
         "isomorphic-fetch": "^2.2.1",
         "jsonwebtoken": "^8.3.0",
