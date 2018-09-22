@@ -16,16 +16,9 @@
     <label for="vendorName">Create a new Purchase Request for Vendor: <input type="text" name="vendorName" id="vendorName" required></label><button type="submit">Create Request</button>
 </form>
 {{#if data}}
-
-    {{!-- <table class="request-listing" sortable>
-        <tr>
-            <th>Request #</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Submitter</th>
-        </tr> --}}
-        {{#each data}} {{>request/requestTableRow this}} {{/each}}
-    {{!-- </table> --}}
+    <section class="request-grid-container">
+        {{#each data}} {{>request/requestSummary this}} {{/each}}
+    </section>
 {{else}}
 <p>no data received</p>
 {{/if}}

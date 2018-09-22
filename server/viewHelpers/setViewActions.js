@@ -7,27 +7,27 @@ const setViewActions = function(status, options) {
     const userIsApprover = (options.data.root.user.role.toUpperCase() == 'APPROVER');
     const userIsRequestor = (options.data.root.user._id == options.hash.requestor);
 
-    const viewMore = `<button class="action view-request" data-clickable="viewRequest" data-reqId="${requestId}">View Request Detail</button>`;
+    const viewMore = `<a href="#" class="action view-request" data-clickable="viewRequest" data-reqId="${requestId}"><i class="material-icons action-icon">remove_red_eye</i><span class="action-text"> View Request Detail</span></a>`;
 
-    const submit = `<button class="action submit-request" data-clickable="submitRequest" data-reqId="${requestId}">Submit Request</button>`;
+    const submit = `<a href="#" class="action submit-request" data-clickable="submitRequest" data-reqId="${requestId}"><i class="material-icons action-icon">send</i><span class="action-text"> Submit Request</span></a>`;
 
-    const edit = `<button class="action edit-request" data-clickable="editRequest" data-reqId="${requestId}">Edit Request</button>`;
+    const editOrView = `<a href="#" class="action edit-request" data-clickable="viewRequest" data-reqId="${requestId}"><i class="material-icons action-icon">edit</i><span class="action-text"> View or Edit Request</span></a>`;
 
-    const deleteRequest = `<button class="action delete-request" data-clickable=deleteRequest" data-reqId="${requestId}">Delete Request</button>`;
+    const deleteRequest = `<a href="#" class="action delete-request" data-clickable=deleteRequest" data-reqId="${requestId}"><i class="material-icons action-icon">delete</i><span class="action-text"> Delete Request</span></a>`;
 
-    const undoSubmit = `<button class="action unsubmit-request" data-clickable="unsubmit" data-reqId="${requestId}">Unsubmit Request</button>`;
+    const undoSubmit = `<a href="#" class="action unsubmit-request" data-clickable="unsubmit" data-reqId="${requestId}"><i class="material-icons action-icon">undo</i><span class="action-text"> Unsubmit Request</span></a>`;
 
-    const approve = `<button class="action approve-request" data-clickable="approveRequest" data-reqId="${requestId}">Approve</button>`;
+    const approve = `<a href="#" class="action approve-request" data-clickable="approveRequest" data-reqId="${requestId}"><i class="material-icons action-icon">thumb_up</i><span class="action-text"> Approve</span></a>`;
 
-    const deny = `<button class="action deny-request" data-clickable="denyRequest" data-reqId="${requestId}">Deny</button>`;
+    const deny = `<a href="#" class="action deny-request" data-clickable="denyRequest" data-reqId="${requestId}"><i class="material-icons action-icon">thumb_down</i> Deny</a>`;
 
-    const markOrdered = `<button class="action mark-request-ordered" data-clickable="markOrdered" data-reqId="${requestId}">Mark Request as Ordered</button>`;
+    const markOrdered = `<a href="#" class="action mark-request-ordered" data-clickable="markOrdered" data-reqId="${requestId}"><i class="material-icons action-icon">shopping_cart</i><span class="action-text"> Mark Request as Ordered</span></a>`;
 
-    const resubmit = `<button class="action resubmit-request" data-clickable="submitRequest" data-reqId="${requestId}">Resubmit Request</button>`;
+    const resubmit = `<a href="#" class="action resubmit-request" data-clickable="submitRequest" data-reqId="${requestId}"><i class="material-icons action-icon">send</i><span class="action-text> Resubmit Request</span></a>`;
 
-    const markComplete = `<button class="action mark-request-complete" data-clickable="markComplete" data-reqId="${requestId}">Mark Request as Complete</button>`;
+    const markComplete = `<a href="#" class="action mark-request-complete" data-clickable="markComplete" data-reqId="${requestId}"><i class="material-icons action-icon">done_all</i><span class="action-text"> Mark Request as Complete</span></a>`;
 
-    let string = '<div class="action-box">' + viewMore;
+    let string = '<footer class="action-box">';
     switch (status) {
         case 'created':
             // status created
@@ -36,7 +36,9 @@ const setViewActions = function(status, options) {
             // -- Edit (if user = requestor)
             // -- Delete (if user = requestor)
             if (userIsRequestor) {
-                string += edit + submit + deleteRequest;
+                string += editOrView + submit + deleteRequest;
+            } else {
+                string += viewMore;
             }
             break;
         case 'submitted':
@@ -45,6 +47,7 @@ const setViewActions = function(status, options) {
             // -- Undo Submit (if user = requestor)
             // -- Approve (if user is approver)
             // -- Deny (if user is approver)
+            string += viewMore;
             if (userIsRequestor) {
                 string += undoSubmit;
             }
@@ -57,7 +60,7 @@ const setViewActions = function(status, options) {
             // -- View More
             // -- Deny (if user is approver)
             // -- Mark as Ordered
-            string += markOrdered;
+            string += viewMore + markOrdered;
             if (userIsApprover) {
                 string += deny;
             }
@@ -70,7 +73,9 @@ const setViewActions = function(status, options) {
             // -- Resubmit (if user = requestor)
             // -- Delete (if user = requestor)
             if (userIsRequestor) {
-                string += edit + resubmit + deleteRequest;
+                string += editOrView + resubmit + deleteRequest;
+            } else {
+                string += viewMore;
             }
 
             if (userIsApprover) {
@@ -81,16 +86,17 @@ const setViewActions = function(status, options) {
             // status ordered
             // -- View More
             // -- Mark Complete
-            string += markComplete;
+            string += viewMore + markComplete;
             break;
         case 'complete':
             // status complete
             // -- View More
+            string += viewMore;
             break;
         default:
             throw new Error('Invalid status');
     }
-    string += '</div>'
+    string += '</footer>'
     return new Handlebars.SafeString(string);
 };
 

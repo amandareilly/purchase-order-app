@@ -49,10 +49,6 @@ const ClickHandler = {
         const requestId = element.getAttribute('data-reqId');
         window.location.href = `${window.location.origin}/requests/${requestId}`;
     },
-    editRequest: function(element) {
-        const requestId = element.getAttribute('data-reqId');
-        window.location.href = `${window.location.origin}/requests/${requestId}`;
-    },
     deleteRequest: function(element) {
         const requestId = element.getAttribute('data-reqId');
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {

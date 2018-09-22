@@ -7,16 +7,13 @@
 
 <article class="request {{this.status}}">
     <header class="request-summary-header">
-        <h3 class="vendor-name">{{this.vendor.name}}</h3>
-        <div class="vendor-info">
-            <p class="vendor-url">{{this.vendor.url}}</p>
-            <p class="vendor-phone">{{this.vendor.phone}}</p>
-            <p class="vendor-contact">{{this.vendor.contactName}}</p>
-            <p class="vendor-notes">{{this.vendor.notes}}</p>
-        </div>
-        <p class="status">{{this.status}}</p>
+        <p class="status left">{{#getIcon this.status}}{{/getIcon}}</p>
+        <p class="status right">{{#toUppercase this.status}}{{/toUppercase}}</p>
+        <div class="clearfix"></div>
     </header>
     <p class="request-total">{{#formatCurrency this.requestTotal }}{{/formatCurrency}}</p>
+    <p class="vendor-name"><span class="vendor-label">Vendor: </span>
+        {{this.vendor.name}}</p>
         {{#setViewActions this.status request=this.id requestor=this.requestor.id location="dashboard"}}
         This is some info in the set view actions.
         {{/setViewActions}}
