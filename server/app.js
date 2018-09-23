@@ -10,11 +10,10 @@ const authRouter = require('./routes/authRouter');
 const passport = require('passport');
 const app = express();
 
-const { localStrategy, jwtStrategy, bearerStrategy } = require('./authStrategies');
+const { localStrategy, jwtStrategy } = require('./authStrategies');
 
 passport.use('jwt', jwtStrategy);
 passport.use('local', localStrategy);
-passport.use('bearer', bearerStrategy);
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 // app.use(morgan('default'));

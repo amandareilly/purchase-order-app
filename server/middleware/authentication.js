@@ -1,9 +1,7 @@
 const passport = require('passport');
 
-const localAuth = passport.authenticate('local', { session: false });
-const jwtAuth = passport.authenticate('jwt', { session: false });
-
-const bearerAuth = passport.authenticate('bearer', { session: false });
+const localAuth = passport.authenticate('local', { session: false, failureRedirect: '/login' });
+const jwtAuth = passport.authenticate('jwt', { session: false, failureRedirect: '/login' });
 
 let authMiddleware;
 
@@ -17,4 +15,4 @@ authMiddleware = (req, res, next) => {
     }
 };
 
-module.exports = { localAuth, jwtAuth, bearerAuth, authMiddleware };
+module.exports = { localAuth, jwtAuth, authMiddleware };

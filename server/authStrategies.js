@@ -1,6 +1,5 @@
 const { Strategy: LocalStrategy } = require('passport-local');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const Auth = require('./controllers/AuthController');
 const cookieExtractor = require('./middleware/cookieExtractor');
 
 const User = require('./models/User');
@@ -33,14 +32,4 @@ const jwtStrategy = new JwtStrategy({
     }
 );
 
-const bearerStrategy = new JwtStrategy({
-        secretOrKey: JWT_SECRET,
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        algorithms: ['HS256']
-    },
-    (payload, done) => {
-        done(null, payload.user);
-    }
-);
-
-module.exports = { localStrategy, jwtStrategy, bearerStrategy };
+module.exports = { localStrategy, jwtStrategy };
