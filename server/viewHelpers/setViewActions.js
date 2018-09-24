@@ -1,5 +1,9 @@
 const Handlebars = require('handlebars');
 
+const constructAction = function(actionObject, requestId) {
+    return `<li class="action-menu-item"><i class="material-icons action-icon">${actionObject.iconName}</i><a href="#" class="action ${actionObject.class}" data-clickable="${actionObject.clickable}" data-reqId="${requestId}">${actionObject.actionText}</a></li>`;
+}
+
 const setViewActions = function(status, options) {
 
     const requestId = options.hash.request;
@@ -7,27 +11,70 @@ const setViewActions = function(status, options) {
     const userIsApprover = (options.data.root.user.role.toUpperCase() == 'APPROVER');
     const userIsRequestor = (options.data.root.user._id == options.hash.requestor);
 
-    const viewMore = `<a href="#" class="action view-request" data-clickable="viewRequest" data-reqId="${requestId}"><i class="material-icons action-icon">remove_red_eye</i><span class="action-text"> View Request Detail</span></a>`;
+    const actionOptions = {
+        viewMore: {
+            class: 'view-request',
+            clickable: 'viewRequest',
+            iconName: 'remove_red_eye',
+            actionText: 'View'
+        },
+        submit: {
+            class: 'submit-request',
+            clickable: 'submitRequest',
+            iconName: 'send',
+            actionText: 'Submit'
+        },
+        editOrView: {
+            class: 'edit-request',
+            clickable: 'viewRequest',
+            iconName: 'edit',
+            actionText: 'View or Edit'
+        },
+        deleteRequest: {
+            class: 'delete-request',
+            clickable: 'deleteRequest',
+            iconName: 'delete',
+            actionText: 'Delete'
+        },
+        undoSubmit: {
+            class: 'unsubmit-request',
+            clickable: 'unsubmit',
+            iconName: 'undo',
+            actionText: 'Unsubmit'
+        },
+        approve: {
+            class: 'approve-request',
+            clickable: 'approveRequest',
+            iconName: 'thumb_up',
+            actionText: 'Approve'
+        },
+        deny: {
+            class: 'deny-request',
+            clickable: 'denyRequest',
+            iconName: 'thumb_down',
+            actionText: 'Deny'
+        },
+        markOrdered: {
+            class: 'mark-request-ordered',
+            clickable: 'markOrdered',
+            iconName: 'shopping_cart',
+            actionText: 'Mark Ordered'
+        },
+        resubmit: {
+            class: 'resubmit-request',
+            clickable: 'submitRequest',
+            iconName: 'send',
+            actionText: 'Resubmit'
+        },
+        markComplete: {
+            class: 'mark-request-complete',
+            clickable: 'markComplete',
+            iconName: 'done_all',
+            actionText: 'Mark Complete'
+        },
+    }
 
-    const submit = `<a href="#" class="action submit-request" data-clickable="submitRequest" data-reqId="${requestId}"><i class="material-icons action-icon">send</i><span class="action-text"> Submit Request</span></a>`;
-
-    const editOrView = `<a href="#" class="action edit-request" data-clickable="viewRequest" data-reqId="${requestId}"><i class="material-icons action-icon">edit</i><span class="action-text"> View or Edit Request</span></a>`;
-
-    const deleteRequest = `<a href="#" class="action delete-request" data-clickable=deleteRequest" data-reqId="${requestId}"><i class="material-icons action-icon">delete</i><span class="action-text"> Delete Request</span></a>`;
-
-    const undoSubmit = `<a href="#" class="action unsubmit-request" data-clickable="unsubmit" data-reqId="${requestId}"><i class="material-icons action-icon">undo</i><span class="action-text"> Unsubmit Request</span></a>`;
-
-    const approve = `<a href="#" class="action approve-request" data-clickable="approveRequest" data-reqId="${requestId}"><i class="material-icons action-icon">thumb_up</i><span class="action-text"> Approve</span></a>`;
-
-    const deny = `<a href="#" class="action deny-request" data-clickable="denyRequest" data-reqId="${requestId}"><i class="material-icons action-icon">thumb_down</i> Deny</a>`;
-
-    const markOrdered = `<a href="#" class="action mark-request-ordered" data-clickable="markOrdered" data-reqId="${requestId}"><i class="material-icons action-icon">shopping_cart</i><span class="action-text"> Mark Request as Ordered</span></a>`;
-
-    const resubmit = `<a href="#" class="action resubmit-request" data-clickable="submitRequest" data-reqId="${requestId}"><i class="material-icons action-icon">send</i><span class="action-text> Resubmit Request</span></a>`;
-
-    const markComplete = `<a href="#" class="action mark-request-complete" data-clickable="markComplete" data-reqId="${requestId}"><i class="material-icons action-icon">done_all</i><span class="action-text"> Mark Request as Complete</span></a>`;
-
-    let string = '<footer class="action-box">';
+    let string = `<nav class="action-box"><i class="material-icons menu-toggle" data-clickable="toggleRequestCardMenu" data-reqId="${requestId}" data-toggleStatus="closed">menu</i><ul class="action-menu">`;
     switch (status) {
         case 'created':
             // status created
@@ -36,9 +83,9 @@ const setViewActions = function(status, options) {
             // -- Edit (if user = requestor)
             // -- Delete (if user = requestor)
             if (userIsRequestor) {
-                string += editOrView + submit + deleteRequest;
+                string += constructAction(actionOptions.editOrView, requestId) + constructAction(actionOptions.submit, requestId) + constructAction(actionOptions.deleteRequest, requestId);
             } else {
-                string += viewMore;
+                string += constructAction(actionOptions.viewMore, requestId);
             }
             break;
         case 'submitted':
@@ -47,12 +94,12 @@ const setViewActions = function(status, options) {
             // -- Undo Submit (if user = requestor)
             // -- Approve (if user is approver)
             // -- Deny (if user is approver)
-            string += viewMore;
+            string += constructAction(actionOptions.viewMore, requestId);
             if (userIsRequestor) {
-                string += undoSubmit;
+                string += constructAction(actionOptions.undoSubmit, requestId);
             }
             if (userIsApprover) {
-                string += approve + deny;
+                string += constructAction(actionOptions.approve, requestId) + constructAction(actionOptions.deny, requestId);
             }
             break;
         case 'approved':
@@ -60,9 +107,9 @@ const setViewActions = function(status, options) {
             // -- View More
             // -- Deny (if user is approver)
             // -- Mark as Ordered
-            string += viewMore + markOrdered;
+            string += constructAction(actionOptions.viewMore, requestId) + constructAction(actionOptions.markOrdered, requestId);
             if (userIsApprover) {
-                string += deny;
+                string += constructAction(actionOptions.deny, requestId);
             }
             break;
         case 'denied':
@@ -73,30 +120,30 @@ const setViewActions = function(status, options) {
             // -- Resubmit (if user = requestor)
             // -- Delete (if user = requestor)
             if (userIsRequestor) {
-                string += editOrView + resubmit + deleteRequest;
+                string += constructAction(actionOptions.editOrView, requestId) + constructAction(actionOptions.resubmit, requestId) + constructAction(actionOptions.deleteRequest, requestId);
             } else {
-                string += viewMore;
+                string += constructAction(actionOptions.viewMore, requestId);
             }
 
             if (userIsApprover) {
-                string += approve;
+                string += constructAction(actionOptions.approve, requestId);
             }
             break;
         case 'ordered':
             // status ordered
             // -- View More
             // -- Mark Complete
-            string += viewMore + markComplete;
+            string += constructAction(actionOptions.viewMore, requestId) + constructAction(actionOptions.markComplete, requestId);
             break;
         case 'complete':
             // status complete
             // -- View More
-            string += viewMore;
+            string += constructAction(actionOptions.viewMore, requestId);
             break;
         default:
             throw new Error('Invalid status');
     }
-    string += '</footer>'
+    string += '</ul></nav>'
     return new Handlebars.SafeString(string);
 };
 

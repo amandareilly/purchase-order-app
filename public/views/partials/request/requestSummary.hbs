@@ -1,20 +1,33 @@
-{{!-- <tr>
-    <td><a href="/requests/{{this.id}}" class="view-request-link" data-request="{{id}}">{{this.sequence}}</a></td>
-    <td>{{dateFormat this.createdAt "MMMM Do YYYY"}}</td>
-    <td>{{this.status}}</td>
-    <td>{{this.requestor.name}}</td>
-</tr> --}}
-
-<article class="request {{this.status}}">
-    <header class="request-summary-header">
-        <p class="status left">{{#getIcon this.status}}{{/getIcon}}</p>
-        <p class="status right">{{#toUppercase this.status}}{{/toUppercase}}</p>
-        <div class="clearfix"></div>
-    </header>
-    <p class="request-total">{{#formatCurrency this.requestTotal }}{{/formatCurrency}}</p>
-    <p class="vendor-name"><span class="vendor-label">Vendor: </span>
-        {{this.vendor.name}}</p>
-        {{#setViewActions this.status request=this.id requestor=this.requestor.id location="dashboard"}}
-        This is some info in the set view actions.
-        {{/setViewActions}}
+<article class="request {{this.status}}" data-reqId="{{this.id}}">
+     {{#setViewActions this.status request=this.id requestor=this.requestor.id location="dashboard"}}{{/setViewActions}}
+    <div class="summary">
+        <header class="request-summary-header">
+            <p class="status">{{#toUppercase this.status}}{{/toUppercase}}</p>
+            <div class="clearfix"></div>
+        </header>
+        <div class="main-summary-section">
+            <p class="request-total">{{#formatCurrency this.requestTotal }}{{/formatCurrency}}</p>
+            <p class="vendor-name"><span class="vendor-label">Vendor: </span>
+                {{this.vendor.name}}</p>
+            {{#checkIfApprover this}}
+            <p class="requestor-name"><span class="requestor-label">Requestor:  </span>{{this.requestor.name}}</p>
+            {{/checkIfApprover}}
+        </div>
+        <div class="item-list-container">
+            <i class="material-icons list-toggle" data-clickable="toggleRequestListView" data-reqId="{{this.id}}">
+                list</i>
+            {{#if this.items}}
+                <p class="item-list-title">Items in this Request</p>
+                <ul class="item-list">
+                    {{#each (limit this.items 5)}}
+                    <li class="request-item">{{this.name}} - {{this.qty}} @ ${{this.pricePer}}</li>
+                    {{/each}}
+                </ul>
+                {{#prettyMoreListText this.items 5 this.id}}
+                {{/prettyMoreListText}}
+            {{else}}
+                <p>No items found.</p>
+            {{/if}}
+        </div>
+    </div>
 </article>

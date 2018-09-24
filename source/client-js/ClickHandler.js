@@ -16,6 +16,28 @@ const ClickHandler = {
             ClickHandler[clicked.getAttribute('data-clickable')](clicked);
         }
     },
+    toggleRequestCardMenu: function(element) {
+        const reqId = element.getAttribute('data-reqId');
+        const iconElement = $(`[data-clickable="toggleRequestCardMenu"][data-reqId="${reqId}"`);
+        const navElement = iconElement.parent();
+        navElement.toggleClass('menu-open');
+        if (navElement.hasClass('menu-open')) {
+            iconElement.html('close');
+        } else {
+            iconElement.html('menu');
+        }
+    },
+    toggleRequestListView: function(element) {
+        const reqId = element.getAttribute('data-reqId');
+        const iconElement = $(`[data-clickable="toggleRequestListView"][data-reqId="${reqId}"`);
+        const listElement = iconElement.parent();
+        listElement.toggleClass('list-open');
+        if (listElement.hasClass('list-open')) {
+            iconElement.html('close');
+        } else {
+            iconElement.html('list');
+        }
+    },
     toggleAllRequests: function(element) {
         const userId = element.getAttribute('data-user-id');
         let swap;
@@ -26,10 +48,8 @@ const ClickHandler = {
             link.dataset.toggleable = link.attributes.href.nodeValue;
             link.attributes.href.nodeValue = swap;
         });
-        console.log(window.location);
         let search = window.location.search;
         let queryLoc = search.indexOf('user=');
-        console.log("queryLoc", queryLoc)
 
         let redirect = window.location.origin + window.location.pathname;
         let updated;

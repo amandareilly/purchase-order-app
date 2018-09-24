@@ -1,3 +1,26 @@
+// Request Card Color Variables
+$createdBackground: #4A148C;
+$createdPale: #E1BEE7;
+$createdMenu: #AB47BC;
+$submittedBackground: #01579B;
+$submittedPale: #B3E5FC;
+$submittedMenu: #29B6F6;
+$approvedBackground: #1B5E20;
+$approvedPale: #C8E6C9;
+$approvedMenu: #66BB6A;
+$orderedBackground: #1A237E;
+$orderedPale: #C5CAE9;
+$orderedMenu: #5C6BC0;
+$completeBackground: #212121;
+$completePale: #F5F5F5;
+$completeMenu: #BDBDBD;
+$deniedBackground: #b71c1c;
+$deniedPale: #ffcdd2;
+$deniedMenu: #ef5350;
+* {
+    box-sizing: border-box;
+}
+
 .wrapper {
     max-width: 980px;
     margin: 0 auto;
@@ -15,71 +38,257 @@
 }
 
 .request {
-    border: 1px solid #000;
+    border-radius: 0 25px 0 25px;
     padding: 10px;
-    color: #FFF;
     text-align: center;
+    position: relative;
+    min-height: 250px;
+    box-shadow: 3px 3px 5px #263238;
+    display: flex;
+    flex-direction: column;
     .status {
         text-align: right;
         font-weight: 700;
+        padding-right: 10px;
     }
+}
+
+.summary {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-summary-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .request-total {
     font-weight: 900;
-    font-size: 1.5em;
+    font-size: 2em;
 }
 
 .request.created {
-    background-color: #7b1fa2;
-    .status {
-        color: #e1bee7;
+    background-color: $createdBackground;
+    color: $createdPale;
+    .action-box,
+    .item-list-container {
+        background-color: $createdMenu;
+    }
+    .action-menu-item {
+        border-color: $createdPale;
     }
 }
 
 .request.submitted {
-    background-color: #0097a7;
-    .status {
-        color: #b2ebf2;
+    background-color: $submittedBackground;
+    color: $submittedPale;
+    .action-box,
+    .item-list-container {
+        background-color: $submittedMenu;
+    }
+    .action-menu-item,
+    .item-list-container {
+        border-color: $submittedPale;
     }
 }
 
 .request.approved {
-    background-color: #388e3c;
-    .status {
-        color: #c8e6c9;
+    background-color: $approvedBackground;
+    color: $approvedPale;
+    .action-box,
+    .item-list-container {
+        background-color: $approvedMenu;
+    }
+    .action-menu-item {
+        border-color: $approvedPale;
     }
 }
 
 .request.ordered {
-    background-color: #0288d1;
-    .status {
-        color: #b3e5fc;
+    background-color: $orderedBackground;
+    color: $orderedPale;
+    .action-box,
+    .item-list-container {
+        background-color: $orderedMenu;
+    }
+    .action-menu-item {
+        border-color: $orderedPale;
     }
 }
 
 .request.complete {
-    background-color: #455a64;
-    .status {
-        color: #cfd8dc;
+    background-color: $completeBackground;
+    color: $completePale;
+    .action-box,
+    .item-list-container {
+        background-color: $completeMenu;
+    }
+    .action-menu-item {
+        border-color: $completePale;
     }
 }
 
 .request.denied {
-    background-color: #b71c1c;
-    .status {
-        color: #ffcdd2;
+    background-color: $deniedBackground;
+    color: $deniedPale;
+    .action-box,
+    .item-list-container {
+        background-color: $deniedMenu;
+    }
+    .action-menu-item {
+        border-color: $deniedPale;
     }
 }
 
-.status.left {
-    float: left;
-}
-
-.status.right {
-    float: right;
-}
-
-.vendor-label {
+.vendor-label,
+.requestor-label {
     font-weight: 700;
+}
+
+.vendor-name,
+.requestor-name {
+    font-size: 1.2em;
+}
+
+.action-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom-right-radius: 100%;
+    width: 65px;
+    height: 65px;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-left: 10px;
+    transition: all .3s;
+    box-shadow: 3px 3px 5px #263238;
+    .action-menu {
+        width: 100%;
+        padding: 10px;
+        display: none;
+    }
+}
+
+.action-box.menu-open {
+    border-radius: 0;
+    width: 60%;
+    height: 100%;
+    padding: 10px;
+    overflow: hidden;
+    border-bottom-left-radius: 25px;
+    .action-menu {
+        display: block;
+        border-bottom-left-radius: 25px;
+    }
+}
+
+.item-list-container {
+    position: absolute;
+    vertical-align: bottom;
+    border-bottom-left-radius: 25px;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 45px;
+    overflow: hidden;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    transition: all .3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    .item-list {
+        width: 100%;
+        padding: 10px;
+        display: none;
+    }
+    .item-list-title,
+    .item-list-more-items {
+        display: none;
+    }
+}
+
+.item-list-container.list-open {
+    border-radius: 0;
+    height: 100%;
+    padding: 10px;
+    overflow: hidden;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    .item-list {
+        display: block;
+        border-bottom-left-radius: 25px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .item-list-more-items,
+    .item-list-title {
+        display: block;
+    }
+}
+
+.item-list-title {
+    margin-bottom: 0;
+}
+
+.menu-toggle {
+    display: block;
+    text-align: left;
+    cursor: pointer;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+.list-toggle {
+    display: block;
+    text-align: right;
+    cursor: pointer;
+    padding-top: 10px;
+    justify-self: flex-end;
+}
+
+.action-menu-item {
+    color: #FFF;
+    display: block;
+    text-align: left;
+    padding: 5px 0;
+}
+
+.action-icon {
+    padding-right: 15px;
+    position: relative;
+    top: 5px;
+}
+
+.action,
+.action:link,
+.action:visited,
+.action:active,
+.action:hover {
+    position: relative;
+    text-decoration: none;
+    color: #FFF;
+    font-size: 1em;
+    font-weight: 900;
+}
+
+.item-list {
+    text-align: left;
+}
+
+.item-list-title {
+    font-size: 1.5em;
+    font-weight: 900;
+}
+
+.new-request-form {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid gray;
 }

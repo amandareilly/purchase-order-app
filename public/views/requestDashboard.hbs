@@ -7,12 +7,12 @@
     {{/setToggleable}} | {{#setToggleable filterByUser base="requests" user=user._id query="status=denied" text="Denied Requests" class="denied-requests"}}
     {{/setToggleable}} | {{#setToggleable filterByUser base="requests" user=user._id query="status=ordered" text="Ordered Requests" class="ordered-requests"}}
     {{/setToggleable}}
-    {{#checkIfApprover}}
+    {{#checkIfApprover user}}
     <br>
     <label for="show-all">Show Only My Requests <input type="checkbox" name="show-all" id="show-all" data-clickable="toggleAllRequests" data-allow-default="true" data-user-id="{{user._id}}" {{#if filterByUser}}checked{{/if}}></label>
     {{/checkIfApprover}}
 </nav>
-<form action="/requests/new" method="post">
+<form action="/requests/new" method="post" class="new-request-form">
     <label for="vendorName">Create a new Purchase Request for Vendor: <input type="text" name="vendorName" id="vendorName" required></label><button type="submit">Create Request</button>
 </form>
 {{#if data}}

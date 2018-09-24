@@ -39,6 +39,9 @@ const hbs = exphbs.create({
         formatCurrency: require('./viewHelpers/formatCurrency'),
         toUppercase: require('./viewHelpers/toUppercase'),
         getIcon: require('./viewHelpers/getIcon'),
+        limit: require('./viewHelpers/limit'),
+        prettyMoreListText: require('./viewHelpers/prettyMoreListText'),
+        checkIfApprover: require('./viewHelpers/checkIfApprover'),
     },
 });
 
@@ -48,6 +51,11 @@ app.set('view engine', 'hbs');
 
 // Root URL
 app.get('/', (req, res) => res.render('home', { loggedIn: true }));
+
+// logout 
+app.get('/logout', (req, res) => {
+    res.clearCookie('jwt').redirect('/login');
+});
 
 const SeedData = require('./SeedData');
 // Test Route for Seeding
