@@ -13,12 +13,22 @@
     {{/checkIfApprover}}
 </nav>
 <form action="/requests/new" method="post" class="new-request-form">
-    <label for="vendorName">Create a new Purchase Request for Vendor: <input type="text" name="vendorName" id="vendorName" required></label><button type="submit">Create Request</button>
+    <p class="create-instructions">Select a Vendor to create a new request:</p>
+    <select name="vendorSelector" id="vendor-selector" class="vendor-selector" required>
+            <option value="">Select a vendor...</option>
+        {{#each vendorList.vendors}}
+            <option value="{{this}}">{{this}}</option>
+        {{/each}}
+            <option value="">----------</option>
+            <option value="create-new-vendor">Create New Vendor</option>
+    </select>
+    <input type="text" name="vendorName" id="vendorName" class="hidden">
+    <button type="submit">Create Request</button>
 </form>
-{{#if data}}
-    <section class="request-grid-container">
-        {{#each data}} {{>request/requestSummary this}} {{/each}}
-    </section>
+{{#if data.all}}
+        <section class="request-grid-container">
+            {{#each data.all}} {{>request/requestSummary this}} {{/each}}
+        </section>
 {{else}}
-<p>no data received</p>
+<p>No requests were found that match your criteria.</p>
 {{/if}}

@@ -6,6 +6,8 @@ const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
+        let userList;
+        let vendorList;
         let filterByUser = false;
         if (req.query.user && req.query.user == req.user._id) {
             filterByUser = true;
@@ -15,36 +17,83 @@ class RequestController {
         const headers = SharedApi.getHeadersWithToken(req);
 
         let user;
-        return SharedApi.getUser(req)
-            .then((foundUser) => {
-                user = foundUser;
-                if (user.role == 'basic') {
-                    if (query && query != '/') {
-                        query += `&user=${user._id}`;
-                    } else {
-                        query = `?user=${user._id}`
-                    }
-                }
-                url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
+        const userUrl = SharedApi.constructApiUrl(req, 'users');
+        const vendorUrl = SharedApi.constructApiUrl(req, 'distinctVendors');
+        return fetch(userUrl, {
+                headers: headers
             })
-            .then(() => {
-                return fetch(url, {
+            .then(response => response.json())
+            .then((data) => {
+                userList = data;
+                return fetch(vendorUrl, {
                         headers: headers
                     })
-                    .then((response) => {
-                        if (response.status === 401) {
-                            res.redirect('/login');
-                        }
-                        return response.json();
+                    .then(response => response.json())
+                    .then((data) => {
+                        vendorList = data;
+                        return SharedApi.getUser(req)
+                            .then((foundUser) => {
+                                user = foundUser;
+                                if (user.role == 'basic') {
+                                    if (query && query != '/') {
+                                        query += `&user=${user._id}`;
+                                    } else {
+                                        query = `?user=${user._id}`
+                                    }
+                                }
+                                url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
+                            })
+                            .then(() => {
+                                return fetch(url, {
+                                        headers: headers
+                                    })
+                                    .then((response) => {
+                                        if (response.status === 401) {
+                                            res.redirect('/login');
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        const sortedData = {
+                                            all: [],
+                                            created: [],
+                                            submitted: [],
+                                            approved: [],
+                                            denied: [],
+                                            ordered: [],
+                                            complete: []
+                                        };
+                                        const groupsFound = {
+                                            created: false,
+                                            submitted: false,
+                                            approved: false,
+                                            denied: false,
+                                            ordered: false,
+                                            complete: false
+                                        };
+
+                                        data.requests.forEach((request) => {
+                                            sortedData[request.status].push(request);
+                                            groupsFound[request.status] = true;
+                                        });
+                                        sortedData['all'] = data.requests;
+                                        data = sortedData;
+                                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data, 'All Purchase Requests', filterByUser, userList, vendorList, groupsFound);
+                                    })
+                                    .catch(error => console.error('Fetch Error: ', error));
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
                     })
-                    .then(data => {
-                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data.requests, 'All Purchase Requests', filterByUser)
-                    })
-                    .catch(error => console.error('Fetch Error: ', error));
+                    .catch((error) => {
+                        console.error(error);
+                    });
             })
             .catch((error) => {
                 console.error(error);
             });
+
 
     }
 
@@ -53,7 +102,7 @@ class RequestController {
         let userId;
         let requestData;
 
-        const vendorName = req.body.vendorName || 'System Vendor';
+        const vendorName = req.body.vendorName || req.body.vendorSelector || 'System Vendor';
         const url = SharedApi.constructApiUrl(req, 'requests');
 
         return SharedApi.getUser(req)
@@ -98,20 +147,23 @@ class RequestController {
                         if (!data.error) {
                             pageTitle = `Request # ${data.id}`;
                         }
-                        RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle);
+                        RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle, null, );
                     })
                     .catch(error => console.error('Fetch Error: ', error));
             })
 
     }
 
-    static renderRequestPage(res, view, loggedIn, user, data, pageTitle, filterByUser) {
+    static renderRequestPage(res, view, loggedIn, user, data, pageTitle, filterByUser, userList, vendorList, groupsFound) {
         res.render(view, {
             loggedIn,
             user,
             data,
             pageTitle,
-            filterByUser
+            filterByUser,
+            userList,
+            vendorList,
+            groupsFound
         });
     }
 

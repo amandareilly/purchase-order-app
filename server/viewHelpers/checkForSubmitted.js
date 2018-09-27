@@ -1,5 +1,5 @@
 const checkForSubmitted = function(conditional, options) {
-    if (conditional !== "created") {
+    if (conditional == "submitted") {
         return options.inverse(this);
     } else {
         return options.fn(this);

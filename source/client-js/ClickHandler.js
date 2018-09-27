@@ -5,10 +5,24 @@ const ClickHandler = {
     apiUrl: process.env.API_URL || 'http://localhost:8080/api/',
     addClickListeners: function() {
         const body = document.querySelector('body');
+        const vendorSelector = document.getElementById('vendor-selector');
         body.addEventListener('click', this.handleClicked);
+        vendorSelector.addEventListener('change', this.changedVendorSelector);
+    },
+    changedVendorSelector: function(e) {
+        const vendorSelector = document.getElementById('vendor-selector');
+        const selected = vendorSelector.options[vendorSelector.selectedIndex].value;
+        if (selected === 'create-new-vendor') {
+            $('#vendorName').toggleClass('hidden').addAttr('required');
+        } else {
+            if (!$('#vendorName').hasClass('hidden')) {
+                $('#vendorName').toggleClass('hidden').removeAttr('required');
+            }
+        }
     },
     handleClicked: function(e) {
         const clicked = e.target;
+
         if (clicked.hasAttribute('data-clickable')) {
             if (!clicked.hasAttribute('data-allow-default')) {
                 e.preventDefault();
@@ -85,24 +99,31 @@ const ClickHandler = {
         }
     },
     submitRequest: function(element) {
+        console.log('submit');
         this.updateRequest(element, 'submitted');
     },
     unsubmit: function(element) {
+        console.log('unsubmit');
         this.updateRequest(element, 'created');
     },
     approveRequest: function(element) {
+        console.log('approve request');
         this.updateRequest(element, 'approved');
     },
     denyRequest: function(element) {
+        console.log('deny request');
         this.updateRequest(element, 'denied');
     },
     markOrdered: function(element) {
+        console.log('mark ordered');
         this.updateRequest(element, 'ordered');
     },
     markComplete: function(element) {
+        console.log('mark complete');
         this.updateRequest(element, 'complete');
     },
     updateRequest: function(element, status) {
+        const refreshOnUpdate = element.getAttribute('data-refresh-on-update');
         const requestId = element.getAttribute('data-reqId');
         const url = this.apiUrl + 'requests/' + requestId;
         const updateData = {
@@ -116,8 +137,12 @@ const ClickHandler = {
                 body: JSON.stringify(updateData)
             })
             .then((response) => {
-                const redirectUrl = window.location.origin + '/requests/' + requestId;
-                window.location.href = redirectUrl;
+                if (refreshOnUpdate) {
+                    location.reload(true);
+                } else {
+                    const redirectUrl = window.location.origin + '/requests/' + requestId;
+                    window.location.href = redirectUrl;
+                }
             })
             .catch(error => console.error('Fetch Error: ', error));
     },

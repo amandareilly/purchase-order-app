@@ -52,8 +52,8 @@ class RequestHelper {
     }
 
     static generateRequestStatus() {
-        const statuses = ['created', 'submitted', 'processed', 'complete'];
-        return statuses[Math.floor(Math.random() * 4)];
+        const statuses = ['created', 'submitted', 'approved', 'denied', 'ordered', 'complete'];
+        return statuses[Math.floor(Math.random() * 6)];
     }
 
     static generateItems() {

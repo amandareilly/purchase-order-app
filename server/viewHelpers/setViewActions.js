@@ -1,7 +1,7 @@
 const Handlebars = require('handlebars');
 
 const constructAction = function(actionObject, requestId) {
-    return `<li class="action-menu-item"><i class="material-icons action-icon">${actionObject.iconName}</i><a href="#" class="action ${actionObject.class}" data-clickable="${actionObject.clickable}" data-reqId="${requestId}">${actionObject.actionText}</a></li>`;
+    return `<li class="action-menu-item"><i class="material-icons action-icon">${actionObject.iconName}</i><a href="#" class="action ${actionObject.class}" data-clickable="${actionObject.clickable}" data-reqId="${requestId}" data-refresh-on-update="true">${actionObject.actionText}</a></li>`;
 }
 
 const setViewActions = function(status, options) {
@@ -141,7 +141,7 @@ const setViewActions = function(status, options) {
             string += constructAction(actionOptions.viewMore, requestId);
             break;
         default:
-            throw new Error('Invalid status');
+            throw new Error(`Status "${status}" is not valid.`);
     }
     string += '</ul></nav>'
     return new Handlebars.SafeString(string);

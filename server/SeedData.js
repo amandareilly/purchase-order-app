@@ -1,13 +1,10 @@
 const faker = require('faker');
-const mongoose = require('mongoose');
 const Sequence = require('./models/Sequence');
 const Request = require('./models/Request');
 const User = require('./models/User');
-const RequestHelper = require('../test/helpers/RequestHelper');
 
 const vendorArray = [];
 let userArray = [];
-let sequence;
 const requestData = [];
 let sequenceNum = 0;
 
@@ -17,10 +14,7 @@ class SeedData {
         SeedData.generateUserArray();
         return User.insertMany(userArray)
             .then((insertedUsers) => {
-                userArray = [];
-                insertedUsers.forEach(function(user, index) {
-                    userArray.push(user._id);
-                });
+                userArray = insertedUsers;
 
                 SeedData.generateVendorArray(15);
                 for (let i = 0; i < 100; i++) {
@@ -42,13 +36,16 @@ class SeedData {
         const zero = '0';
         const fillDigits = zero.repeat(4 - sequenceNum.toString().length);
         const thisSeq = `${new Date().getFullYear()}-${fillDigits}${sequenceNum}`;
+        const createDate = faker.date.recent(30);
         return {
             sequence: thisSeq,
             requestor: SeedData.generateRequestUser(),
             status: SeedData.generateRequestStatus(),
             items: SeedData.generateItems(),
             vendor: SeedData.generateRequestVendor(),
-            notes: faker.lorem.paragraph()
+            notes: faker.lorem.paragraph(),
+            createdAt: createDate,
+            updatedAt: createDate
         }
     }
 
@@ -75,45 +72,54 @@ class SeedData {
     static generateUserArray() {
         userArray.push({
             name: {
-                first: 'First Basic',
-                last: 'User'
+                first: 'Basic',
+                last: 'User1'
             },
             role: 'basic',
             email: 'basic1@testapp.test'
         });
         userArray.push({
             name: {
-                first: 'Second Basic',
-                last: 'User'
+                first: 'Basic',
+                last: 'User2'
             },
             role: 'basic',
             email: 'basic2@testapp.test'
         });
         userArray.push({
             name: {
-                first: 'First Approver',
+                first: 'Basic',
+                last: 'User3'
+            },
+            role: 'basic',
+            email: 'basic3@testapp.test'
+        });
+        userArray.push({
+            name: {
+                first: 'Basic',
+                last: 'User4'
+            },
+            role: 'basic',
+            email: 'basic4@testapp.test'
+        });
+        userArray.push({
+            name: {
+                first: 'Approver',
                 last: 'User'
             },
             role: 'approver',
             email: 'approver1@testapp.test'
         });
-        userArray.push({
-            name: {
-                first: 'Second Approver',
-                last: 'User'
-            },
-            role: 'approver',
-            email: 'approver2@testapp.test'
-        });
     }
 
     static generateRequestUser() {
-        return userArray[Math.floor(Math.random() * userArray.length)];
+        const users = userArray.filter(user => user.role === 'basic');
+        return users[Math.floor(Math.random() * users.length)]._id;
     }
 
     static generateRequestStatus() {
-        const statuses = ['created', 'submitted', 'approved', 'denied', 'complete'];
-        return statuses[Math.floor(Math.random() * 4)];
+        const statuses = ['created', 'submitted', 'approved', 'denied', 'complete', 'ordered'];
+        return statuses[Math.floor(Math.random() * statuses.length)];
     }
 
     static generateItems() {
@@ -131,7 +137,9 @@ class SeedData {
             qty: faker.random.number({ min: 1, max: 10 }),
             pricePer: faker.commerce.price(),
             neededBy: faker.date.future(),
-            expeditedShipping: faker.random.boolean()
+            expeditedShipping: faker.random.boolean(),
+            link: faker.internet.url(),
+            notes: faker.lorem.sentence()
         };
     }
 }

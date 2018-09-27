@@ -12,6 +12,8 @@ class PurchaseRequestApi {
             .find()
             .byRequestor(user)
             .byStatus(status)
+            .sort({ updatedAt: 1 })
+            .exec()
             .then(requests => {
                 if (requests) {
                     res.json({
@@ -114,27 +116,29 @@ class PurchaseRequestApi {
                     if (user.role.toUpperCase() !== 'APPROVER') {
                         res.status(403).send('Forbidden').end();
                     }
-                } else {
-                    // check for required fields
-                    const validation = PurchaseRequestApi.validateRequest('update', req);
-                    if (typeof(validation) === 'string') {
-                        console.error(validation);
-                        res.status(400).send(validation);
-                    }
-                    Request.findById(req.body.id)
-                        .then(request => {
-                            request.status = req.body.status;
-                            return request;
-                        })
-                        .then(request => request.save())
-                        .then((updatedRequest) => {
-                            res.status(200).json(updatedRequest.serialize());
-                        })
-                        .catch((err) => {
-                            console.error(err);
-                            res.status(500).json({ message: 'Internal server error' });
-                        });
                 }
+                // check for required fields
+                const validation = PurchaseRequestApi.validateRequest('update', req);
+                if (typeof(validation) === 'string') {
+                    console.error(validation);
+                    res.status(400).send(validation);
+                }
+                Request.findById(req.body.id)
+                    .then(request => {
+                        request.status = req.body.status;
+                        return request;
+                    })
+                    .then((request) => {
+                        return request.save();
+                    })
+                    .then((updatedRequest) => {
+                        res.status(200).json(updatedRequest.serialize());
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        res.status(500).json({ message: 'Internal server error' });
+                    });
+
 
             });
 
@@ -151,6 +155,17 @@ class PurchaseRequestApi {
                 res.status(204).end();
             })
             .catch((err) => {
+                console.error(err);
+                res.status(500).json({ message: 'Internal server error' });
+            });
+    }
+
+    static getDistinctVendors(req, res) {
+        Request.collection.distinct('vendor.name')
+            .then((vendors) => {
+                res.json({ vendors: vendors });
+            })
+            .catch(err => {
                 console.error(err);
                 res.status(500).json({ message: 'Internal server error' });
             });

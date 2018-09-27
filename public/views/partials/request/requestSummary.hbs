@@ -22,9 +22,8 @@
                     {{#each (limit this.items 5)}}
                     <li class="request-item">{{this.name}} - {{this.qty}} @ ${{this.pricePer}}</li>
                     {{/each}}
+                    {{#prettyMoreListText this.items 5 this.id}} {{/prettyMoreListText}}
                 </ul>
-                {{#prettyMoreListText this.items 5 this.id}}
-                {{/prettyMoreListText}}
             {{else}}
                 <p>No items found.</p>
             {{/if}}

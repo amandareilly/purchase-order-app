@@ -1,5 +1,5 @@
 const formatCurrency = function(context) {
-    const parts = parseFloat(context).toFixed(2).toString().split('.');
+    const parts = splitIntoParts(context);
     let currencyString = '$';
     const extraChars = parts[0].length % 3;
     if (extraChars) {
@@ -18,5 +18,9 @@ const formatCurrency = function(context) {
 
     return currencyString;
 };
+
+function splitIntoParts(string) {
+    return parseFloat(string).toFixed(2).toString().split('.');
+}
 
 module.exports = formatCurrency;

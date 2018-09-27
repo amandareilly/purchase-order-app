@@ -46,4 +46,8 @@ router.post('/users', UserApiController.createUser);
 router.post('/auth/login', AuthController.issueToken);
 router.post('/auth/refresh', AuthController.issueToken);
 
+// find distinct values for searches
+router.get('/distinctVendors', PurchaseRequestApiController.getDistinctVendors);
+
+
 module.exports = router;

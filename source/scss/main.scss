@@ -1,22 +1,28 @@
 // Request Card Color Variables
-$createdBackground: #4A148C;
+$createdDark: #4A148C;
 $createdPale: #E1BEE7;
-$createdMenu: #AB47BC;
-$submittedBackground: #01579B;
+$createdMedium: #AB47BC;
+$createdExtraPale: #F3E5F5;
+$submittedDark: #01579B;
 $submittedPale: #B3E5FC;
-$submittedMenu: #29B6F6;
-$approvedBackground: #1B5E20;
+$submittedMedium: #29B6F6;
+$submittedExtraPale: #E1F5FE;
+$approvedDark: #1B5E20;
 $approvedPale: #C8E6C9;
-$approvedMenu: #66BB6A;
-$orderedBackground: #1A237E;
+$approvedMedium: #66BB6A;
+$approvedExtraPale: #E8F5E9;
+$orderedDark: #1A237E;
 $orderedPale: #C5CAE9;
-$orderedMenu: #5C6BC0;
-$completeBackground: #212121;
+$orderedMedium: #5C6BC0;
+$orderedExtraPale: #E8EAF6;
+$completeDark: #212121;
 $completePale: #F5F5F5;
-$completeMenu: #BDBDBD;
-$deniedBackground: #b71c1c;
+$completeMedium: #BDBDBD;
+$completeExtraPale: #FAFAFA;
+$deniedDark: #b71c1c;
 $deniedPale: #ffcdd2;
-$deniedMenu: #ef5350;
+$deniedMedium: #ef5350;
+$deniedExtraPale: #ffebee;
 * {
     box-sizing: border-box;
 }
@@ -38,7 +44,7 @@ $deniedMenu: #ef5350;
 }
 
 .request {
-    border-radius: 0 25px 0 25px;
+    border-radius: 0 30px 0 30px;
     padding: 10px;
     text-align: center;
     position: relative;
@@ -46,6 +52,8 @@ $deniedMenu: #ef5350;
     box-shadow: 3px 3px 5px #263238;
     display: flex;
     flex-direction: column;
+    border: 5px solid;
+    background-color: #f7f7f7;
     .status {
         text-align: right;
         font-weight: 700;
@@ -73,75 +81,111 @@ $deniedMenu: #ef5350;
 }
 
 .request.created {
-    background-color: $createdBackground;
-    color: $createdPale;
+    border-color: $createdDark;
+    color: $createdDark;
     .action-box,
     .item-list-container {
-        background-color: $createdMenu;
+        background-color: $createdMedium;
     }
     .action-menu-item {
         border-color: $createdPale;
     }
+    .item-list {
+        background-color: $createdPale;
+    }
+    .item-list-title {
+        color: $createdExtraPale;
+    }
 }
 
 .request.submitted {
-    background-color: $submittedBackground;
-    color: $submittedPale;
+    border-color: $submittedDark;
+    color: $submittedDark;
     .action-box,
     .item-list-container {
-        background-color: $submittedMenu;
+        background-color: $submittedMedium;
     }
     .action-menu-item,
     .item-list-container {
         border-color: $submittedPale;
     }
+    .item-list {
+        background-color: $submittedPale;
+    }
+    .item-list-title {
+        color: $submittedExtraPale;
+    }
 }
 
 .request.approved {
-    background-color: $approvedBackground;
-    color: $approvedPale;
+    border-color: $approvedDark;
+    color: $approvedDark;
     .action-box,
     .item-list-container {
-        background-color: $approvedMenu;
+        background-color: $approvedMedium;
     }
     .action-menu-item {
         border-color: $approvedPale;
     }
+    .item-list {
+        background-color: $approvedPale;
+    }
+    .item-list-title {
+        color: $approvedExtraPale;
+    }
 }
 
 .request.ordered {
-    background-color: $orderedBackground;
-    color: $orderedPale;
+    border-color: $orderedDark;
+    color: $orderedDark;
     .action-box,
     .item-list-container {
-        background-color: $orderedMenu;
+        background-color: $orderedMedium;
     }
     .action-menu-item {
         border-color: $orderedPale;
     }
+    .item-list {
+        background-color: $orderedPale;
+    }
+    .item-list-title {
+        color: $orderedExtraPale;
+    }
 }
 
 .request.complete {
-    background-color: $completeBackground;
-    color: $completePale;
+    border-color: $completeDark;
+    color: $completeDark;
     .action-box,
     .item-list-container {
-        background-color: $completeMenu;
+        background-color: $completeMedium;
     }
     .action-menu-item {
         border-color: $completePale;
     }
+    .item-list {
+        background-color: $completePale;
+    }
+    .item-list-title {
+        color: $completeExtraPale;
+    }
 }
 
 .request.denied {
-    background-color: $deniedBackground;
-    color: $deniedPale;
+    border-color: $deniedDark;
+    color: $deniedDark;
     .action-box,
     .item-list-container {
-        background-color: $deniedMenu;
+        background-color: $deniedMedium;
     }
     .action-menu-item {
         border-color: $deniedPale;
+    }
+    .item-list {
+        background-color: $deniedPale;
+    }
+    .item-list-title {
+        color: $deniedExtraPale;
     }
 }
 
@@ -181,9 +225,11 @@ $deniedMenu: #ef5350;
     padding: 10px;
     overflow: hidden;
     border-bottom-left-radius: 25px;
+    z-index: 5;
     .action-menu {
         display: block;
         border-bottom-left-radius: 25px;
+        z-index: 5;
     }
 }
 
@@ -196,8 +242,6 @@ $deniedMenu: #ef5350;
     width: 100%;
     height: 45px;
     overflow: hidden;
-    padding-bottom: 10px;
-    padding-right: 10px;
     transition: all .3s;
     display: flex;
     flex-direction: column;
@@ -207,9 +251,9 @@ $deniedMenu: #ef5350;
         width: 100%;
         padding: 10px;
         display: none;
+        margin: 0 10px;
     }
-    .item-list-title,
-    .item-list-more-items {
+    .item-list-title {
         display: none;
     }
 }
@@ -217,7 +261,6 @@ $deniedMenu: #ef5350;
 .item-list-container.list-open {
     border-radius: 0;
     height: 100%;
-    padding: 10px;
     overflow: hidden;
     border-bottom-left-radius: 25px;
     border-top-right-radius: 25px;
@@ -225,16 +268,16 @@ $deniedMenu: #ef5350;
         display: block;
         border-bottom-left-radius: 25px;
         font-weight: 700;
-        margin-bottom: 10px;
+        padding-bottom: 25px;
+        flex-grow: 1;
     }
-    .item-list-more-items,
     .item-list-title {
         display: block;
     }
 }
 
 .item-list-title {
-    margin-bottom: 0;
+    margin-bottom: 10px;
 }
 
 .menu-toggle {
@@ -251,6 +294,8 @@ $deniedMenu: #ef5350;
     cursor: pointer;
     padding-top: 10px;
     justify-self: flex-end;
+    width: 100%;
+    text-align: center;
 }
 
 .action-menu-item {
@@ -290,5 +335,9 @@ $deniedMenu: #ef5350;
 .new-request-form {
     margin: 10px 0;
     padding: 10px;
-    border: 1px solid gray;
+    border: 3px solid #0D47A1;
+    background-color: #BBDEFB;
+    color: #0D47A1;
+    font-size: 1.7em;
+    font-weight: 700;
 }
