@@ -1,26 +1,31 @@
+// generic styles
 @import 'reset';
 @import 'typography';
 @import 'links';
 @import 'colorVars';
 @import 'flexboxDefaults';
-@import 'loadingSpinner';
-@import 'pageHeader';
-@import 'pageTitle';
-@import 'loginForm';
-@import 'pageNav';
-@import 'requestDetail';
-@import 'addItemForm';
-@import 'requestGrid';
-@import 'requestSummary';
-@import 'filterPanel';
-@import 'newRequestForm';
-@import 'requestDashboard';
+// shared component styles
+@import 'shared/pageHeader';
+@import 'shared/pageTitle';
+// login page-specific styles
+@import 'login/loginForm';
+// detail page-specific styles
+@import 'detail/pageNav';
+@import 'detail/requestDetail';
+@import 'detail/addItemForm';
+// dashboard page-specific styles
+@import 'dashboard/loadingSpinner';
+@import 'dashboard/requestGrid';
+@import 'dashboard/requestSummary';
+@import 'dashboard/filterPanel';
+@import 'dashboard/newRequestForm';
+@import 'dashboard/requestDashboard';
 // media queries
-@import 'LT890px';
-@import 'LT850px';
-@import 'LT630px';
-@import 'LT600px';
-@import 'LT475px';
+@import 'mediaQueries/LT890px';
+@import 'mediaQueries/LT850px';
+@import 'mediaQueries/LT630px';
+@import 'mediaQueries/LT600px';
+@import 'mediaQueries/LT475px';
 * {
     box-sizing: border-box;
 }

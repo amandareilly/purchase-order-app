@@ -112,6 +112,26 @@ this["templates"]["main"] = Handlebars.registerPartial("layouts_main", Handlebar
     + ((stack1 = ((helper = (helper = helpers.body || (depth0 != null ? depth0.body : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"body","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "\r\n    </div>\r\n    <div class=\"footer\"></div>\r\n    <script src=\"https://code.jquery.com/jquery-3.3.1.min.js\" integrity=\"sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=\"\r\n        crossorigin=\"anonymous\"></script>\r\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.runtime.min.js\" charset=\"utf-8\"></script>\r\n    <script src=\"/assets/js/bundle.js\"></script>\r\n</body>\r\n</html>\r\n";
 },"useData":true}));;
+this["templates"]["header"] = Handlebars.registerPartial("partials_page_header", Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
+
+  return "    <div class=\"page-header\">\r\n        <div class=\"wrapper\">\r\n            <div class=\"user-wrap\">\r\n                <img class=\"user-avatar\" src=\"https://api.adorable.io/avatars/150/"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1._id : stack1), depth0))
+    + ".png\" alt=\"Avatar for "
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.first : stack1), depth0))
+    + " "
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.last : stack1), depth0))
+    + "\">\r\n                <div class=\"user-info\">\r\n                    <p class=\"user-name\">"
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.first : stack1), depth0))
+    + " "
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.last : stack1), depth0))
+    + "</p>\r\n                    <p class=\"user-email\">"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.email : stack1), depth0))
+    + "</p>\r\n                </div>\r\n            </div>\r\n            <a href=\"logout\" class=\"header-link\"><span class=\"link-group\">Log Out<i class=\"material-icons\">exit_to_app</i></span></a>\r\n        </div>\r\n    </div>\r\n";
+},"useData":true}));;
+this["templates"]["loadingSpinner"] = Handlebars.registerPartial("partials_page_loadingSpinner", Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<div class=\"spinner-container\">\r\n    <div class=\"sk-fading-circle\">\r\n        <div class=\"sk-circle1 sk-circle\"></div>\r\n        <div class=\"sk-circle2 sk-circle\"></div>\r\n        <div class=\"sk-circle3 sk-circle\"></div>\r\n        <div class=\"sk-circle4 sk-circle\"></div>\r\n        <div class=\"sk-circle5 sk-circle\"></div>\r\n        <div class=\"sk-circle6 sk-circle\"></div>\r\n        <div class=\"sk-circle7 sk-circle\"></div>\r\n        <div class=\"sk-circle8 sk-circle\"></div>\r\n        <div class=\"sk-circle9 sk-circle\"></div>\r\n        <div class=\"sk-circle10 sk-circle\"></div>\r\n        <div class=\"sk-circle11 sk-circle\"></div>\r\n        <div class=\"sk-circle12 sk-circle\"></div>\r\n    </div>\r\n</div>\r\n";
+},"useData":true}));;
 this["templates"]["filterPanel"] = Handlebars.registerPartial("partials_dashboard_filterPanel", Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
@@ -248,26 +268,6 @@ this["templates"]["panel"] = Handlebars.registerPartial("partials_dashboard_pane
     + "    </ul>\r\n</nav>\r\n\r\n"
     + ((stack1 = helpers.each.call(alias1,depth0,{"name":"each","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"usePartial":true,"useData":true}));;
-this["templates"]["header"] = Handlebars.registerPartial("partials_page_header", Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression;
-
-  return "    <div class=\"page-header\">\r\n        <div class=\"wrapper\">\r\n            <div class=\"user-wrap\">\r\n                <img class=\"user-avatar\" src=\"https://api.adorable.io/avatars/150/"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1._id : stack1), depth0))
-    + ".png\" alt=\"Avatar for "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.first : stack1), depth0))
-    + " "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.last : stack1), depth0))
-    + "\">\r\n                <div class=\"user-info\">\r\n                    <p class=\"user-name\">"
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.first : stack1), depth0))
-    + " "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.name : stack1)) != null ? stack1.last : stack1), depth0))
-    + "</p>\r\n                    <p class=\"user-email\">"
-    + alias2(alias1(((stack1 = (depth0 != null ? depth0.user : depth0)) != null ? stack1.email : stack1), depth0))
-    + "</p>\r\n                </div>\r\n            </div>\r\n            <a href=\"logout\" class=\"header-link\"><span class=\"link-group\">Log Out<i class=\"material-icons\">exit_to_app</i></span></a>\r\n        </div>\r\n    </div>\r\n";
-},"useData":true}));;
-this["templates"]["loadingSpinner"] = Handlebars.registerPartial("partials_page_loadingSpinner", Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div class=\"spinner-container\">\r\n    <div class=\"sk-fading-circle\">\r\n        <div class=\"sk-circle1 sk-circle\"></div>\r\n        <div class=\"sk-circle2 sk-circle\"></div>\r\n        <div class=\"sk-circle3 sk-circle\"></div>\r\n        <div class=\"sk-circle4 sk-circle\"></div>\r\n        <div class=\"sk-circle5 sk-circle\"></div>\r\n        <div class=\"sk-circle6 sk-circle\"></div>\r\n        <div class=\"sk-circle7 sk-circle\"></div>\r\n        <div class=\"sk-circle8 sk-circle\"></div>\r\n        <div class=\"sk-circle9 sk-circle\"></div>\r\n        <div class=\"sk-circle10 sk-circle\"></div>\r\n        <div class=\"sk-circle11 sk-circle\"></div>\r\n        <div class=\"sk-circle12 sk-circle\"></div>\r\n    </div>\r\n</div>\r\n";
-},"useData":true}));;
 this["templates"]["addItemForm"] = Handlebars.registerPartial("partials_request_addItemForm", Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
