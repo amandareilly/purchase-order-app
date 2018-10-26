@@ -27,7 +27,6 @@ const ClickHandler = {
     },
     handleClicked: function(e) {
         const clicked = e.target;
-        console.log(clicked);
 
         if (clicked.hasAttribute('data-clickable')) {
             if (!clicked.hasAttribute('data-allow-default')) {
@@ -123,7 +122,6 @@ const ClickHandler = {
         const requestId = element.getAttribute('data-reqId');
         if (confirm("Are you sure you want to delete this request?  This action CANNOT be undone!")) {
             const url = this.apiUrl + 'requests/' + requestId;
-            console.log(url);
             fetch(url, {
                     method: 'delete',
                     headers: SharedApi.getHeadersWithToken(null, false, document.cookie)
@@ -131,8 +129,6 @@ const ClickHandler = {
                 .then((response) => {
                     if (response.status == 204) {
                         this.updateDashBoardStatus(requestId, 'deleted');
-                    } else {
-                        console.log(response);
                     }
                 })
                 .catch(error => console.error('Fetch Error: ', error));
