@@ -1,3 +1,20 @@
+.app-info,
+.demo-user-info {
+    color: $primaryDark;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+.app-info {
+    border-bottom: 1px solid $primaryDark;
+    padding-bottom: 15px;
+}
+
+.user-list-heading {
+    color: $primaryDark;
+    font-size: 1.5em;
+}
+
 .login-form {
     margin: 15px auto;
     background-color: $secondaryLight;
@@ -28,6 +45,11 @@
 #email {
     display: block;
     margin: 15px auto;
+    padding: 10px;
+}
+
+#email {
+    font-size: .75em;
 }
 
 .login-button {

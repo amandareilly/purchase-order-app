@@ -43,7 +43,7 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 // Root URL
-app.get('/', (req, res) => res.render('home', { loggedIn: true }));
+app.use('/', authRouter);
 
 // logout 
 app.get('/logout', (req, res) => {
