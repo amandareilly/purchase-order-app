@@ -324,6 +324,7 @@ const ClientFunctions = {
     data: {
         getRequests: function(statuses, users) {
             let url = ClientFunctions.helpers.data.getApiUrl('requests?');
+            console.log('url');
             url = `${url}${ClientFunctions.helpers.data.constructArrayParameter(statuses, 'status')}`
             if (users.length > 0) {
                 url = `${url}&${ClientFunctions.helpers.data.constructArrayParameter(users, 'user')}`;
