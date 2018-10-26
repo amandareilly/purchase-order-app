@@ -9,8 +9,8 @@ const requestData = [];
 let sequenceNum = 0;
 
 class SeedData {
-    static seedData(req, res) {
-        User.db.dropDatabase();
+    static async seedData(req, res) {
+        await User.db.dropDatabase();
         SeedData.generateUserArray();
         return User.insertMany(userArray)
             .then((insertedUsers) => {
@@ -27,7 +27,7 @@ class SeedData {
             })
             .then(() => {
                 console.log('success');
-                res.status(200).send();
+                res.redirect('/');
             })
     }
 
