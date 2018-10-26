@@ -34,14 +34,6 @@ const hbs = exphbs.create({
         prettifyTrueFalse: require('./viewHelpers/prettifyTrueFalse'),
         checkForSubmitted: require('./viewHelpers/checkForSubmitted'),
         checkForApproved: require('./viewHelpers/checkForApproved'),
-        setToggleable: require('./viewHelpers/setToggleable'),
-        setViewActions: require('./viewHelpers/setViewActions'),
-        formatCurrency: require('./viewHelpers/formatCurrency'),
-        toUppercase: require('./viewHelpers/toUppercase'),
-        getIcon: require('./viewHelpers/getIcon'),
-        limit: require('./viewHelpers/limit'),
-        prettyMoreListText: require('./viewHelpers/prettyMoreListText'),
-        checkIfApprover: require('./viewHelpers/checkIfApprover'),
         json: require('./viewHelpers/json')
     },
 });
