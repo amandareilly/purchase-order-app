@@ -9,7 +9,7 @@ const ClientFunctions = {
         },
         data: {
             getApiUrl: function(append = null) {
-                let apiUrl = process.env.API_URL || 'http://localhost:8080/api/';
+                let apiUrl = window.location.origin + '/api/';
                 if (append) {
                     apiUrl += append;
                 }
@@ -324,7 +324,6 @@ const ClientFunctions = {
     data: {
         getRequests: function(statuses, users) {
             let url = ClientFunctions.helpers.data.getApiUrl('requests?');
-            console.log('url');
             url = `${url}${ClientFunctions.helpers.data.constructArrayParameter(statuses, 'status')}`
             if (users.length > 0) {
                 url = `${url}&${ClientFunctions.helpers.data.constructArrayParameter(users, 'user')}`;
