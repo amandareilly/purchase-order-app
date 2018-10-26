@@ -1,31 +1,29 @@
-<article class="request {{this.status}}" data-reqId="{{this.id}}">
-     {{#setViewActions this.status request=this.id requestor=this.requestor.id location="dashboard"}}{{/setViewActions}}
+<article class="request {{status.forCode}}" data-reqId="{{id}}">
+     {{viewActions}}
     <div class="summary">
         <header class="request-summary-header">
-            <p class="status">{{#toUppercase this.status}}{{/toUppercase}}</p>
+            <p class="status">{{status.forDisplay}}</p>
             <div class="clearfix"></div>
         </header>
         <div class="main-summary-section">
-            <p class="request-total">{{#formatCurrency this.requestTotal }}{{/formatCurrency}}</p>
+            <p class="request-total">{{requestTotal}}</p>
             <p class="vendor-name"><span class="vendor-label">Vendor: </span>
-                {{this.vendor.name}}</p>
-            {{#checkIfApprover this}}
-            <p class="requestor-name"><span class="requestor-label">Requestor:  </span>{{this.requestor.name}}</p>
-            {{/checkIfApprover}}
+                {{vendorName}}</p>
+            {{requestorHtml}}
         </div>
         <div class="item-list-container">
-            <i class="material-icons list-toggle" data-clickable="toggleRequestListView" data-reqId="{{this.id}}">
+            {{#if items}}
+                <i class="material-icons list-toggle" data-clickable="toggleRequestListView" data-reqId="{{id}}">
                 list</i>
-            {{#if this.items}}
                 <p class="item-list-title">Items in this Request</p>
                 <ul class="item-list">
-                    {{#each (limit this.items 5)}}
-                    <li class="request-item">{{this.name}} - {{this.qty}} @ ${{this.pricePer}}</li>
+                    {{#each items}}
+                        <li class="request-item">{{this.name}} - {{this.qty}} @ ${{this.pricePer}}</li>
                     {{/each}}
-                    {{#prettyMoreListText this.items 5 this.id}} {{/prettyMoreListText}}
+                    {{getAdditionalItemsHtml}}
                 </ul>
             {{else}}
-                <p>No items found.</p>
+                <p class="no-items-msg">No Items Yet</p>
             {{/if}}
         </div>
     </div>

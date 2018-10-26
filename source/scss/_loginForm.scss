@@ -1,0 +1,46 @@
+.login-form {
+    margin: 15px auto;
+    background-color: $secondaryLight;
+    border: 3px solid $primaryDark;
+    padding: 15px;
+    font-size: 1.25em;
+    color: $primaryDark;
+    display: flex;
+    flex-direction: column;
+}
+
+.demo-user-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.basic-users,
+.approver-users {
+    flex-grow: 1;
+}
+
+.login-label {
+    font-size: 2em;
+    text-align: center;
+}
+
+.login-label,
+#email {
+    display: block;
+    margin: 15px auto;
+}
+
+.login-button {
+    max-width: 350px;
+    padding: 25px;
+    font-size: 1.5em;
+    margin: 0 auto;
+    background-color: $primaryDark;
+    color: #fff;
+    border: none;
+}
+
+.login-button:hover,
+.login-button:active {
+    background-color: $primaryLight;
+}

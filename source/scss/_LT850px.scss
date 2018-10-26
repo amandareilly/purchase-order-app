@@ -1,0 +1,13 @@
+// _LT850px.scss
+@media only screen and (max-width: 850px) {
+    .action-icon {
+        font-size: 16px;
+    }
+    .request-grid-container {
+        grid-template-columns: repeat(2, minmax(250px, 420px));
+    }
+    .dashboard-toggle {
+        font-size: 1.25em;
+        height: 40px;
+    }
+}

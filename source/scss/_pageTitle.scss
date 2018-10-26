@@ -1,0 +1,13 @@
+// _pageTitle.scss
+.page-title {
+    background-color: $primaryLight;
+    h1 {
+        color: #332533;
+    }
+    box-shadow: 0 25px 5px #fff;
+    vertical-align: middle;
+}
+
+.page-title .wrapper {
+    padding: 15px;
+}

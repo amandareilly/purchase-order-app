@@ -1,0 +1,43 @@
+// _pageNav.scss
+.page-nav {
+    background-color: $primaryDark;
+    box-shadow: 0 5px 5px #888;
+}
+
+.page-nav .wrapper {
+    display: flex;
+    padding: 0;
+}
+
+.page-nav-item .material-icons {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.page-nav-item {
+    border-right: 1px solid $secondaryLight;
+}
+
+.page-nav-item:last-child {
+    border-right: 0;
+}
+
+.page-nav-item,
+.page-nav-item:visited,
+.page-nav-item:active,
+.page-nav-item:hover {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px;
+    color: $secondaryLight;
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.page-nav-item:hover {
+    background-color: $secondaryColor;
+    color: $primaryDark;
+    text-decoration: none;
+    border-color: $secondaryLight;
+}

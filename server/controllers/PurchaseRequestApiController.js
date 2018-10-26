@@ -3,11 +3,11 @@ const SharedApi = require('../api/SharedApi');
 const Request = require('../models/Request');
 const ItemApi = require('./ItemApiController');
 
+
 class PurchaseRequestApi {
     static getAllRequests(req, res) {
         const status = (req.query.status ? req.query.status.split(' ') : null);
-        const user = (req.query.user ? req.query.user : null);
-
+        const user = (req.query.user ? req.query.user.split(' ') : null);
         Request
             .find()
             .byRequestor(user)
@@ -147,8 +147,8 @@ class PurchaseRequestApi {
     static deleteRequest(req, res) {
         Request.findById(req.params.id)
             .then((request) => {
-                if (request.status != 'created') {
-                    res.status(400).send(`Only requests with status 'created' can be deleted.  The specified request currently has a status of ${request.status}.`);
+                if (request.status != 'created' && request.status != 'denied') {
+                    res.status(400).send(`Only requests with status 'created' or 'denied' can be deleted.  The specified request currently has a status of ${request.status}.`);
                     return;
                 }
                 request.remove();
@@ -161,7 +161,7 @@ class PurchaseRequestApi {
     }
 
     static getDistinctVendors(req, res) {
-        Request.collection.distinct('vendor.name')
+        return Request.distinct('vendor.name')
             .then((vendors) => {
                 res.json({ vendors: vendors });
             })

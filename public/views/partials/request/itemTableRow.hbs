@@ -1,22 +1,25 @@
 <tr class="data">
-    <td>{{this.id}}</td>
     <td>{{this.name}}</td>
     <td>{{this.qty}}</td>
     <td>{{this.pricePer}}</td>
     <td>{{dateFormat this.neededBy "MMMM Do YYYY"}}</td>
-    <td>{{prettifyTrueFalse this.expeditedShipping}}</td>
     
      {{#checkForApproved parent.data.status}}
-        <td rowspan="3">
-            <a href="{{parent.data.id}}/items/delete/{{this.id}}" class="view-request-link" data-item="{{this.id}}">Remove</a>
+        <td>
+            <a href="{{parent.data.id}}/items/delete/{{this.id}}" class="view-request-link" data-item="{{this.id}}"><i class="material-icons">delete</i></a>
         </td>
+    {{else}}
+        <td></td>
     {{/checkForApproved}}
+    <td>
+        <a href="" class="view-more-info" data-item="{{this.id}}" data-clickable="toggleItemDetailView"><i class="material-icons" data-item="{{this.id}}" data-clickable="toggleItemDetailView">expand_more</i></a>
+    </td>
 </tr>
-<tr class="link">
-    <td class="link">Link:</td>
-    <td colspan="5"><a href="{{this.link}}" target="_new" class="item-link"></a>{{this.link}}</td>
-</tr>
-<tr class="notes">
-    <td class="notes">Notes:</td>
-    <td colspan="5">{{this.notes}}</td>
+<tr class="additional-info-parent hidden" data-item-targeted="{{this.id}}">
+    <td colspan="6" class="additional-info">
+        <p><b>Expedited Shipping: </b>{{prettifyTrueFalse this.expeditedShipping}}</p>
+        <p><b>Vendor Link: </b><a href="{{this.link}}" target="_new" class="item-link">{{this.link}}</a></p>
+        <p class="notes"><b>Notes:</b> {{this.notes}}</p>
+        
+    </td>
 </tr>

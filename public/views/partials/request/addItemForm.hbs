@@ -1,0 +1,37 @@
+<form action="{{data.id}}/addItem" method="post" class="hidden" id="add-item-form">
+    <table>
+        <tr>
+            <th><label for="itemName">Item Name</label></th>
+            <th><label for="itemQty">Quantity</label></th>
+            <th><label for="itemPrice">Price Each</label></th>
+            
+        </tr>
+        <tr>
+            <td><input type="text" name="itemName" id="itemName"></td>
+            <td><input type="number" name="itemQty" id="itemQty"></td>
+            <td><input type="number" name="itemPrice" id="itemPrice" step="0.01" min=0></td>
+        </tr>
+        <tr>
+            <th><label for="neededBy">Needed By</label></th>
+            <th><label for="expeditedShipping">Expedited Shipping?</label></th>
+            <th><label for="itemLink">Vendor Link (optional)</label></th>
+        </tr>
+        <tr>
+            <td><label for="neededBy">Needed By: <input type="date" name="neededBy" id="neededBy"></td>
+            <td><input type="checkbox" name="expeditedShipping" id="expeditedShipping"></td>
+            <td><input type="url" name="itemLink" id="itemLink"></td>
+        </tr>
+        <tr>
+            <th colspan=3><label for="itemNotes">Notes (optional)</label></td>
+        </tr>
+        <tr>
+            <td colspan=3><textarea name="itemNotes" id="itemNotes"></textarea></td>
+        </tr>
+    </table> 
+    
+    <div class="button-box flex-horz-wrap">
+        <button type="submit" class="btn btn-submit"><i class="material-icons">send</i>Add Item</button>
+        <button type="reset" class="btn btn-clear"><i class="material-icons">clear_all</i>Clear Form</button>
+        <button type="reset" class="btn btn-cancel" data-clickable="cancelAddItem" data-allow-default><i class="material-icons">clear</i>Cancel</button>
+    </div>
+</form>

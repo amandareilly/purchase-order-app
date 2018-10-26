@@ -1,0 +1,19 @@
+<nav class="panel-nav">
+    <ul class="tabs-group">
+        {{#each this}}
+            <li class="tab"><a href="" class="{{#if @first}}selected{{/if}}" data-targets="{{@key}}" data-clickable="changeDashboardSelectors">{{this.title}}</a></li>
+        {{/each}}
+    </ul>
+</nav>
+
+{{#each this}}
+<div class="request-group-container {{#if this.selected}}selected{{else}}hidden{{/if}}">
+    <h2>{{this.title}}</h2>
+    <div class="request-grid-container">
+        
+        {{#each this.requests}}
+            {{>request/requestSummary}}
+        {{/each}}
+    </div>
+</div>
+{{/each}}

@@ -1,0 +1,46 @@
+// _requestDashboard.scss
+.dashboard-toggle {
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    height: 55px;
+    padding: 15px;
+    background-color: $primaryDark;
+    color: #fff;
+    margin-bottom: 0;
+    .toggle-explainer {
+        display: inline-block;
+        padding-left: 10px;
+    }
+    &:hover,
+    &:active {
+        background-color: $primaryColor;
+        color: #fff;
+    }
+}
+
+.create-form-toggle-close,
+.filter-form-toggle-close {
+    font-size: 1.5em;
+    color: $primaryDark;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.dashboard-actions-wrapper {
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.no-requests-found {
+    grid-column: 1 / span 3;
+    color: $primaryDark;
+    text-align: center;
+}
+
+.dashboard-container {
+    position: relative;
+}

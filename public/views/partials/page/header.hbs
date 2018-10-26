@@ -1,11 +1,12 @@
-    <header>
-        {{#if loggedIn}}
-            <div class="user-info">
-                <p class="user-name"><b>User Name: </b>{{user.name.first}} {{user.name.last}}</p>
-                <p class="user-email"><b>User Email: </b>{{user.email}}</p>
-                <p class="user-role"><b>User Role: </b>{{user.role}}</p>
+    <div class="page-header">
+        <div class="wrapper">
+            <div class="user-wrap">
+                <img class="user-avatar" src="https://api.adorable.io/avatars/150/{{user._id}}.png" alt="Avatar for {{user.name.first}} {{user.name.last}}">
+                <div class="user-info">
+                    <p class="user-name">{{user.name.first}} {{user.name.last}}</p>
+                    <p class="user-email">{{user.email}}</p>
+                </div>
             </div>
-        {{else}}
-            <button class="login">Log In</button>
-        {{/if}}
-    </header>
+            <a href="logout" class="header-link"><span class="link-group">Log Out<i class="material-icons">exit_to_app</i></span></a>
+        </div>
+    </div>

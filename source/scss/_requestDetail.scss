@@ -1,0 +1,141 @@
+// _requestDetail.scss
+.request-header {
+    padding-top: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 5px #c2c2c2;
+    color: $primaryDark;
+    font-size: 1.25em;
+}
+
+.request-header-wrap {
+    display: flex;
+}
+
+.detail-page-header {
+    color: $primaryDark;
+}
+
+.status-text {
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 0 15px;
+    padding: 20px;
+    font-weight: bold;
+    margin-right: 30px;
+    line-height: 100%;
+}
+
+.status-text.created {
+    background-color: $createdDark;
+    color: $createdExtraPale;
+}
+
+.status-text.submitted {
+    background-color: $submittedDark;
+    color: $submittedExtraPale;
+}
+
+.status-text.approved {
+    background-color: $approvedDark;
+    color: $approvedExtraPale;
+}
+
+.status-text.ordered {
+    background-color: $orderedDark;
+    color: $orderedExtraPale;
+}
+
+.status-text.complete {
+    background-color: $completeDark;
+    color: $completeExtraPale;
+}
+
+.status-text.denied {
+    background-color: $deniedDark;
+    color: $deniedExtraPale;
+}
+
+.request-vendor {
+    font-size: 2em;
+}
+
+.request-item-header-group {
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.toggle-add-item-form,
+.toggle-add-item-form:link,
+.toggle-add-item-form:visited {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px;
+    background-color: $primaryDark;
+    color: $secondaryLight;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.toggle-add-item-form:active,
+.toggle-add-item-form:hover {
+    background-color: $secondaryLight;
+    color: $primaryDark;
+    text-decoration: none;
+}
+
+.request-action-box {
+    justify-content: flex-start;
+}
+
+.request-action {
+    display: inline-flex;
+    align-items: center;
+    padding-right: 15px;
+    .material-icons {
+        padding-right: 5px;
+    }
+}
+
+.submit-request,
+.submit-request:link,
+.submit-request:visited,
+.submit-request:active,
+.submit-request:hover,
+.approve-request,
+.approve-request:link,
+.approve-request:visited,
+.approve-request:active,
+.approve-request:hover {
+    color: #009624;
+    .material-icons {
+        text-decoration: none;
+    }
+}
+
+.delete-request,
+.delete-request:link,
+.delete-request:visited,
+.delete-request:active,
+.delete-request:hover,
+.deny-request,
+.deny-request:link,
+.deny-request:visited,
+.deny-request:active,
+.deny-request:hover {
+    color: #9a0007;
+    .material-icons {
+        text-decoration: none;
+    }
+}
+
+.undo-submit,
+.undo-submit:link,
+.undo-submit:visited {
+    color: #424242;
+}
+
+.request-action:last-child {
+    padding-right: 0;
+}

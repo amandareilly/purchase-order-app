@@ -1,0 +1,53 @@
+<form action="#" class="filter-form hidden" id="filter-form">
+    <i class="material-icons filter-form-toggle-close" data-clickable="toggleFilterForm">close</i>
+    {{#if userIsApprover}} 
+        <div>
+            <div class="input-wrapper">
+                <input type="radio" name="filter-by-loggedInUser" id="yes" value="yes"{{#if myFilterSelected}} checked{{/if}} class="toggle toggle-left"><label for="yes" class="toggle-btn">My Requests</label>
+                <input type="radio" name="filter-by-loggedInUser" id="no" value="no"{{#if myFilterSelected}}{{else}} checked{{/if}} class="toggle toggle-right"><label for="no" class="toggle-btn">Other User Requests</label>
+            </div>
+        </div>
+        <div class="filter-wrapper">
+            <fieldset class="filters general-filters status-filters{{#if myFilterSelected}} hidden{{/if}}">
+                <div class="fieldset-wrap">
+                    {{#each generalStatuses}}
+                        <div class="filter-checkbox">
+                            <input type="checkbox" name="gen-statuses" value="{{this.name}}" id="{{this.name}}" class="filter-gen-filters filter-gen-status checkbox"{{#if this.selected}} checked{{/if}}>
+                            <label for="{{this.name}}" class="filter-label">
+                                <div class="label-wrapper">{{this.displayText}}</div>
+                            </label>
+                        </div> 
+                    {{/each}} 
+                </div>
+            </fieldset>
+            
+        {{/if}}
+        <fieldset class=" filters own-filters{{#if userIsApprover}}{{#if myFilterSelected}}{{else}} hidden{{/if}}{{/if}}">
+            <div class="fieldset-wrap">
+                {{#each myStatuses}}
+                    <div class="filter-checkbox">
+                        <input type="checkbox" name="my-statuses" value="{{this.name}}" id="my-{{this.name}}" class="filter-own-filters checkbox"{{#if this.selected}} checked{{/if}}>
+                        <label for="my-{{this.name}}" class="filter-label"><div class="label-wrapper">{{this.displayText}}</div></label>
+                    </div>
+                {{/each}}
+            </div>
+        </fieldset>
+        
+        {{#if userIsApprover}}
+            <fieldset class="filters general-filters user-filters{{#if myFilterSelected}} hidden{{/if}}">
+                <div class="fieldset-wrap">
+                    {{#each users}}
+                        <div class="filter-checkbox">
+                            <input type="checkbox" name="users" value="{{this.id}}" id="{{this.id}}" class="filter-gen-filters checkbox"{{#if this.selected}} checked{{/if}}>
+                            <label for="{{this.id}}" class="filter-label">
+                                <div class="label-wrapper">{{this.name}}</div>
+                            </label>
+                        </div>
+                        
+                    {{/each}}
+                </div>
+            </fieldset>
+        {{/if}}
+    </div>
+    <button type="submit" class="btn btn-submit filter-btn" id="filter-requests-button">Filter</button>
+</form>

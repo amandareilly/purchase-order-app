@@ -1,0 +1,7 @@
+.request-grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(250px, 420px));
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    position: relative;
+}

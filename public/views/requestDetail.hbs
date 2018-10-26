@@ -1,48 +1,78 @@
 {{>page/header}}
-<h1>Request Detail Page</h1>
-<a href="/requests" class="back-to-dashboard">Return to Dashboard</a>
-{{#if data.id}}
-    <div class="request-header">
-        <p class="request-id"><b>Request # </b>{{data.id}}</p>
-        <p class="request-date"><b>Created on </b>{{dateFormat data.createdAt "MMMM Do YYYY"}}</p>
-        <p class="requestor"><b>Created By: </b>{{user.name.first}} {{user.name.last}} | {{user.email}}</p>
-        <p class="request-status"><b>Status: </b>{{capitalizeFirstLetter data.status}}</p>
-        <p class="request-vendor"><b>Vendor: </b>{{data.vendor.name}}</p>
+<header class="page-title">
+    <div class="wrapper">
+        <h1>Request Detail</h1>
     </div>
-    {{#if data.items}}
+</header>
+<nav class="page-nav">
+    <div class="wrapper">
+        <a href="/requests" class="back-to-dashboard page-nav-item"><i class="material-icons">arrow_back</i>Return to Dashboard</a>
+    </div>
+</nav>
+
+{{#if data.id}}
+    <header class="request-header">
+        <div class="wrapper">
+            <div class="request-header-wrap">
+                <p class="status-text {{data.status}}">{{capitalizeFirstLetter data.status}}</p>
+                <div class="request-header-group">
+                    <p class="request-vendor"><b>Vendor: </b>{{data.vendor.name}}</p>               
+                        <p class="request-data">Created on {{dateFormat data.createdAt "MMMM Do YYYY"}} by {{user.name.first}} {{user.name.last}} ({{user.email}})</p>
+                </div>
+            </div>
+            <div class="request-action-box flex-horz-wrap">
+                {{#checkForSubmitted data.status}}
+                    <a href="/requests/{{data.id}}/submit" class="request-action submit-request" data-clickable="submitRequest" data-reqId="{{data.id}}"><i class="material-icons">send</i>Submit
+                        Request</a>
+                        <a href="/requests/{{data.id}}/delete" class="request-action delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}"><i                        class="material-icons">delete</i>Delete
+                            Request</a>
+                {{else}}
+                    {{#checkForApproved data.status}}
+                        <a href="/requests/{{data.id}}/approve" class="request-action approve-request" data-clickable="approveRequest" data-reqId="{{data.id}}"><i class="material-icons">thumb_up</i>Approve
+                        Request</a>
+                        <a href="/request/{{data.id}}/deny" class="request-action deny-request" data-clickable="denyRequest" data-reqId="{{data.id}}"><i class="material-icons">thumb_down</i>Deny
+                        Request</a>
+                        <a href="/request/{{data.id}}/unsubmit" class="request-action undo-submit" data-clickable="unsubmit" data-reqId="{{data.id}}"><i class="material-icons">undo</i>Unsubmit
+                        Request</a>
+                    {{/checkForApproved}}
+                {{/checkForSubmitted}}
+            </div>
+        </div>
+    </header>
+    <div class="wrapper">
+        <div class="flex-horz-wrap request-item-header-group">
+            <h2 class="detail-page-header">Items Requested</h2>
+            {{#checkForSubmitted data.status}}
+            <a href="" id="toggle-add-item-form" class="toggle-add-item-form" data-clickable="toggleAddItemForm"><i class="material-icons">add</i>Add
+                Item</a>
+                </div>
+            {{>request/addItemForm}}
+            {{else}}
+                </div>
+            {{/checkForSubmitted}}
+        
         <table class="item-listing">
             <tr>
-                <th>Item Id</th>
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Price Each</th>
                 <th>Needed By</th>
-                <th>Expedited Shipping?</th>
-                {{#checkForApproved data.status}}
-                    <th></th>
-                {{/checkForApproved}}
+                <th></th>
+                <th></th>
             </tr>
-            {{#each data.items}} {{>request/itemTableRow parent=..}} {{/each}}
+            {{#if data.items}}
+                {{#each data.items}}
+                    {{>request/itemTableRow parent=..}}
+                {{/each}}
+            {{/if}}
         </table>
-    {{/if}}
-    {{#checkForSubmitted data.status}}
-        <form action="{{data.id}}/addItem" method="post">
-            <label for="itemName">Item Name: <input type="text" name="itemName" id="itemName"></label><br>
-            <label for="itemQty">Quantity Needed: <input type="number" name="itemQty" id="itemQty"></label><br>
-            <label for="itemPrice">Price Each: <input type="number" name="itemPrice" id="itemPrice" step="0.01" min=0></label>    <br>
-            <label for="neededBy">Needed By: <input type="date" name="neededBy" id="neededBy"></label><br>
-            <label for="expeditedShipping">Request Expedited Shipping: <input type="checkbox" name="expeditedShipping" id="expeditedShipping"></label><br>
-            <label for="itemLink">Vendor Link (optional): <input type="url" name="itemLink" id="itemLink"></label><br>
-            <label for="itemNotes">Notes (optional): <textarea name="itemNotes" id="itemNotes" cols="30" rows="10"></textarea></label><br>
-            <button type="submit">Add Item</button><button type="reset">Clear Form</button>
-        </form><br>
-        <a href="/requests/{{data.id}}/delete" class="delete-request" data-clickable="deleteRequest" data-reqId="{{data.id}}">Delete Request</a><br>
-        <a href="/requests/{{data.id}}/submit" class="submit-request" data-clickable="submitRequest" data-reqId="{{data.id}}">Submit Request</a>
-    {{else}}
-        {{#checkForApproved data.status}}
-            <a href="/requests/{{data.id}}/approve" class="approve-request" data-clickable="approveRequest" data-reqId="{{data.id}}">Approve Request</a> | <a href="/request/{{data.id}}/deny" class="deny-request" data-clickable="denyRequest" data-reqId="{{data.id}}">Deny Request</a> | <a href="/request/{{data.id}}/unsubmit" class="undo-submit" data-clickable="unsubmit" data-reqId="{{data.id}}">Unsubmit Request</a>
-        {{/checkForApproved}}
-    {{/checkForSubmitted}}
+</div>
 {{else}}
-<h2>Request Not Found</h2>
+<div class="wrapper">
+    <h2>Request Not Found</h2>
+</div>
 {{/if}}
+<script type='text/javascript'>
+    const pageContext = 'requestDetail';
+    const userData = {{{json user}}};
+</script>

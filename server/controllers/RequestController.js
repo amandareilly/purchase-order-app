@@ -6,94 +6,21 @@ const SharedApi = require('../api/SharedApi');
 
 class RequestController {
     static getAllRequests(req, res) {
-        let userList;
-        let vendorList;
-        let filterByUser = false;
-        if (req.query.user && req.query.user == req.user._id) {
-            filterByUser = true;
-        }
-        let query = req.url || null;
-        let url;
         const headers = SharedApi.getHeadersWithToken(req);
-
-        let user;
-        const userUrl = SharedApi.constructApiUrl(req, 'users');
         const vendorUrl = SharedApi.constructApiUrl(req, 'distinctVendors');
-        return fetch(userUrl, {
+        return fetch(vendorUrl, {
                 headers: headers
             })
             .then(response => response.json())
-            .then((data) => {
-                userList = data;
-                return fetch(vendorUrl, {
-                        headers: headers
-                    })
-                    .then(response => response.json())
-                    .then((data) => {
-                        vendorList = data;
-                        return SharedApi.getUser(req)
-                            .then((foundUser) => {
-                                user = foundUser;
-                                if (user.role == 'basic') {
-                                    if (query && query != '/') {
-                                        query += `&user=${user._id}`;
-                                    } else {
-                                        query = `?user=${user._id}`
-                                    }
-                                }
-                                url = SharedApi.constructApiUrl(req, 'requests' + (query ? query : ''));
-                            })
-                            .then(() => {
-                                return fetch(url, {
-                                        headers: headers
-                                    })
-                                    .then((response) => {
-                                        if (response.status === 401) {
-                                            res.redirect('/login');
-                                        }
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        const sortedData = {
-                                            all: [],
-                                            created: [],
-                                            submitted: [],
-                                            approved: [],
-                                            denied: [],
-                                            ordered: [],
-                                            complete: []
-                                        };
-                                        const groupsFound = {
-                                            created: false,
-                                            submitted: false,
-                                            approved: false,
-                                            denied: false,
-                                            ordered: false,
-                                            complete: false
-                                        };
-
-                                        data.requests.forEach((request) => {
-                                            sortedData[request.status].push(request);
-                                            groupsFound[request.status] = true;
-                                        });
-                                        sortedData['all'] = data.requests;
-                                        data = sortedData;
-                                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data, 'All Purchase Requests', filterByUser, userList, vendorList, groupsFound);
-                                    })
-                                    .catch(error => console.error('Fetch Error: ', error));
-                            })
-                            .catch((error) => {
-                                console.error(error);
-                            });
-                    })
-                    .catch((error) => {
-                        console.error(error);
+            .then(data => {
+                const vendorList = data;
+                return SharedApi.getUser(req)
+                    .then((user) => {
+                        const data = null;
+                        RequestController.renderRequestPage(res, 'requestDashboard', loggedIn, user, data, 'All Requests', vendorList);
                     });
             })
-            .catch((error) => {
-                console.error(error);
-            });
-
+            .catch(err => console.error(err));
 
     }
 
@@ -147,24 +74,24 @@ class RequestController {
                         if (!data.error) {
                             pageTitle = `Request # ${data.id}`;
                         }
-                        RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle, null, );
+                        RequestController.renderRequestPage(res, 'requestDetail', loggedIn, user, data, pageTitle);
                     })
                     .catch(error => console.error('Fetch Error: ', error));
             })
 
     }
 
-    static renderRequestPage(res, view, loggedIn, user, data, pageTitle, filterByUser, userList, vendorList, groupsFound) {
-        res.render(view, {
+    static renderRequestPage(res, view, loggedIn, user, data, pageTitle, vendorList = null) {
+        const vars = {
             loggedIn,
             user,
             data,
-            pageTitle,
-            filterByUser,
-            userList,
-            vendorList,
-            groupsFound
-        });
+            pageTitle
+        };
+        if (vendorList) {
+            vars.vendorList = vendorList;
+        }
+        res.render(view, vars);
     }
 
     static deleteItem(req, res) {

@@ -24,7 +24,9 @@ class Auth {
         const user = req.user;
         req.session.user = user;
         const authToken = Auth.createAuthToken(user);
-        res.cookie('jwt', authToken).redirect('/requests');
+        res.cookie('jwt', authToken);
+        res.clearCookie('userId')
+        res.clearCookie('user').redirect('/requests');
     }
 }
 

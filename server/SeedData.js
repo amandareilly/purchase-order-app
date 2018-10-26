@@ -113,8 +113,7 @@ class SeedData {
     }
 
     static generateRequestUser() {
-        const users = userArray.filter(user => user.role === 'basic');
-        return users[Math.floor(Math.random() * users.length)]._id;
+        return userArray[Math.floor(Math.random() * userArray.length)]._id;
     }
 
     static generateRequestStatus() {

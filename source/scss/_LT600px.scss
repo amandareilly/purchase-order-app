@@ -1,0 +1,51 @@
+// _LT600px.scss
+@media only screen and (max-width: 600px) {
+    .dashboard-header {
+        display: flex;
+        flex-direction: column;
+    }
+    .dashboard-title {
+        text-align: center;
+        font-size: 2.5em;
+    }
+    .dashboard-actions {
+        display: flex;
+        justify-content: space-around;
+    }
+    .dashboard-toggle {
+        flex-grow: 1;
+        margin-right: 10px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    .user-avatar {
+        width: 70px;
+        height: 70px;
+        margin-right: 15px;
+    }
+    .user-name {
+        font-size: 1.5em;
+    }
+    .user-email {
+        font-size: 1em;
+    }
+    .request-grid-container {
+        display: block;
+        min-width: 250px;
+    }
+    .request {
+        margin-bottom: 15px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    .request-action {
+        .material-icons {
+            font-size: 16px;
+        }
+    }
+    .header-link {
+        font-size: 1em;
+    }
+}

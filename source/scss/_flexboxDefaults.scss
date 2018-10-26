@@ -1,0 +1,13 @@
+.flex-horz-wrap {
+    display: flex;
+}
+
+.flex-col-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.justify-between {
+    justify-content: space-between;
+}

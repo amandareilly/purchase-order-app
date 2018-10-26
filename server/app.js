@@ -42,6 +42,7 @@ const hbs = exphbs.create({
         limit: require('./viewHelpers/limit'),
         prettyMoreListText: require('./viewHelpers/prettyMoreListText'),
         checkIfApprover: require('./viewHelpers/checkIfApprover'),
+        json: require('./viewHelpers/json')
     },
 });
 
